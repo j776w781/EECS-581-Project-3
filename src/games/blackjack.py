@@ -37,7 +37,7 @@ class BlackJackScreen(QWidget):
 		self.scene = QGraphicsScene()
 		self.ui.cardGraphicsView.setScene(self.scene)
 
-		self.deck_pos = QPointF(50, 240)
+		self.deck_pos = QPointF(0, 240)
 		self.player_pos = QPointF(200, 470)
 		self.dealer_pos = QPointF(200, 90)
 
@@ -50,7 +50,7 @@ class BlackJackScreen(QWidget):
 		self.game.deal(self.game.playerHand)
 		for i, card in enumerate(self.game.playerHand):
 			card_sprite = self.createCard(card)
-			end = self.player_pos + QPointF(i*75, 0)
+			end = self.player_pos + QPointF(i*80, 0)
 			self.animateCard(self.deck_pos, end, card_sprite)
 
 		# Deal dealer hand next.
@@ -60,7 +60,7 @@ class BlackJackScreen(QWidget):
 				card_sprite = self.createCard(card, True)
 			else:
 				card_sprite = self.createCard(card)
-			end = self.dealer_pos + QPointF(i*50, 0)
+			end = self.dealer_pos + QPointF(i*80, 0)
 			self.animateCard(self.deck_pos, end, card_sprite)
 		print(self.game.dealerHand)
 		print(self.game.playerHand)
