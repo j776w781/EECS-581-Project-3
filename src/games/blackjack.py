@@ -1,13 +1,99 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty
+from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .deck import Deck
 import time
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
+
+class AnimatedCard(QGraphicsObject):
+	def __init__(self, pixmap):
+		super().__init__()
+		self._pixmap = pixmap
+		self._pos = QPointF(0, 0)
+
+	def boundingRect(self):
+		return QRectF(0, 0, self._pixmap.width(), self._pixmap.height())
+
+	def paint(self, painter, option, widget=None):
+		painter.drawPixmap(0, 0, self._pixmap)
+
+	def getPos(self):
+		return super().pos()
+	
+	def setPos(self, pos):
+		super().setPos(pos)
+
+	pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
 
 class BlackJackScreen(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent)
 		self.ui = Ui_BlackJackScreen()
 		self.ui.setupUi(self)
+
+		self.scene = QGraphicsScene()
+		self.ui.cardGraphicsView.setScene(self.scene)
+
+		self.deck_pos = QPointF(50, 240)
+		self.player_pos = QPointF(200, 470)
+		self.dealer_pos = QPointF(200, 90)
+
+		self.game = BlackJack(1000)
+		self.ui.dealButton.clicked.connect(self.deal)
+
+	def deal(self):
+		# Deal player hand first.
+		print("Dealing cards...")
+		self.game.deal(self.game.playerHand)
+		for i, card in enumerate(self.game.playerHand):
+			card_sprite = self.createCard(card)
+			end = self.player_pos + QPointF(i*75, 0)
+			self.animateCard(self.deck_pos, end, card_sprite)
+
+		# Deal dealer hand next.
+		self.game.deal(self.game.dealerHand)
+		for i, card in enumerate(self.game.dealerHand):
+			if i == 0:
+				card_sprite = self.createCard(card, True)
+			else:
+				card_sprite = self.createCard(card)
+			end = self.dealer_pos + QPointF(i*50, 0)
+			self.animateCard(self.deck_pos, end, card_sprite)
+		print(self.game.dealerHand)
+		print(self.game.playerHand)
+		self.ui.dealButton.setEnabled(False)	
+
+	def createCard(self, card, hidden=False):
+		print("Creating cards...")
+		# The line below is what we'll use when the card sprites are finished.
+		# path = os.path.join(CARDS_DIR, f"{card.rank}_of_{card.suit}.png")
+		# For now I'm using a placeholder card.
+		if hidden:
+			path = os.path.join(CARDS_DIR, "card_back.jpg")
+		else:
+			path = os.path.join(CARDS_DIR, "ace_of_spade.png")
+		print(path)
+		pixmap = QPixmap(path).scaled(100, 145)
+		return pixmap
+
+	def animateCard(self, start, end, pixmap):
+		print("Animating cards...")
+		card_sprite = AnimatedCard(pixmap)
+		self.scene.addItem(card_sprite)
+
+		anim = QPropertyAnimation(card_sprite, b'pos')
+		anim.setDuration(700)
+		anim.setStartValue(start)
+		anim.setEndValue(end)
+		anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+		anim.start()
+
+		if not hasattr(self, '_anims'):
+			self._anims = []
+		self._anims.append(anim)
 
 class BlackJack:
 	def __init__(self, chips):
@@ -37,12 +123,12 @@ class BlackJack:
 	def getTotal(self, hand):
 		total = [0]
 		for card in hand:
-			if card.rank == 'A':
+			if card.rank == 'ace':
 				if total[0] + 11 > 21:
 					total[0] = total[0] + 1
 				else:
-					total.append('A')
-			elif card.rank == 'J' or card.rank == 'Q' or card.rank == 'K':
+					total.append('ace')
+			elif card.rank == 'jack' or card.rank == 'queen' or card.rank == 'king':
 				total[0] = total[0] + 10
 			else:
 				total[0] = total[0] + card.rank

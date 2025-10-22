@@ -70,7 +70,7 @@
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>280</y>
+     <y>240</y>
      <width>131</width>
      <height>16</height>
     </rect>
@@ -110,6 +110,51 @@
     <string>Player's Hand:</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="dealButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>400</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {background-color: qlineargradient(
+    		x1:0, y1:0, x2:0, y2:1,
+    		stop:0 #ff0000,
+    		stop:1 #7d0000
+	);
+}</string>
+   </property>
+   <property name="text">
+    <string>Deal</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="cardGraphicsView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>801</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: transparent;</string>
+   </property>
+  </widget>
+  <zorder>cardGraphicsView</zorder>
+  <zorder>dealerLabel</zorder>
+  <zorder>label</zorder>
+  <zorder>playerLabel</zorder>
+  <zorder>dealButton</zorder>
  </widget>
  <resources/>
  <connections/>
