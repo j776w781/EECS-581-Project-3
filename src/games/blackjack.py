@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject
 from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
-from .deck import Deck
+from .objects.deck import Deck
 import time
 import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
