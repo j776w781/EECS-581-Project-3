@@ -1,5 +1,13 @@
-from deck import Deck
+from PyQt6.QtWidgets import QWidget
+from .ui.blackjack_ui import Ui_BlackJackScreen
+from .deck import Deck
 import time
+
+class BlackJackScreen(QWidget):
+	def __init__(self, parent=None):
+		super().__init__(parent)
+		self.ui = Ui_BlackJackScreen()
+		self.ui.setupUi(self)
 
 class BlackJack:
 	def __init__(self, chips):
