@@ -43,7 +43,8 @@ if __name__ == "__main__":
     fonts = ["BROADW", "HARLOWSI", "MAGNETOB"]
     # --- FONT LOADING SECTION ---
     for f in fonts:
-        font_path = os.path.join(f".assets/fonts/{f}.TTF")
+        base_dir = os.path.dirname(__file__)
+        font_path = os.path.join(base_dir, "assets", "fonts", f"{f}.TTF")
         font_id = QFontDatabase.addApplicationFont(font_path)
         font_families = QFontDatabase.applicationFontFamilies(font_id)
         if font_families:
