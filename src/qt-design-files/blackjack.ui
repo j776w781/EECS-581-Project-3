@@ -32,10 +32,10 @@
   <widget class="QLabel" name="dealerLabel">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>30</y>
-     <width>249</width>
-     <height>241</height>
+     <x>410</x>
+     <y>10</y>
+     <width>301</width>
+     <height>181</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -46,8 +46,9 @@
    </property>
    <property name="font">
     <font>
-     <family>Baskerville</family>
+     <family>Harlow Solid Italic</family>
      <pointsize>32</pointsize>
+     <italic>true</italic>
     </font>
    </property>
    <property name="styleSheet">
@@ -82,10 +83,10 @@
   <widget class="QLabel" name="playerLabel">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>320</y>
-     <width>249</width>
-     <height>221</height>
+     <x>420</x>
+     <y>380</y>
+     <width>331</width>
+     <height>191</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -96,12 +97,17 @@
    </property>
    <property name="font">
     <font>
-     <family>Baskerville</family>
+     <family>Harlow Solid Italic</family>
      <pointsize>32</pointsize>
+     <italic>true</italic>
     </font>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel {
+	color: rgb(255, 255, 255);
 	background-color: transparent;
 	padding-top: 100px;
 }</string>
@@ -134,7 +140,104 @@
 }</string>
    </property>
    <property name="text">
-    <string>Deal</string>
+    <string>Start</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="betButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>460</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	
+	
+	background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(222, 255, 42, 255), stop:1 rgba(255, 255, 255, 255));
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Bet More</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="chipsNum">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>520</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Available Chips:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="hitButton">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>260</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(57, 255, 42, 255), stop:1 rgba(255, 255, 255, 255));
+}</string>
+   </property>
+   <property name="text">
+    <string>Hit</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="standButton">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>260</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>19</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {background-color: qlineargradient(
+    		x1:0, y1:0, x2:0, y2:1,
+    		stop:0 #ff0000,
+    		stop:1 #7d0000
+	);
+}</string>
+   </property>
+   <property name="text">
+    <string>Stand</string>
    </property>
   </widget>
   <widget class="QGraphicsView" name="cardGraphicsView">
@@ -146,15 +249,16 @@
      <height>601</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: transparent;</string>
-   </property>
   </widget>
   <zorder>cardGraphicsView</zorder>
   <zorder>dealerLabel</zorder>
   <zorder>label</zorder>
   <zorder>playerLabel</zorder>
   <zorder>dealButton</zorder>
+  <zorder>betButton</zorder>
+  <zorder>chipsNum</zorder>
+  <zorder>hitButton</zorder>
+  <zorder>standButton</zorder>
  </widget>
  <resources/>
  <connections/>

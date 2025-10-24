@@ -32,7 +32,7 @@ class AnimatedCard(QGraphicsObject):
 
 
 class BlackJackScreen(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, chips = 10):
         super().__init__(parent)
         self.ui = Ui_BlackJackScreen()
         self.ui.setupUi(self)
@@ -41,16 +41,26 @@ class BlackJackScreen(QWidget):
         self.ui.cardGraphicsView.setScene(self.scene)
 
         self.deck_pos = QPointF(0, 240)
-        self.player_pos = QPointF(300, 400)
-        self.dealer_pos = QPointF(300, 70)
+        self.player_pos = QPointF(300, 350)
+        self.dealer_pos = QPointF(300, 80)
 
-        self.game = BlackJack(1000)
-        self.ui.dealButton.clicked.connect(self.deal)
+        self.game = BlackJack()
+        self.ui.dealButton.clicked.connect(self.play)
 
         # Rules button
         self.rulesButton = QPushButton("Rules", self)
         self.rulesButton.move(20, 20)
         self.rulesButton.clicked.connect(self.showRules)
+
+        self.player_chips = chips
+        self.ui.chipsNum.setText(f"Available chips: {chips}")
+        self.ui.betButton.clicked.connect(self.betMore)        
+
+
+        self.ui.hitButton.clicked.connect(self.hit)
+        self.ui.hitButton.setEnabled(False)
+        self.ui.standButton.clicked.connect(self.dealerGo)
+        self.ui.standButton.setEnabled(False)
 
 
         '''
@@ -121,7 +131,7 @@ class BlackJackScreen(QWidget):
         self._anims.append(anim)
 
 
-    def create_chip(self):
+    def create_chip(self, num):
         print("Creating chip...")
         path = os.path.join(CHIPS_DIR, "chips.png")
         print(path)
@@ -136,23 +146,50 @@ class BlackJackScreen(QWidget):
         chip_pixmap = pixmap.copy(x, y, 48, 50).scaled(75, 100)
 
         # Now you can display or use chip_pixmap
-        chip_item = self.scene.addPixmap(chip_pixmap)
-        chip_item.setPos(500, 500)
+        #chip_item = self.scene.addPixmap(chip_pixmap)
+        #chip_item.setPos(500, 500)
         return chip_pixmap
     
 
+    def betMore(self):
+        if self.game.chips == self.player_chips:
+            QMessageBox.information(self, "Maximum Bet", "You've already bet all your chips! Good luck!")
+        else:
+            self.game.chips += 1
+            self.ui.chipsNum.setText(f"Available chips: {self.player_chips - self.game.chips}")
+        return 
+
+    def dealerGo(self):
+        print("IMPLEMENT ME")
+
+    def hit(self, player):
+        print("IMPLEMENT ME")
+        '''
+        TODO: Use the BlackJack class (.game attribute) to add a card to the player's hand.
+        DON'T do the random selection here. It should do that in the BlackJack class and simply
+        return the card here. (also might want to return whether or not a bust has occurred.)
+
+        This function should ONLY handle the animation for adding the card to the DEALER's OR PLAYER's hand.
+        It could also trigger the loss function if bust returns true.
+        '''
+        return
+
     def play(self):
+        self.ui.betButton.setEnabled(False)
+        self.ui.hitButton.setEnabled(True)
+        self.ui.standButton.setEnabled(True)
         self.deal()
 
 
+
 class BlackJack:
-    def __init__(self, chips):
+    def __init__(self):
         self.deck = Deck()
         self.playerHand = []
         self.dealerHand = []
         self.playerScore = 0
         self.dealerScore = 0
-        self.chips = chips
+        self.chips = 0
         self.bust = False
 
     def deal(self, hand):
@@ -227,6 +264,26 @@ class BlackJack:
                 total = self.getTotal(self.playerHand)
                 if len(total) > 1:
                     self.verifyTotal(total)
+                total = self.getBestSum(total)
+                return total
+            
+    def hit(self, player):
+        if player == 'human':
+            self.playerHand.append(self.deck.draw())
+            total = self.getTotal(self.playerHand)
+
+            if len(total) > 1:
+                self.verifyTotal(total)
+            if total[0] > 21:
+                total = self.getBestSum(total)
+                return total
+        else:
+            self.dealerHand.append(self.deck.draw())
+            total = self.getTotal(self.playerHand)
+
+            if len(total) > 1:
+                self.verifyTotal(total)
+            if total[0] > 21:
                 total = self.getBestSum(total)
                 return total
 
