@@ -73,15 +73,16 @@
    </property>
    <property name="font">
     <font>
-     <family>Broadway Flat 3D Filled</family>
+     <family>Magneto</family>
      <pointsize>104</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgba(0, 0, 0, 0); color: #000000</string>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;StakeFree&lt;/p&gt;&lt;p&gt;Casino&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:48pt; color:#ffffff;&quot;&gt;StakeFree&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:48pt; color:#ffffff;&quot;&gt;Casino&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -92,7 +93,7 @@
     <rect>
      <x>10</x>
      <y>40</y>
-     <width>351</width>
+     <width>371</width>
      <height>476</height>
     </rect>
    </property>

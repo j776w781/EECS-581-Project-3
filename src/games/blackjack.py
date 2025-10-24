@@ -53,12 +53,11 @@ class BlackJackScreen(QWidget):
         self.rulesButton.clicked.connect(self.showRules)
 
 
-
-        
+        '''
         self.chipsButton = QPushButton("Summon Chips", self)
         self.chipsButton.move(20, 500)
         self.chipsButton.clicked.connect(self.create_chip)
-        
+        '''
         
 
     def showRules(self):
@@ -140,6 +139,10 @@ class BlackJackScreen(QWidget):
         chip_item = self.scene.addPixmap(chip_pixmap)
         chip_item.setPos(500, 500)
         return chip_pixmap
+    
+
+    def play(self):
+        self.deal()
 
 
 class BlackJack:
