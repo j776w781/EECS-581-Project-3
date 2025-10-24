@@ -8,6 +8,9 @@ class Card:
 	def __str__(self):
 		return self.suit + ': ' + str(self.rank)
 	
+	def __repr__(self):
+		return str(self)
+	
 	def __add__(self, other):
 		return self.rank + other.rank	
 

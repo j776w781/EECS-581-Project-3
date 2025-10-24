@@ -8,6 +8,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
+CHIPS_DIR = os.path.join(BASE_DIR, "../assets")
 
 class AnimatedCard(QGraphicsObject):
     def __init__(self, pixmap):
@@ -36,12 +37,12 @@ class BlackJackScreen(QWidget):
         self.ui = Ui_BlackJackScreen()
         self.ui.setupUi(self)
 
-        self.scene = QGraphicsScene()
+        self.scene = QGraphicsScene(0, 0, 600, 590, self)
         self.ui.cardGraphicsView.setScene(self.scene)
 
         self.deck_pos = QPointF(0, 240)
-        self.player_pos = QPointF(200, 470)
-        self.dealer_pos = QPointF(200, 90)
+        self.player_pos = QPointF(300, 400)
+        self.dealer_pos = QPointF(300, 70)
 
         self.game = BlackJack(1000)
         self.ui.dealButton.clicked.connect(self.deal)
@@ -50,6 +51,15 @@ class BlackJackScreen(QWidget):
         self.rulesButton = QPushButton("Rules", self)
         self.rulesButton.move(20, 20)
         self.rulesButton.clicked.connect(self.showRules)
+
+
+
+        
+        self.chipsButton = QPushButton("Summon Chips", self)
+        self.chipsButton.move(20, 500)
+        self.chipsButton.clicked.connect(self.create_chip)
+        
+        
 
     def showRules(self):
         rules_text = (
@@ -92,6 +102,8 @@ class BlackJackScreen(QWidget):
         print(path)
         pixmap = QPixmap(path).scaled(100, 145)
         return pixmap
+    
+
 
     def animateCard(self, start, end, pixmap):
         print("Animating cards...")
@@ -108,6 +120,26 @@ class BlackJackScreen(QWidget):
         if not hasattr(self, '_anims'):
             self._anims = []
         self._anims.append(anim)
+
+
+    def create_chip(self):
+        print("Creating chip...")
+        path = os.path.join(CHIPS_DIR, "chips.png")
+        print(path)
+        pixmap = QPixmap(path)
+
+        chip_size = 48
+        index = 2
+        x = index * chip_size
+        y = 0
+
+        # Extract it as a sub-image
+        chip_pixmap = pixmap.copy(x, y, 48, 50).scaled(75, 100)
+
+        # Now you can display or use chip_pixmap
+        chip_item = self.scene.addPixmap(chip_pixmap)
+        chip_item.setPos(500, 500)
+        return chip_pixmap
 
 
 class BlackJack:
