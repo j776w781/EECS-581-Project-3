@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck
@@ -138,6 +138,18 @@ class BlackJackScreen(QWidget):
             self._anims = []
         self._anims.append(anim)
 
+        return card_sprite
+
+
+    def animateDealerCard(self, card, idx):
+        card_sprite = self.createCard(card, hidden=False)
+        end = self.dealer_pos + QPointF(idx * 80, 0)
+        self.animateCard(self.deck_pos, end, card_sprite)
+
+
+
+
+
 
     def create_chip(self, num):
         print("Creating chip...")
@@ -170,7 +182,17 @@ class BlackJackScreen(QWidget):
     def dealerGo(self):
         self.ui.hitButton.setEnabled(False)
         self.ui.standButton.setEnabled(False)
+        reveal = self.createCard(self.game.dealerHand[0], hidden=False)
+        self.hidden_card._pixmap = reveal
+        self.hidden_card.update()
         self.game.dealerTurn()
+        
+        wait = 0
+        for i, card in enumerate(self.game.dealerHand):
+            if i > 1:
+                QTimer.singleShot(wait, lambda c=card, idx=i: self.animateDealerCard(c,idx))
+                wait += 1000
+
         print(f"Dealer's score: {self.game.dealerScore}")
 
     def hit(self):
