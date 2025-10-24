@@ -115,7 +115,7 @@ class BlackJackScreen(QWidget):
         if hidden:
             path = os.path.join(CARDS_DIR, "card_back.jpg")
         else:
-            path = os.path.join(CARDS_DIR, "ace_of_spade.png")
+            path = os.path.join(CARDS_DIR, "" + str(card.rank) + "_of_" + card.suit + ".png")
         print(path)
         pixmap = QPixmap(path).scaled(100, 145)
         return pixmap

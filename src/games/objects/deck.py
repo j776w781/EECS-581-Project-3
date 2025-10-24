@@ -41,3 +41,11 @@ class Deck:
 		index = self.deck.index(card)
 		self.deck.pop(index)
 		return card
+	
+	def shuffle(self):
+		self.deck = []
+		suits = ['spade', 'club', 'diamond', 'heart']
+		ranks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'jack', 'queen', 'king', 'ace']	
+		for suit in suits:
+			for rank in ranks:
+				self.deck.append(Card(suit, rank))
