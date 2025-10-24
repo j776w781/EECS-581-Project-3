@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck
@@ -138,6 +138,18 @@ class BlackJackScreen(QWidget):
             self._anims = []
         self._anims.append(anim)
 
+        return card_sprite
+
+
+    def animateDealerCard(self, card, idx):
+        card_sprite = self.createCard(card, hidden=False)
+        end = self.dealer_pos + QPointF(idx * 80, 0)
+        self.animateCard(self.deck_pos, end, card_sprite)
+
+
+
+
+
 
     def create_chip(self, num):
         print("Creating chip...")
@@ -170,11 +182,36 @@ class BlackJackScreen(QWidget):
     def dealerGo(self):
         self.ui.hitButton.setEnabled(False)
         self.ui.standButton.setEnabled(False)
+        reveal = self.createCard(self.game.dealerHand[0], hidden=False)
+        self.hidden_card._pixmap = reveal
+        self.hidden_card.update()
         self.game.dealerTurn()
+        
+        wait = 0
+        for i, card in enumerate(self.game.dealerHand):
+            if i > 1:
+                QTimer.singleShot(wait, lambda c=card, idx=i: self.animateDealerCard(c,idx))
+                wait += 1000
+
         print(f"Dealer's score: {self.game.dealerScore}")
+
+
+    def game_over(self, winner):
+        if winner == "dealer":
+            '''
+            BISSHOY: The player loses the chips they bet "stored in self.game.chips". You'll have to subtract those from
+            the player_chips attribute. This would be the time to potentially remove them from the game. Also, might want to include
+            in here the option to replay(reset the GUI to initial state).
+            '''
+            return
+        return
+
+
+
 
     def hit(self):
         print("IMPLEMENT ME")
+        cur_total, busted = self.game.hit("human")
         '''
         TODO: Use the BlackJack class (.game attribute) to add a card to the player's hand.
         DON'T do the random selection here. It should do that in the BlackJack class and simply
@@ -182,9 +219,13 @@ class BlackJackScreen(QWidget):
 
         This function should ONLY handle the animation for adding the card to the DEALER's OR PLAYER's hand.
         It could also trigger the loss function if bust returns true.
-        '''
-        return
 
+        Could also show current score.
+        '''
+        if busted:
+            self.game_over("dealer")
+        return
+    
     def start(self):
 
         if self.game.chips > 0:
@@ -254,37 +295,6 @@ class BlackJack:
         return final
 
 
-
-
-    def playerTurn(self):
-        while True:
-            print("\nDealer's hand:")
-            self.printHand(self.dealerHand, True)
-            print("\nPlayer's hand:")
-            self.printHand(self.playerHand)
-
-            choice = input('\nHit or Stand?: ')
-            choices = ['hit', 'h', 'stand', 's']
-            while choice.lower() not in choices:
-                print("Invalid choice. Please 'hit' or 'stand'.")
-                choice = input('Hit or Stand: ')
-
-            if choice.lower() in ['hit', 'h']:
-                self.playerHand.append(self.deck.draw())
-                total = self.getTotal(self.playerHand)
-
-                if len(total) > 1:
-                    self.verifyTotal(total)
-                if total[0] > 21:
-                    total = self.getBestSum(total)
-                    return total
-            else:
-                total = self.getTotal(self.playerHand)
-                if len(total) > 1:
-                    self.verifyTotal(total)
-                total = self.getBestSum(total)
-                return total
-            
     def hit(self, player):
         if player == 'human':
             self.playerHand.append(self.deck.draw())
@@ -292,20 +302,10 @@ class BlackJack:
 
             if len(total) > 1:
                 self.verifyTotal(total)
-            if total[0] > 21:
-                total = self.getBestSum(total)
-                return total
-        else:
-            self.dealerHand.append(self.deck.draw())
-            total = self.getTotal(self.playerHand)
-
-            if len(total) > 1:
-                self.verifyTotal(total)
-            if total[0] > 21:
-                total = self.getBestSum(total)
-                return total
-
-
+            total = self.getBestSum(total)
+            if total > 21:
+                return total, True
+            return total, False
 
 
     def dealerTurn(self):
@@ -365,6 +365,38 @@ class BlackJack:
                 return total
         '''
 
+
+
+    def playerTurn(self):
+        while True:
+            print("\nDealer's hand:")
+            self.printHand(self.dealerHand, True)
+            print("\nPlayer's hand:")
+            self.printHand(self.playerHand)
+
+            choice = input('\nHit or Stand?: ')
+            choices = ['hit', 'h', 'stand', 's']
+            while choice.lower() not in choices:
+                print("Invalid choice. Please 'hit' or 'stand'.")
+                choice = input('Hit or Stand: ')
+
+            if choice.lower() in ['hit', 'h']:
+                self.playerHand.append(self.deck.draw())
+                total = self.getTotal(self.playerHand)
+
+                if len(total) > 1:
+                    self.verifyTotal(total)
+                if total[0] > 21:
+                    total = self.getBestSum(total)
+                    return total
+            else:
+                total = self.getTotal(self.playerHand)
+                if len(total) > 1:
+                    self.verifyTotal(total)
+                total = self.getBestSum(total)
+                return total
+            
+    
     def play(self):
         self.deal(self.dealerHand)
         self.deal(self.playerHand)
