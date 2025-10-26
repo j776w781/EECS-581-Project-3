@@ -250,6 +250,32 @@
     </rect>
    </property>
   </widget>
+  <widget class="QPushButton" name="leaveButton">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>560</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {background-color: qlineargradient(
+    		x1:0, y1:0, x2:0, y2:1,
+    		stop:0 #ff0000,
+    		stop:1 #7d0000
+	);
+}</string>
+   </property>
+   <property name="text">
+    <string>Leave</string>
+   </property>
+  </widget>
   <zorder>cardGraphicsView</zorder>
   <zorder>dealerLabel</zorder>
   <zorder>label</zorder>
@@ -259,6 +285,7 @@
   <zorder>chipsNum</zorder>
   <zorder>hitButton</zorder>
   <zorder>standButton</zorder>
+  <zorder>leaveButton</zorder>
  </widget>
  <resources/>
  <connections/>

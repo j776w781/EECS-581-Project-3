@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck
@@ -32,6 +32,8 @@ class AnimatedCard(QGraphicsObject):
 
 
 class BlackJackScreen(QWidget):
+    switch_to_menu = pyqtSignal()
+
     def __init__(self, parent=None, chips = 10):
         super().__init__(parent)
         self.ui = Ui_BlackJackScreen()
@@ -61,7 +63,7 @@ class BlackJackScreen(QWidget):
         self.ui.hitButton.setEnabled(False)
         self.ui.standButton.clicked.connect(self.dealerGo)
         self.ui.standButton.setEnabled(False)
-
+        self.ui.leaveButton.clicked.connect(self.leave)
 
         '''
         self.chipsButton = QPushButton("Summon Chips", self)
@@ -145,11 +147,6 @@ class BlackJackScreen(QWidget):
         card_sprite = self.createCard(card, hidden=False)
         end = self.dealer_pos + QPointF(idx * 80, 0)
         self.animateCard(self.deck_pos, end, card_sprite)
-
-
-
-
-
 
     def create_chip(self, num):
         print("Creating chip...")
@@ -242,6 +239,14 @@ class BlackJackScreen(QWidget):
         else:
             QMessageBox.information(self, "No Bet", "We're not running a charity! Place your bet!")
 
+    def leave(self):
+        self.scene.clear()
+        self.game = BlackJack()
+        self.ui.dealButton.setEnabled(True)
+        self.ui.betButton.setEnabled(True)
+        self.ui.hitButton.setEnabled(False)
+        self.ui.standButton.setEnabled(False)
+        self.switch_to_menu.emit()
 
 
 class BlackJack:

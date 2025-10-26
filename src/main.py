@@ -31,6 +31,8 @@ class MainWindow(QMainWindow):
         self.menu.switch_to_blackjack.connect(self.show_blackjack_screen)
         self.menu.app_exit.connect(self.close)
 
+        self.blackjack.switch_to_menu.connect(self.show_menu_screen)
+
     def show_blackjack_screen(self):
         self.stack.setCurrentWidget(self.blackjack)
 
