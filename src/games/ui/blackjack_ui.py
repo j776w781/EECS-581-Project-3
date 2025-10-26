@@ -126,7 +126,6 @@ class Ui_BlackJackScreen(object):
         self.leaveButton.setObjectName("leaveButton")
         self.cardGraphicsView.raise_()
         self.dealerLabel.raise_()
-        self.label.raise_()
         self.playerLabel.raise_()
         self.dealButton.raise_()
         self.betButton.raise_()
@@ -142,7 +141,6 @@ class Ui_BlackJackScreen(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.dealerLabel.setText(_translate("Form", "Dealer\'s Hand:"))
-        self.label.setText(_translate("Form", "[Deck of Cards here]"))
         self.playerLabel.setText(_translate("Form", "Player\'s Hand:"))
         self.dealButton.setText(_translate("Form", "Start"))
         self.betButton.setText(_translate("Form", "Bet More"))

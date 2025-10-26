@@ -64,14 +64,22 @@ class BlackJackScreen(QWidget):
         self.ui.standButton.clicked.connect(self.dealerGo)
         self.ui.standButton.setEnabled(False)
         self.ui.leaveButton.clicked.connect(self.leave)
+        self.addDeckBack()
+
+
 
         '''
         self.chipsButton = QPushButton("Summon Chips", self)
         self.chipsButton.move(20, 500)
         self.chipsButton.clicked.connect(self.create_chip)
         '''
-        
 
+    def addDeckBack(self):
+        deck_back_path = os.path.join(CARDS_DIR, "card_back.jpg")
+        deck_back_pixmap = QPixmap(deck_back_path).scaled(100, 145)
+        self.deck_item = self.scene.addPixmap(deck_back_pixmap)
+        self.deck_item.setPos(self.deck_pos)
+        
     def showRules(self):
         rules_text = (
             "Blackjack Rules:\n"
@@ -106,11 +114,6 @@ class BlackJackScreen(QWidget):
         print(self.game.dealerHand)
         print(self.game.playerHand)
         self.ui.dealButton.setEnabled(False)
-
-
-
-
-
 
     def createCard(self, card, hidden=False):
         print("Creating cards...")
@@ -246,6 +249,7 @@ class BlackJackScreen(QWidget):
         self.ui.betButton.setEnabled(True)
         self.ui.hitButton.setEnabled(False)
         self.ui.standButton.setEnabled(False)
+        self.addDeckBack()
         self.switch_to_menu.emit()
 
 
