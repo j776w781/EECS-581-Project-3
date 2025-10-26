@@ -210,8 +210,11 @@ class BlackJackScreen(QWidget):
 
 
     def hit(self):
-        print("IMPLEMENT ME")
-        cur_total, busted = self.game.hit("human")
+        cur_total, card, busted = self.game.hit("human")
+        print(self.game.playerHand)
+        end = self.player_pos + QPointF((len(self.game.playerHand)-1)*80, 0)
+        card = self.createCard(card)
+        self.animateCard(self.deck_pos, end, card)
         '''
         TODO: Use the BlackJack class (.game attribute) to add a card to the player's hand.
         DON'T do the random selection here. It should do that in the BlackJack class and simply
@@ -222,7 +225,10 @@ class BlackJackScreen(QWidget):
 
         Could also show current score.
         '''
+	
         if busted:
+            self.ui.hitButton.setEnabled(False)
+            self.ui.standButton.setEnabled(False)
             self.game_over("dealer")
         return
     
@@ -298,14 +304,15 @@ class BlackJack:
     def hit(self, player):
         if player == 'human':
             self.playerHand.append(self.deck.draw())
+            card = self.playerHand[len(self.playerHand)-1]
             total = self.getTotal(self.playerHand)
 
             if len(total) > 1:
                 self.verifyTotal(total)
             total = self.getBestSum(total)
             if total > 21:
-                return total, True
-            return total, False
+                return total, card, True
+            return total, card, False
 
 
     def dealerTurn(self):
