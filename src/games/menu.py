@@ -1,3 +1,13 @@
+'''
+Name: main.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, Max Biundo
+
+Description: Menu GUI for the program. Calls on switching between all game GUIS.
+
+Inputs: none
+Outputs: Menu GUI.
+'''
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget
 from .ui.menu_ui import Ui_MenuScreen
@@ -19,18 +29,23 @@ class MenuScreen(QWidget):
 
 		self.ui.exitButton.clicked.connect(self.exit)
 
+	#Switches to blackjack
 	def blackjack(self):
 		print("Blackjack clicked!")
 		self.switch_to_blackjack.emit()
 
+	#Switches to roulette.
 	def roulette(self):
 		print("Roulette clicked!")
 
+	#Switches to poker
 	def poker(self):
 		print("Poker clicked!")
 
+	#switches to sabacc
 	def sabacc(self):
 		print("Sabacc clicked!")
 
+	#exits the program.
 	def exit(self):
 		self.app_exit.emit()
