@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck
@@ -192,18 +192,60 @@ class BlackJackScreen(QWidget):
             if i > 1:
                 QTimer.singleShot(wait, lambda c=card, idx=i: self.animateDealerCard(c,idx))
                 wait += 1000
-
+        if self.game.dealerScore > 21:
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
+        elif self.game.dealerScore > self.game.playerScore:
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("dealer"))
+        elif self.game.dealerScore == self.game.playerScore:
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("Tie"))
+        else:
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
+        print(f"Player's score: {self.game.playerScore}")
         print(f"Dealer's score: {self.game.dealerScore}")
 
 
     def game_over(self, winner):
+        for card in self.scene.items():
+            self.scene.removeItem(card)
+        for i, card in enumerate(self.game.playerHand):
+            
+            card_sprite = self.createCard(card)
+            end = self.player_pos + QPointF(i * 80, 0)
+            self.animateCard(end, self.deck_pos, card_sprite)
+
+        for i, card in enumerate(self.game.dealerHand):
+            
+            card_sprite = self.createCard(card)
+            end = self.dealer_pos + QPointF(i * 80, 0)
+            self.animateCard(end, self.deck_pos, card_sprite)
+
+        QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.scene.clear())
+
+        self.game.playerHand = []
+        self.game.dealerHand = []
+        self.game.bust = False
+        self.game.dealerScore = 0
+        self.game.playerScore = 0
+
+        self.ui.dealButton.setEnabled(True)
+        self.ui.betButton.setEnabled(True)
+        self.ui.hitButton.setEnabled(False)
+        self.ui.standButton.setEnabled(False)
         if winner == "dealer":
+            self.player_chips = self.player_chips- self.game.chips
+            self.game.chips = 0
+            QMessageBox.information(self, "Dealer Wins", "Dealer Wins")
             '''
             BISSHOY: The player loses the chips they bet "stored in self.game.chips". You'll have to subtract those from
             the player_chips attribute. This would be the time to potentially remove them from the game. Also, might want to include
             in here the option to replay(reset the GUI to initial state).
             '''
-            return
+            print("dealer wins!")
+            return 0
+        elif winner == "player":
+            QMessageBox.information(self, "You Win", "You Win")
+            self.player_chips += self.game.chips*2
+            self.game.chips = 0
         return
 
 
@@ -229,7 +271,8 @@ class BlackJackScreen(QWidget):
         if busted:
             self.ui.hitButton.setEnabled(False)
             self.ui.standButton.setEnabled(False)
-            self.game_over("dealer")
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("dealer"))
+            
         return
     
     def start(self):
@@ -381,7 +424,7 @@ class BlackJack:
                 return total
         '''
 
-
+#adding this comment to see if it updates
 
     def playerTurn(self):
         while True:
@@ -410,6 +453,7 @@ class BlackJack:
                 if len(total) > 1:
                     self.verifyTotal(total)
                 total = self.getBestSum(total)
+                self.playerScore = self.getBestSum(total)
                 return total
             
     
