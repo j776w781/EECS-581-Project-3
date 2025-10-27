@@ -1,5 +1,14 @@
+'''
+Name: deck.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, Max Biundo
+
+Description: Implementation for Playing card and card deck.
+'''
+
 import random
 
+#Implementation for playing card, whic just has a suit and rank.
 class Card:
 	def __init__(self, suit, rank):
 		self.suit = suit
@@ -15,6 +24,12 @@ class Card:
 		return self.rank + other.rank	
 
 
+'''
+Implementation for card deck, which is essentially just a list of Cards.
+
+Drawing removes a random card from the deck.
+Shuffling restores the initial state of the deck.
+'''
 class Deck:
 	def __init__(self):
 		self.deck = []
