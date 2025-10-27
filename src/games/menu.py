@@ -3,7 +3,10 @@ Name: main.py
 
 Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, Max Biundo
 
-Description: Main skeleton for the program. Facilitates switching between all GUI elements.
+Description: Menu GUI for the program. Calls on switching between all game GUIS.
+
+Inputs: none
+Outputs: Menu GUI.
 '''
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget
