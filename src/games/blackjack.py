@@ -420,7 +420,7 @@ class BlackJack:
                 return total
         '''
 
-
+#adding this comment to see if it updates
 
     def playerTurn(self):
         while True:
