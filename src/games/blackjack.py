@@ -268,6 +268,7 @@ class BlackJackScreen(QWidget):
             if self.player_chips == 0:
                 QMessageBox.information(self, "Get out.", "Get outta here!")
                 self.leave()
+            self.addDeckBack()
             return 0
         elif winner == "player":
             QMessageBox.information(self, "You Win", "You Win")
