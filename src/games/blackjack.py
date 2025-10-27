@@ -19,7 +19,6 @@ from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqt
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck
-import time
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -63,7 +62,7 @@ class BlackJackScreen(QWidget):
     '''
     Renders the initial state of the GUI, connecting buttons to helper functions.
     '''
-    def __init__(self, parent=None, chips = 10):
+    def __init__(self, state, parent=None):
         super().__init__(parent)
         self.ui = Ui_BlackJackScreen()
         self.ui.setupUi(self)
@@ -71,30 +70,32 @@ class BlackJackScreen(QWidget):
         self.scene = QGraphicsScene(0, 0, 600, 590, self)
         self.ui.cardGraphicsView.setScene(self.scene)
 
-        self.deck_pos = QPointF(0, 240)
+        self.deck_pos = QPointF(-32, 190)
         self.player_pos = QPointF(300, 350)
         self.dealer_pos = QPointF(300, 80)
 
         self.game = BlackJack()
         self.ui.dealButton.clicked.connect(self.start)
+        self.addDeckBack()
 
         # Rules button
         self.rulesButton = QPushButton("Rules", self)
         self.rulesButton.move(20, 20)
         self.rulesButton.clicked.connect(self.showRules)
 
-        self.player_chips = chips
-        self.ui.chipsNum.setText(f"Available chips: {chips}")
+        self.state = state
+        self.pot = 0
+        self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+        self.ui.potNum.setText(f"Pot: {self.pot}")
         self.ui.betButton.clicked.connect(self.betMore)        
 
 
         self.ui.hitButton.clicked.connect(self.hit)
         self.ui.hitButton.setEnabled(False)
-        self.ui.standButton.clicked.connect(self.dealerGo)
+        self.ui.standButton.clicked.connect(self.stand)
         self.ui.standButton.setEnabled(False)
         self.ui.leaveButton.clicked.connect(self.leave)
-        self.addDeckBack()
-
+        
 
     '''Adds the card deck icon to the GUI.'''
     def addDeckBack(self):
@@ -193,11 +194,13 @@ class BlackJackScreen(QWidget):
     Adds a player's chip to the current gamble.
     '''
     def betMore(self):
-        if self.game.chips == self.player_chips:
+        if self.state.chips == 0:
             QMessageBox.information(self, "Maximum Bet", "You've already bet all your chips! Good luck!")
         else:
-            self.game.chips += 1
-            self.ui.chipsNum.setText(f"Available chips: {self.player_chips - self.game.chips}")
+            self.pot += 50
+            self.state.chips -= 50
+            self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+            self.ui.potNum.setText(f"Pot: {self.pot}")
         return 
 
     '''
@@ -222,7 +225,7 @@ class BlackJackScreen(QWidget):
         elif self.game.dealerScore > self.game.playerScore:
             QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("dealer"))
         elif self.game.dealerScore == self.game.playerScore:
-            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("Tie"))
+            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("tie"))
         else:
             QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
         print(f"Player's score: {self.game.playerScore}")
@@ -234,47 +237,52 @@ class BlackJackScreen(QWidget):
     Also handles forceful removal if you lose all chips.
     '''
     def game_over(self, winner):
+        if winner == "dealer":
+            QMessageBox.information(self, "Dealer Wins", "Dealer Wins")
+            print("dealer wins!")
+            if self.state.chips == 0:
+                QMessageBox.information(self, "Get out.", "Get outta here!")
+                self.leave()
+            self.addDeckBack()
+        elif winner == "player":
+            QMessageBox.information(self, "You Win", "You Win")
+            self.state.chips += self.pot*2
+            self.ui.chipsNum.setText(f"Your total: {self.state.chips}")
+            self.addDeckBack()
+        elif winner == "tie":
+            QMessageBox.information(self, "You Tie", "You Tie")
+            self.state.chips += self.pot
+            self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+            self.ui.potNum.setText(f"Pot: {self.pot}")
+            self.addDeckBack()
+
         for card in self.scene.items():
             self.scene.removeItem(card)
+
         for i, card in enumerate(self.game.playerHand):
-            
             card_sprite = self.createCard(card)
             end = self.player_pos + QPointF(i * 80, 0)
             self.animateCard(end, self.deck_pos, card_sprite)
 
         for i, card in enumerate(self.game.dealerHand):
-            
             card_sprite = self.createCard(card)
             end = self.dealer_pos + QPointF(i * 80, 0)
             self.animateCard(end, self.deck_pos, card_sprite)
 
         QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.scene.clear())
+        QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.addDeckBack())
 
-        self.game.playerHand = []
-        self.game.dealerHand = []
-        self.game.bust = False
-        self.game.dealerScore = 0
-        self.game.playerScore = 0
+        self.game = BlackJack()
+        self.pot = 0
+        self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+        self.ui.potNum.setText(f"Pot: {self.pot}")
 
-        self.ui.dealButton.setEnabled(True)
-        self.ui.betButton.setEnabled(True)
+
+        QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.ui.dealButton.setEnabled(True))
+        QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.ui.betButton.setEnabled(True))
         self.ui.hitButton.setEnabled(False)
         self.ui.standButton.setEnabled(False)
-        if winner == "dealer":
-            self.player_chips = self.player_chips- self.game.chips
-            self.game.chips = 0
-            QMessageBox.information(self, "Dealer Wins", "Dealer Wins")
-            print("dealer wins!")
-            if self.player_chips == 0:
-                QMessageBox.information(self, "Get out.", "Get outta here!")
-                self.leave()
-            self.addDeckBack()
-            return 0
-        elif winner == "player":
-            QMessageBox.information(self, "You Win", "You Win")
-            self.player_chips += self.game.chips*2
-            self.game.chips = 0
-            self.addDeckBack()
+
         return
 
 
@@ -285,7 +293,7 @@ class BlackJackScreen(QWidget):
     Checks for a bust, and ends the game accordingly.
     '''
     def hit(self):
-        cur_total, card, busted = self.game.hit("human")
+        card, busted = self.game.hit("human")
         print(self.game.playerHand)
         end = self.player_pos + QPointF((len(self.game.playerHand)-1)*80, 0)
         card = self.createCard(card)
@@ -297,12 +305,20 @@ class BlackJackScreen(QWidget):
             
         return
     
+    '''
+    Finalizes player score and hands control to the dealer.
+    '''
+    def stand(self):
+        total = self.game.getTotal(self.game.playerHand)
+        total = self.game.getBestSum(total)
+        self.game.playerScore = total
+        self.dealerGo()
 
     '''
     Starts the game, closing off unnecessary buttons and starting the deal.
     '''
     def start(self):
-        if self.game.chips > 0:
+        if self.pot > 0:
             self.ui.betButton.setEnabled(False)
             self.ui.hitButton.setEnabled(True)
             self.ui.standButton.setEnabled(True)
@@ -315,7 +331,8 @@ class BlackJackScreen(QWidget):
     '''
     def leave(self):
         self.scene.clear()
-        self.player_chips = self.player_chips - self.game.chips
+        self.pot = 0
+        self.ui.potNum.setText(f"Pot: {self.pot}")
         self.game = BlackJack()
         self.ui.dealButton.setEnabled(True)
         self.ui.betButton.setEnabled(True)
@@ -339,7 +356,6 @@ class BlackJack:
         self.dealerHand = []
         self.playerScore = 0
         self.dealerScore = 0
-        self.chips = 0
         self.bust = False
 
     '''Adds card to a hand''' 
@@ -365,10 +381,7 @@ class BlackJack:
         total = [0]
         for card in hand:
             if card.rank == 'ace':
-                if total[0] + 11 > 21:
-                    total[0] = total[0] + 1
-                else:
-                    total.append('ace')
+                total.append('ace')
             elif card.rank in ['jack', 'queen', 'king']:
                 total[0] = total[0] + 10
             else:
@@ -376,29 +389,17 @@ class BlackJack:
         return total
 
     '''
-    Removes any aces that must evaluate to one to preserve the score.
-    '''
-    def verifyTotal(self, total):
-        for i in range(1, len(total)):
-            if total[0] + 11 <= 21:
-                continue
-            else:
-                total[0] += 1
-                total[i] = ''
-        while '' in total:
-            index = total.index('')
-            total.pop(index)
-
-    '''
     Synthesizes a final sum, fully processing aces.
     '''
     def getBestSum(self, total):
         final = total[0]
+        # First, add each ace as a value of 1.
         for i in range(1, len(total)):
-            if final + 11 <= 21:
-                final += 11
-            else:
-                final += 1
+            final += 1
+        # Then for each ace, if we can make one of them bigger, do it.
+        for i in range(1, len(total)):
+            if final + 10 <= 21:
+                final += 10
         return final
 
 
@@ -411,13 +412,11 @@ class BlackJack:
             self.playerHand.append(self.deck.draw())
             card = self.playerHand[len(self.playerHand)-1]
             total = self.getTotal(self.playerHand)
-
-            if len(total) > 1:
-                self.verifyTotal(total)
             total = self.getBestSum(total)
+            self.playerScore = total
             if total > 21:
-                return total, card, True
-            return total, card, False
+                return card, True
+            return card, False
 
 
     '''
@@ -437,16 +436,12 @@ class BlackJack:
             self.printHand(self.playerHand)
 
             total = self.getTotal(self.dealerHand)
-            if len(total) > 1:
-                self.verifyTotal(total)
             #if self.getBestSum(total) < self.playerScore:
             #Casino rules I guess
-            if self.getBestSum(total) < 17:
+            if self.getBestSum(total) <= 17:
                 print('\nDealer hits.')
                 self.dealerHand.append(self.deck.draw())
                 total = self.getTotal(self.dealerHand)
-                if len(total) > 1:
-                    self.verifyTotal(total)
                 if total[0] > 21:
                     self.dealerScore = self.getBestSum(total)
             else:

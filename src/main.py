@@ -11,6 +11,7 @@ from PyQt6.QtGui import QFontDatabase, QFont
 import os
 
 from games.menu import MenuScreen
+from games.state.gamestate import GameState
 from games.blackjack import BlackJackScreen
 
 
@@ -27,12 +28,14 @@ class MainWindow(QMainWindow):
             );
         """)
 
+        self.state = GameState()
+
         #Stores the GUI screens.
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
 
-        self.menu = MenuScreen(parent=self)
-        self.blackjack = BlackJackScreen(parent=self)
+        self.menu = MenuScreen(self.state, parent=self)
+        self.blackjack = BlackJackScreen(self.state, parent=self)
 
         self.stack.addWidget(self.menu)
         self.stack.addWidget(self.blackjack)
@@ -48,6 +51,7 @@ class MainWindow(QMainWindow):
 
     #switch to menu
     def show_menu_screen(self):
+        self.menu.ui.bankLabel.setText(f"Chip Total: {self.state.chips}")
         self.stack.setCurrentWidget(self.menu)
 
 

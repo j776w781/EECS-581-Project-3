@@ -35,9 +35,6 @@ class Ui_BlackJackScreen(object):
         self.dealerLabel.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
         self.dealerLabel.setLineWidth(1)
         self.dealerLabel.setObjectName("dealerLabel")
-        self.label = QtWidgets.QLabel(parent=Form)
-        self.label.setGeometry(QtCore.QRect(50, 240, 131, 16))
-        self.label.setObjectName("label")
         self.playerLabel = QtWidgets.QLabel(parent=Form)
         self.playerLabel.setGeometry(QtCore.QRect(420, 380, 331, 191))
         self.playerLabel.setMinimumSize(QtCore.QSize(100, 100))
@@ -73,18 +70,22 @@ class Ui_BlackJackScreen(object):
         font.setPointSize(19)
         self.betButton.setFont(font)
         self.betButton.setStyleSheet("QPushButton {\n"
-"    \n"
-"    \n"
 "    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:1, y2:0, stop:0 rgba(222, 255, 42, 255), stop:1 rgba(255, 255, 255, 255));\n"
 "}\n"
 "")
         self.betButton.setObjectName("betButton")
         self.chipsNum = QtWidgets.QLabel(parent=Form)
-        self.chipsNum.setGeometry(QtCore.QRect(30, 520, 171, 31))
+        self.chipsNum.setGeometry(QtCore.QRect(20, 50, 271, 41))
         font = QtGui.QFont()
         font.setFamily("Broadway")
-        font.setPointSize(11)
+        font.setPointSize(20)
         self.chipsNum.setFont(font)
+        self.chipsNum.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"    x1:0, y1:0, x2:0, y2:1,\n"
+"    stop:0 #7d7a7a, stop:1 #c7bfbf);\n"
+"    color: black;\n"
+"}")
         self.chipsNum.setObjectName("chipsNum")
         self.hitButton = QtWidgets.QPushButton(parent=Form)
         self.hitButton.setGeometry(QtCore.QRect(400, 260, 171, 41))
@@ -113,7 +114,7 @@ class Ui_BlackJackScreen(object):
         self.cardGraphicsView.setGeometry(QtCore.QRect(0, 0, 801, 601))
         self.cardGraphicsView.setObjectName("cardGraphicsView")
         self.leaveButton = QtWidgets.QPushButton(parent=Form)
-        self.leaveButton.setGeometry(QtCore.QRect(70, 560, 81, 31))
+        self.leaveButton.setGeometry(QtCore.QRect(70, 520, 81, 31))
         font = QtGui.QFont()
         font.setFamily("Broadway")
         self.leaveButton.setFont(font)
@@ -124,6 +125,19 @@ class Ui_BlackJackScreen(object):
 "    );\n"
 "}")
         self.leaveButton.setObjectName("leaveButton")
+        self.potNum = QtWidgets.QLabel(parent=Form)
+        self.potNum.setGeometry(QtCore.QRect(20, 100, 271, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(20)
+        self.potNum.setFont(font)
+        self.potNum.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"    x1:0, y1:0, x2:0, y2:1,\n"
+"    stop:0 #7d7a7a, stop:1 #c7bfbf);\n"
+"    color: black;\n"
+"}")
+        self.potNum.setObjectName("potNum")
         self.cardGraphicsView.raise_()
         self.dealerLabel.raise_()
         self.playerLabel.raise_()
@@ -133,6 +147,7 @@ class Ui_BlackJackScreen(object):
         self.hitButton.raise_()
         self.standButton.raise_()
         self.leaveButton.raise_()
+        self.potNum.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -144,7 +159,8 @@ class Ui_BlackJackScreen(object):
         self.playerLabel.setText(_translate("Form", "Player\'s Hand:"))
         self.dealButton.setText(_translate("Form", "Start"))
         self.betButton.setText(_translate("Form", "Bet More"))
-        self.chipsNum.setText(_translate("Form", "Available Chips:"))
+        self.chipsNum.setText(_translate("Form", "Your Total:"))
         self.hitButton.setText(_translate("Form", "Hit"))
         self.standButton.setText(_translate("Form", "Stand"))
         self.leaveButton.setText(_translate("Form", "Leave"))
+        self.potNum.setText(_translate("Form", "Pot: "))

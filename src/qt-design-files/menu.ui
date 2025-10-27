@@ -236,29 +236,32 @@ QPushButton:hover{
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="bankLabel">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>270</y>
-     <width>331</width>
-     <height>241</height>
+     <x>450</x>
+     <y>360</y>
+     <width>261</width>
+     <height>61</height>
     </rect>
    </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>25</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(...)</string>
+    <string notr="true">QLabel {
+	background-color: qlineargradient(
+	x1:0, y1:0, x2:0, y2:1,
+	stop:0 #7d7a7a, 
+	stop:1 #c7bfbf);
+	color: black;
+}</string>
    </property>
    <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>assets/casino-chips-on-transparent-background-png-604786155.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
+    <string>Chip total:</string>
    </property>
   </widget>
  </widget>
