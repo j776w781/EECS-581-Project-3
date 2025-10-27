@@ -1,3 +1,11 @@
+'''
+Name: main.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, Max Biundo
+
+Description: Main skeleton for the program. Facilitates switching between all GUI elements.
+'''
+
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PyQt6.QtGui import QFontDatabase, QFont
 import os
@@ -19,6 +27,7 @@ class MainWindow(QMainWindow):
             );
         """)
 
+        #Stores the GUI screens.
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
 
@@ -33,9 +42,11 @@ class MainWindow(QMainWindow):
 
         self.blackjack.switch_to_menu.connect(self.show_menu_screen)
 
+    #Switch to blackjack
     def show_blackjack_screen(self):
         self.stack.setCurrentWidget(self.blackjack)
 
+    #switch to menu
     def show_menu_screen(self):
         self.stack.setCurrentWidget(self.menu)
 
