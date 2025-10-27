@@ -220,14 +220,15 @@ class BlackJackScreen(QWidget):
             if i > 1:
                 QTimer.singleShot(wait, lambda c=card, idx=i: self.animateDealerCard(c,idx))
                 wait += 1000
+        
         if self.game.dealerScore > 21:
-            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
+            QTimer.singleShot(wait, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
         elif self.game.dealerScore > self.game.playerScore:
-            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("dealer"))
+            QTimer.singleShot(wait, Qt.TimerType.PreciseTimer, lambda: self.game_over("dealer"))
         elif self.game.dealerScore == self.game.playerScore:
-            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("tie"))
+            QTimer.singleShot(wait, Qt.TimerType.PreciseTimer, lambda: self.game_over("tie"))
         else:
-            QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
+            QTimer.singleShot(wait, Qt.TimerType.PreciseTimer, lambda: self.game_over("player"))
         print(f"Player's score: {self.game.playerScore}")
         print(f"Dealer's score: {self.game.dealerScore}")
 
