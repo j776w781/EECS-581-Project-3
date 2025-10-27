@@ -9,11 +9,12 @@ Description: Main skeleton for the program. Facilitates switching between all GU
 from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
 from PyQt6.QtGui import QFontDatabase, QFont
 import os
+import sys
+sys.dont_write_bytecode = True
 
 from games.menu import MenuScreen
 from games.state.gamestate import GameState
 from games.blackjack import BlackJackScreen
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
