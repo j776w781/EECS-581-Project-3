@@ -246,6 +246,7 @@ class BlackJackScreen(QWidget):
             QMessageBox.information(self, "You Win", "You Win")
             self.player_chips += self.game.chips*2
             self.game.chips = 0
+        self.addDeckBack()
         return
 
 
