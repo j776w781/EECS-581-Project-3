@@ -241,12 +241,13 @@ class BlackJackScreen(QWidget):
             in here the option to replay(reset the GUI to initial state).
             '''
             print("dealer wins!")
+            self.addDeckBack()
             return 0
         elif winner == "player":
             QMessageBox.information(self, "You Win", "You Win")
             self.player_chips += self.game.chips*2
             self.game.chips = 0
-        self.addDeckBack()
+            self.addDeckBack()
         return
 
 
