@@ -128,7 +128,7 @@ class RouletteScreen(QWidget):
 
         # Use the power of MATH to spin the wheel to our random desintation. 
         target_index = self.game.wheel.spin()
-        final_angle = (5*-360) + target_index * -9.9 # Spins 5 full times before landing on random value.
+        final_angle = (5*-360) + target_index * -9.729 # Spins 5 full times before landing on random value.
 
         # Set start and ending values of animation.
         self.animation.setStartValue(0)
