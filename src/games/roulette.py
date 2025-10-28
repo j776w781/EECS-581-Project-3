@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QGraphicsView, QPushButton, QMessageBox, QGraphicsPixmapItem
+from PyQt6.QtCore import QObject, QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor
 from .ui.roulette_ui import Ui_RouletteScreen
 from .objects.table import Number, Table, Wheel
@@ -8,6 +8,22 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TABLE_DIR = os.path.join(BASE_DIR, "../assets/table.jpg")
 WHEEL_DIR = os.path.join(BASE_DIR, "../assets/wheel.png")
+PTR_DIR = os.path.join(BASE_DIR, "../assets/pointer.png")
+
+class RotatablePixmap(QObject):
+    def __init__(self, pixmap_item):
+        super().__init__()
+        self._rotation = 0
+        self.item = pixmap_item
+
+    def getRotation(self):
+        return self._rotation
+
+    def setRotation(self, value):
+        self._rotation = value
+        self.item.setRotation(value)  # update the QGraphicsPixmapItem
+
+    rotation = pyqtProperty(float, getRotation, setRotation)
 
 class RouletteScreen(QWidget):
     switch_to_menu = pyqtSignal()
@@ -18,10 +34,60 @@ class RouletteScreen(QWidget):
         self.ui.setupUi(self)
         self.ui.tableLabel.setPixmap(QPixmap(TABLE_DIR))
         self.ui.wheelLabel.setPixmap(QPixmap(WHEEL_DIR))
+        self.ui.label.setPixmap(QPixmap(PTR_DIR))
+        
         self.state = state
-        self.game = Roulette(self.state.chips)
+        self.game = Roulette()
+
+        # Set up the scene for wheel animation.
+        self.ui.wheelLabel.hide()
+        self.scene = QGraphicsScene(self)
+        self.ui.graphicsView.setScene(self.scene)
+        wheel_pixmap = QPixmap(WHEEL_DIR)
+        self.wheel_item = QGraphicsPixmapItem(wheel_pixmap)
+        self.wheel_item.setTransformationMode(Qt.TransformationMode.SmoothTransformation)
+        self.wheel_item.setTransformOriginPoint(wheel_pixmap.width()/2, wheel_pixmap.height()/2)
+        
+        self.wheel_item.setPos(self.ui.graphicsView.width() - (wheel_pixmap.width()/2), self.ui.graphicsView.height() - (wheel_pixmap.height()/2))
+        self.scene.setSceneRect(0, 0, self.ui.graphicsView.width(), self.ui.graphicsView.height())
+        self.ui.graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.ui.graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+
+        #self.ui.graphicsView.setRenderHint(QPainter.RenderHint.Antialiasing)
+        self.scene.addItem(self.wheel_item)
 
         self.ui.totalLabel.setText(f"Your Total: {self.state.chips}")
+
+        # Spin button handling.
+        self.ui.spinButton.clicked.connect(self.spin)
+
+        # Single row bets
+        self.ui.r_1.clicked.connect(lambda: self.apply_bet("r_1"))
+        self.ui.r_2.clicked.connect(lambda: self.apply_bet("r_2"))
+        self.ui.r_3.clicked.connect(lambda: self.apply_bet("r_3"))
+        self.ui.r_4.clicked.connect(lambda: self.apply_bet("r_4"))
+        self.ui.r_5.clicked.connect(lambda: self.apply_bet("r_5"))
+        self.ui.r_6.clicked.connect(lambda: self.apply_bet("r_6"))
+        self.ui.r_7.clicked.connect(lambda: self.apply_bet("r_7"))
+        self.ui.r_8.clicked.connect(lambda: self.apply_bet("r_8"))
+        self.ui.r_9.clicked.connect(lambda: self.apply_bet("r_9"))
+        self.ui.r_10.clicked.connect(lambda: self.apply_bet("r_10"))
+        self.ui.r_11.clicked.connect(lambda: self.apply_bet("r_11"))
+        self.ui.r_12.clicked.connect(lambda: self.apply_bet("r_12"))
+
+        # Paired row bets
+        self.ui.rp_1_2.clicked.connect(lambda: self.apply_bet("rp_1_2"))
+        self.ui.rp_2_3.clicked.connect(lambda: self.apply_bet("rp_2_3"))
+        self.ui.rp_3_4.clicked.connect(lambda: self.apply_bet("rp_3_4"))
+        self.ui.rp_4_5.clicked.connect(lambda: self.apply_bet("rp_4_5"))
+        self.ui.rp_5_6.clicked.connect(lambda: self.apply_bet("rp_5_6"))
+        self.ui.rp_6_7.clicked.connect(lambda: self.apply_bet("rp_6_7"))
+        self.ui.rp_7_8.clicked.connect(lambda: self.apply_bet("rp_7_8"))
+        self.ui.rp_8_9.clicked.connect(lambda: self.apply_bet("rp_8_9"))
+        self.ui.rp_9_10.clicked.connect(lambda: self.apply_bet("rp_9_10"))
+        self.ui.rp_10_11.clicked.connect(lambda: self.apply_bet("rp_10_11"))
+        self.ui.rp_11_12.clicked.connect(lambda: self.apply_bet("rp_11_12"))
 
         #TEMPLATE FOR BUTTON CONNECTIONS
         #Assumes the user has clicked the 3 space, placing a bet on 3.
@@ -37,7 +103,7 @@ class RouletteScreen(QWidget):
         #Red/black: rd/b
         #Even/Odd: e/o
         #Code to put:
-        #self.ui.centerThree.clicked.connect(lambda: self.game.apply_bet("s_3"))
+        #self.ui.centerThree.clicked.connect(lambda: self.apply_bet("s_3"))
 
     #Wrapper for adding a bet to the game logic. Simply passes it to the appropriate Roulette method.
     def apply_bet(self, betcode, chipamount=50):
@@ -46,16 +112,26 @@ class RouletteScreen(QWidget):
         #Removes the chips from the user's balance. Does not immediately kick them out.
         self.state.chips = self.state.chips-chipamount
 
+    def spin(self):
+        print('Spinning...')
+        self.rotatable_wheel = RotatablePixmap(self.wheel_item)
+        self.animation = QPropertyAnimation(self.rotatable_wheel, b'rotation')
+        self.animation.setDuration(4000)  # 4 seconds
+        self.animation.setStartValue(0)
+        self.animation.setEndValue(360 * 5)  # spin 5 full turns
+        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self.animation.start()
+
 class Roulette:
-    def __init__(self, chips):
-        self.chips = chips
+    def __init__(self):
         self.table = Table()
         self.wheel = Wheel()
         self.bets = []
         self.result = 0
 
 
-    def add_bet(bet_code, chips_bet):
+    def add_bet(self, bet_code, chips_bet):
+        print(f"Bet added: {bet_code}")
         #Don't worry about this. Just send me your bets and I'll be implemented later.
         return
 
