@@ -1,5 +1,26 @@
-import time
-from table import Number, Table, Wheel
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
+from PyQt6.QtGui import QPixmap, QPainter, QColor
+from .ui.roulette_ui import Ui_RouletteScreen
+from .objects.table import Number, Table, Wheel
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TABLE_DIR = os.path.join(BASE_DIR, "../assets/table.jpg")
+WHEEL_DIR = os.path.join(BASE_DIR, "../assets/wheel.png")
+
+class RouletteScreen(QWidget):
+    switch_to_menu = pyqtSignal()
+
+    def __init__(self, state, parent=None):
+        super().__init__(parent)
+        self.ui = Ui_RouletteScreen()
+        self.ui.setupUi(self)
+        self.ui.tableLabel.setPixmap(QPixmap(TABLE_DIR))
+        self.ui.wheelLabel.setPixmap(QPixmap(WHEEL_DIR))
+        self.state = state
+
+        self.ui.totalLabel.setText(f"Your Total: {self.state.chips}")
 
 class Roulette:
     def __init__(self, chips):

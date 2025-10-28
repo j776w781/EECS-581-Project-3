@@ -15,6 +15,7 @@ sys.dont_write_bytecode = True
 from games.menu import MenuScreen
 from games.state.gamestate import GameState
 from games.blackjack import BlackJackScreen
+from games.roulette import RouletteScreen
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -30,18 +31,21 @@ class MainWindow(QMainWindow):
         """)
 
         self.state = GameState()
-
+        
         #Stores the GUI screens.
         self.stack = QStackedWidget()
         self.setCentralWidget(self.stack)
 
         self.menu = MenuScreen(self.state, parent=self)
         self.blackjack = BlackJackScreen(self.state, parent=self)
+        self.roulette = RouletteScreen(self.state, parent=self)
 
         self.stack.addWidget(self.menu)
         self.stack.addWidget(self.blackjack)
+        self.stack.addWidget(self.roulette)
 
         self.menu.switch_to_blackjack.connect(self.show_blackjack_screen)
+        self.menu.switch_to_roulette.connect(self.show_roulette_screen)
         self.menu.app_exit.connect(self.close)
 
         self.blackjack.switch_to_menu.connect(self.show_menu_screen)
@@ -49,6 +53,10 @@ class MainWindow(QMainWindow):
     #Switch to blackjack
     def show_blackjack_screen(self):
         self.stack.setCurrentWidget(self.blackjack)
+
+    def show_roulette_screen(self):
+        self.menu.ui.bankLabel.setText(f"Chip Total: {self.state.chips}")
+        self.stack.setCurrentWidget(self.roulette)
 
     #switch to menu
     def show_menu_screen(self):
