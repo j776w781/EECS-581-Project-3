@@ -105,7 +105,9 @@ class RouletteScreen(QWidget):
         #Red/black: rd/b
         #Even/Odd: e/o
         #Code to put:
-        #self.ui.centerThree.clicked.connect(lambda: self.apply_bet("s_3"))
+        #self.ui.s_3.clicked.connect(lambda: self.apply_bet("s_3"))
+
+        #IN THE GUI, SET THE BUTTON'S NAME TO THE BETCODE. USE GAVIN'S WORK AS AN EXAMPLE.
 
     #Wrapper for adding a bet to the game logic. Simply passes it to the appropriate Roulette method.
     #NOTE: We could also use this to add chip graphics if we have time/update the "chips bet" for a button.
