@@ -19,14 +19,45 @@ class RouletteScreen(QWidget):
         self.ui.tableLabel.setPixmap(QPixmap(TABLE_DIR))
         self.ui.wheelLabel.setPixmap(QPixmap(WHEEL_DIR))
         self.state = state
+        self.game = Roulette(self.state.chips)
 
         self.ui.totalLabel.setText(f"Your Total: {self.state.chips}")
+
+        #TEMPLATE FOR BUTTON CONNECTIONS
+        #Assumes the user has clicked the 3 space, placing a bet on 3.
+        #SINGLE NUMBER betcode should be of the form s_#, where s stands for single, # is the actual betting number.
+        #Pairs: p_#_#
+        #Triples: tr_#_#_#
+        #Quads: q_#_#_#_#
+        #Rows: r_# (Row 1 is 1, 2, 3)
+        #Row Pair: rp_#_# (# are row numbers)
+        #Col: c_# (Col 1 is the one with 1)
+        #Twelves: tw_#
+        #Halves: h_#
+        #Red/black: rd/b
+        #Even/Odd: e/o
+        #Code to put:
+        #self.ui.centerThree.clicked.connect(lambda: self.game.apply_bet("s_3"))
+
+    #Wrapper for adding a bet to the game logic. Simply passes it to the appropriate Roulette method.
+    def apply_bet(self, betcode, chipamount=50):
+        #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
+        self.game.add_bet(betcode, chipamount)
+        #Removes the chips from the user's balance. Does not immediately kick them out.
+        self.state.chips = self.state.chips-chipamount
 
 class Roulette:
     def __init__(self, chips):
         self.chips = chips
         self.table = Table()
         self.wheel = Wheel()
+        self.bets = []
+        self.result = 0
+
+
+    def add_bet(bet_code, chips_bet):
+        #Don't worry about this. Just send me your bets and I'll be implemented later.
+        return
 
     def insideBet(self):
         # Input with error handling for roulette number.
