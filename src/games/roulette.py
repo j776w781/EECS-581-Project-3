@@ -108,6 +108,8 @@ class RouletteScreen(QWidget):
         #self.ui.centerThree.clicked.connect(lambda: self.apply_bet("s_3"))
 
     #Wrapper for adding a bet to the game logic. Simply passes it to the appropriate Roulette method.
+    #NOTE: We could also use this to add chip graphics if we have time/update the "chips bet" for a button.
+    #If we have to update the function call for that(pass in self.ui.[button] as well, I can do the tedium, since I should have thought about this before.)
     def apply_bet(self, betcode, chipamount=50):
         #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
         self.game.add_bet(betcode, chipamount)
@@ -137,7 +139,22 @@ class Roulette:
 
 
     def add_bet(self, bet_code, chips_bet):
-        print(f"Bet added: {bet_code}")
+        if len(self.bets) == 0:
+            self.bets.append([bet_code, chips_bet])
+            print(f"Bet added: {bet_code} for {chips_bet}")
+            return
+        else:
+            for i in range(len(self.bets)):
+                if self.bets[i][0] == bet_code:
+                    self.bets[i][1] += chips_bet
+                    print(f"Bet for {bet_code} increased to {self.bets[i][1]} chips")
+                    return
+            self.bets.append([bet_code, chips_bet])
+            print(f"Bet added: {bet_code} for {chips_bet}")
+            return
+        
+
+        
         #Don't worry about this. Just send me your bets and I'll be implemented later.
         return
 
