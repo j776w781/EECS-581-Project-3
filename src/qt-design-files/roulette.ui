@@ -65,10 +65,10 @@
   <widget class="QLabel" name="wheelLabel">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>320</y>
-     <width>561</width>
-     <height>561</height>
+     <x>570</x>
+     <y>370</y>
+     <width>501</width>
+     <height>511</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -638,8 +638,8 @@ QPushButton:hover{
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>370</y>
+     <x>600</x>
+     <y>410</y>
      <width>61</width>
      <height>41</height>
     </rect>
@@ -670,6 +670,7 @@ QPushButton:hover{
     <string notr="true">background-color: rgba(0, 0, 0, 0)</string>
    </property>
   </widget>
+  <zorder>wheelLabel</zorder>
   <zorder>tableLabel</zorder>
   <zorder>theDirtySolution</zorder>
   <zorder>totalLabel</zorder>
@@ -697,7 +698,6 @@ QPushButton:hover{
   <zorder>rp_10_11</zorder>
   <zorder>rp_11_12</zorder>
   <zorder>spinButton</zorder>
-  <zorder>wheelLabel</zorder>
   <zorder>label</zorder>
   <zorder>graphicsView</zorder>
  </widget>

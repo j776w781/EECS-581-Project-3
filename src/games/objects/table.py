@@ -64,27 +64,21 @@ class Table:
     
 class Wheel:
     def __init__(self):
-        self.wheel = []
-        wheel_order = [28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7]
-        for i in range(len(wheel_order)):
-            self.wheel.append(Number(wheel_order[i]))
+        self.order = []
+        order = [28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7]
+        for i in range(len(order)):
+            self.order.append(Number(order[i]))
 
     def __str__(self):
         output = ''
-        for i in range(len(self.wheel)):
-            output += str(self.wheel[i]) + '\n'
+        for i in range(len(self.order)):
+            output += str(self.order[i]) + '\n'
         return output[:len(output)-1]
     
     def spin(self):
-        # The wheel has 37 indices. So the max distance is 20 spins around the wheel. 37*20 = 740.
-        spin_distance = random.randint(1, 740) # We should at least travel once.
-        index = 0
-        for i in range(spin_distance):
-            index += 1
-            if index == len(self.wheel):
-                index = 0
-        
-        return self.wheel[index]
+        # Grab random index in range of wheel's order list.
+        index = random.randint(0, 36)
+        return index
 
         # Why not just pick a random number from the wheel?
             # 1) To preserve statistics of standard Roulette

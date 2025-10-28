@@ -125,12 +125,23 @@ class RouletteScreen(QWidget):
         self.rotatable_wheel = AnimatedWheel(self.wheel_item)
         self.animation = QPropertyAnimation(self.rotatable_wheel, b'rotation')
         self.animation.setDuration(4000)  # 4 seconds
+
+        # Use the power of MATH to spin the wheel to our random desintation. 
+        target_index = self.game.wheel.spin()
+        final_angle = (5*-360) + target_index * -9.9 # Spins 5 full times before landing on random value.
+
+        # Set start and ending values of animation.
         self.animation.setStartValue(0)
-        self.animation.setEndValue(360 * 5)  # spin 5 full turns
-        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
-        self.animation.start()
+        self.animation.setEndValue(final_angle)  # spin 5 full turns + offset
+        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic) # Adjusts acceleration of animation.
+        self.animation.start() # Begin the animation!
+
+        # Do not enable the spin button again until the animation is completely finished.
         QTimer.singleShot(4000, Qt.TimerType.PreciseTimer, lambda: self.ui.spinButton.setEnabled(True))
 
+        # Now grab the legitimate result (that should line up with the wheel).
+        result = self.game.wheel.order[target_index]
+        print("The winning number is:", result) # Test print to see result.
 
 class Roulette:
     def __init__(self):
