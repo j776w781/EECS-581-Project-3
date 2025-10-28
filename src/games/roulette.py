@@ -10,7 +10,7 @@ TABLE_DIR = os.path.join(BASE_DIR, "../assets/table.jpg")
 WHEEL_DIR = os.path.join(BASE_DIR, "../assets/wheel.png")
 PTR_DIR = os.path.join(BASE_DIR, "../assets/pointer.png")
 
-class RotatablePixmap(QObject):
+class AnimatedWheel(QObject):
     def __init__(self, pixmap_item):
         super().__init__()
         self._rotation = 0
@@ -40,26 +40,28 @@ class RouletteScreen(QWidget):
         self.game = Roulette()
 
         # Set up the scene for wheel animation.
-        self.ui.wheelLabel.hide()
-        self.scene = QGraphicsScene(self)
-        self.ui.graphicsView.setScene(self.scene)
-        wheel_pixmap = QPixmap(WHEEL_DIR)
-        self.wheel_item = QGraphicsPixmapItem(wheel_pixmap)
-        self.wheel_item.setTransformationMode(Qt.TransformationMode.SmoothTransformation)
-        self.wheel_item.setTransformOriginPoint(wheel_pixmap.width()/2, wheel_pixmap.height()/2)
+        self.ui.wheelLabel.hide() # Remove static wheel picture.
+        self.scene = QGraphicsScene(self) # Create graphic scene.
+        self.ui.graphicsView.setScene(self.scene) # Put scene in graphicView.
+        wheel_pixmap = QPixmap(WHEEL_DIR) # Create wheel sprite.
+        self.wheel_item = QGraphicsPixmapItem(wheel_pixmap) # Create graphic wheel sprite.
+        self.wheel_item.setTransformationMode(Qt.TransformationMode.SmoothTransformation) # Essentially creates movement more fluidly.
+        self.wheel_item.setTransformOriginPoint(wheel_pixmap.width()/2, wheel_pixmap.height()/2) # Make wheel transform around its origin.
         
-        self.wheel_item.setPos(self.ui.graphicsView.width() - (wheel_pixmap.width()/2), self.ui.graphicsView.height() - (wheel_pixmap.height()/2))
+        # Move wheel so its corner appears from the graphicsView.
+        self.wheel_item.setPos(self.ui.graphicsView.width() - (wheel_pixmap.width()/2), self.ui.graphicsView.height() - (wheel_pixmap.height()/2)) 
         self.scene.setSceneRect(0, 0, self.ui.graphicsView.width(), self.ui.graphicsView.height())
+        # Remove scrollbars that let user move wheel sprite.
         self.ui.graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.ui.graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        # The user actually can still move the wheel sprite, but its negligible.
 
-
-        #self.ui.graphicsView.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # Add the wheel sprite to the view
         self.scene.addItem(self.wheel_item)
 
         self.ui.totalLabel.setText(f"Your Total: {self.state.chips}")
 
-        # Spin button handling.
+        # Spin button handling. Animates wheel.
         self.ui.spinButton.clicked.connect(self.spin)
 
         # Single row bets
@@ -112,15 +114,19 @@ class RouletteScreen(QWidget):
         #Removes the chips from the user's balance. Does not immediately kick them out.
         self.state.chips = self.state.chips-chipamount
 
+    # Function to animate wheel to spin.
     def spin(self):
         print('Spinning...')
-        self.rotatable_wheel = RotatablePixmap(self.wheel_item)
+        self.ui.spinButton.setEnabled(False)
+        self.rotatable_wheel = AnimatedWheel(self.wheel_item)
         self.animation = QPropertyAnimation(self.rotatable_wheel, b'rotation')
         self.animation.setDuration(4000)  # 4 seconds
         self.animation.setStartValue(0)
         self.animation.setEndValue(360 * 5)  # spin 5 full turns
         self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
         self.animation.start()
+        QTimer.singleShot(4000, Qt.TimerType.PreciseTimer, lambda: self.ui.spinButton.setEnabled(True))
+
 
 class Roulette:
     def __init__(self):
