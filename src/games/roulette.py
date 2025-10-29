@@ -59,7 +59,7 @@ class RouletteScreen(QWidget):
         # Add the wheel sprite to the view
         self.scene.addItem(self.wheel_item)
 
-        self.ui.totalLabel.setText(f"Your Total: {self.state.chips}")
+        self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
 
         # Spin button handling. Animates wheel.
         self.ui.spinButton.clicked.connect(self.spin)
@@ -117,6 +117,8 @@ class RouletteScreen(QWidget):
         self.game.add_bet(betcode, chipamount)
         #Removes the chips from the user's balance. Does not immediately kick them out.
         self.state.chips = self.state.chips-chipamount
+        self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+
 
     # Function to animate wheel to spin.
     def spin(self):
