@@ -286,10 +286,30 @@ class Ui_RouletteScreen(object):
 "}")
         self.rp_11_12.setText("")
         self.rp_11_12.setObjectName("rp_11_12")
-#----------------------------------------------------------------------------------------------
-#                                    Split-bet Buttons pt.1
-#----------------------------------------------------------------------------------------------
-
+        self.spinButton = QtWidgets.QPushButton(parent=Form)
+        self.spinButton.setGeometry(QtCore.QRect(300, 340, 161, 61))
+        font = QtGui.QFont()
+        font.setFamily("Broadway Flat 3D Filled")
+        font.setPointSize(50)
+        self.spinButton.setFont(font)
+        self.spinButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"    x1:0, y1:0, x2:0, y2:1,\n"
+"    stop:0 rgba(255, 0, 0, 255), stop:1 rgba(80, 0, 0, 255));\n"
+"    color: white;\n"
+"}")
+        self.spinButton.setObjectName("spinButton")
+        self.label = QtWidgets.QLabel(parent=Form)
+        self.label.setGeometry(QtCore.QRect(570, 380, 61, 41))
+        self.label.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
+        self.label.setText("")
+        self.label.setPixmap(QtGui.QPixmap("../assets/pointer.png"))
+        self.label.setScaledContents(True)
+        self.label.setObjectName("label")
+        self.graphicsView = QtWidgets.QGraphicsView(parent=Form)
+        self.graphicsView.setGeometry(QtCore.QRect(510, 330, 301, 281))
+        self.graphicsView.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
+        self.graphicsView.setObjectName("graphicsView")
         self.p_1_2 = QtWidgets.QPushButton(parent=Form)
         self.p_1_2.setGeometry(QtCore.QRect(80, 138, 21, 20))
         self.p_1_2.setStyleSheet("QPushButton {\n"
@@ -360,16 +380,6 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_10_11.setText("")
         self.p_10_11.setObjectName("p_10_11")
-        self.p_11_12 = QtWidgets.QPushButton(parent=Form)
-        self.p_11_12.setGeometry(QtCore.QRect(249, 72, 21, 20))
-        self.p_11_12.setStyleSheet("QPushButton {\n"
-"    background-color: rgba(255, 255, 255, 0);\n"
-"}\n"
-"QPushButton:hover{\n"
-"    background-color: rgba(255, 255, 255, 60);\n"
-"}")
-        self.p_11_12.setText("")
-        self.p_11_12.setObjectName("p_11_12")
         self.p_13_14 = QtWidgets.QPushButton(parent=Form)
         self.p_13_14.setGeometry(QtCore.QRect(306, 138, 21, 20))
         self.p_13_14.setStyleSheet("QPushButton {\n"
@@ -380,6 +390,16 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_13_14.setText("")
         self.p_13_14.setObjectName("p_13_14")
+        self.p_11_12 = QtWidgets.QPushButton(parent=Form)
+        self.p_11_12.setGeometry(QtCore.QRect(249, 72, 21, 20))
+        self.p_11_12.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.p_11_12.setText("")
+        self.p_11_12.setObjectName("p_11_12")
         self.p_14_15 = QtWidgets.QPushButton(parent=Form)
         self.p_14_15.setGeometry(QtCore.QRect(306, 72, 21, 20))
         self.p_14_15.setStyleSheet("QPushButton {\n"
@@ -511,7 +531,7 @@ class Ui_RouletteScreen(object):
         self.p_32_33.setText("")
         self.p_32_33.setObjectName("p_32_33")
         self.p_34_35 = QtWidgets.QPushButton(parent=Form)
-        self.p_34_35.setGeometry(QtCore.QRect(702, 138, 21, 20))
+        self.p_34_35.setGeometry(QtCore.QRect(702, 139, 21, 20))
         self.p_34_35.setStyleSheet("QPushButton {\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
 "}\n"
@@ -530,10 +550,6 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_35_36.setText("")
         self.p_35_36.setObjectName("p_35_36")
-#----------------------------------------------------------------------------------------------
-#                                    Split-bet Buttons pt.2
-#----------------------------------------------------------------------------------------------
-
         self.p_1_4 = QtWidgets.QPushButton(parent=Form)
         self.p_1_4.setGeometry(QtCore.QRect(107, 171, 21, 20))
         self.p_1_4.setStyleSheet("QPushButton {\n"
@@ -564,7 +580,6 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_3_6.setText("")
         self.p_3_6.setObjectName("p_3_6")
-
         self.p_4_7 = QtWidgets.QPushButton(parent=Form)
         self.p_4_7.setGeometry(QtCore.QRect(164, 171, 21, 20))
         self.p_4_7.setStyleSheet("QPushButton {\n"
@@ -595,7 +610,6 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_6_9.setText("")
         self.p_6_9.setObjectName("p_6_9")
-
         self.p_7_10 = QtWidgets.QPushButton(parent=Form)
         self.p_7_10.setGeometry(QtCore.QRect(220, 171, 21, 20))
         self.p_7_10.setStyleSheet("QPushButton {\n"
@@ -866,36 +880,36 @@ class Ui_RouletteScreen(object):
 "}")
         self.p_33_36.setText("")
         self.p_33_36.setObjectName("p_33_36")
-
-        self.spinButton = QtWidgets.QPushButton(parent=Form)
-        self.spinButton.setGeometry(QtCore.QRect(300, 340, 161, 61))
-        font = QtGui.QFont()
-        font.setFamily("Broadway Flat 3D Filled")
-        font.setPointSize(50)
-        self.spinButton.setFont(font)
-        self.spinButton.setStyleSheet("QPushButton {\n"
-"    background-color: qlineargradient(\n"
-"    x1:0, y1:0, x2:0, y2:1,\n"
-"    stop:0 rgba(255, 0, 0, 255), stop:1 rgba(80, 0, 0, 255));\n"
-"    color: white;\n"
-"}")
-        self.spinButton.setObjectName("spinButton")
-        self.label = QtWidgets.QLabel(parent=Form)
-        self.label.setGeometry(QtCore.QRect(570, 380, 61, 41))
-        self.label.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
-        self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("../assets/pointer.png"))
-        self.label.setScaledContents(True)
-        self.label.setObjectName("label")
-        self.graphicsView = QtWidgets.QGraphicsView(parent=Form)
-        self.graphicsView.setGeometry(QtCore.QRect(510, 330, 301, 281))
-        self.graphicsView.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
-        self.graphicsView.setObjectName("graphicsView")
         self.wheelLabel.raise_()
         self.theDirtySolution.raise_()
         self.tableLabel.raise_()
         self.totalLabel.raise_()
-
+        self.r_1.raise_()
+        self.r_2.raise_()
+        self.r_3.raise_()
+        self.r_4.raise_()
+        self.r_5.raise_()
+        self.r_6.raise_()
+        self.r_7.raise_()
+        self.r_8.raise_()
+        self.r_9.raise_()
+        self.r_10.raise_()
+        self.r_11.raise_()
+        self.r_12.raise_()
+        self.rp_1_2.raise_()
+        self.rp_2_3.raise_()
+        self.rp_3_4.raise_()
+        self.rp_4_5.raise_()
+        self.rp_5_6.raise_()
+        self.rp_6_7.raise_()
+        self.rp_7_8.raise_()
+        self.rp_8_9.raise_()
+        self.rp_9_10.raise_()
+        self.rp_10_11.raise_()
+        self.rp_11_12.raise_()
+        self.spinButton.raise_()
+        self.label.raise_()
+        self.graphicsView.raise_()
         self.p_1_2.raise_()
         self.p_2_3.raise_()
         self.p_4_5.raise_()
@@ -903,8 +917,8 @@ class Ui_RouletteScreen(object):
         self.p_7_8.raise_()
         self.p_8_9.raise_()
         self.p_10_11.raise_()
-        self.p_11_12.raise_()
         self.p_13_14.raise_()
+        self.p_11_12.raise_()
         self.p_14_15.raise_()
         self.p_16_17.raise_()
         self.p_17_18.raise_()
@@ -920,7 +934,6 @@ class Ui_RouletteScreen(object):
         self.p_32_33.raise_()
         self.p_34_35.raise_()
         self.p_35_36.raise_()
-
         self.p_1_4.raise_()
         self.p_2_5.raise_()
         self.p_3_6.raise_()
@@ -954,33 +967,6 @@ class Ui_RouletteScreen(object):
         self.p_31_34.raise_()
         self.p_32_35.raise_()
         self.p_33_36.raise_()
-
-        self.r_1.raise_()
-        self.r_2.raise_()
-        self.r_3.raise_()
-        self.r_4.raise_()
-        self.r_5.raise_()
-        self.r_6.raise_()
-        self.r_7.raise_()
-        self.r_8.raise_()
-        self.r_9.raise_()
-        self.r_10.raise_()
-        self.r_11.raise_()
-        self.r_12.raise_()
-        self.rp_1_2.raise_()
-        self.rp_2_3.raise_()
-        self.rp_3_4.raise_()
-        self.rp_4_5.raise_()
-        self.rp_5_6.raise_()
-        self.rp_6_7.raise_()
-        self.rp_7_8.raise_()
-        self.rp_8_9.raise_()
-        self.rp_9_10.raise_()
-        self.rp_10_11.raise_()
-        self.rp_11_12.raise_()
-        self.spinButton.raise_()
-        self.label.raise_()
-        self.graphicsView.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
