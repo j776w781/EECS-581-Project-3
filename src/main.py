@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.stack.setCurrentWidget(self.blackjack)
 
     def show_roulette_screen(self):
-        self.menu.ui.bankLabel.setText(f"Chip Total: {self.state.chips}")
+        self.roulette.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
         self.stack.setCurrentWidget(self.roulette)
 
     #switch to menu
