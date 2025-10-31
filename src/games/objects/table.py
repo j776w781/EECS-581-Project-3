@@ -4,6 +4,7 @@ class Number:
     def __init__(self, num):
         self.value = num
         self.color = 'black'
+        self.row = 0
         self.col = 0
         self.third = 0
         self.half = 0
@@ -25,6 +26,33 @@ class Number:
             self.col = 2
         elif num % 3 == 0 and num != 0:
             self.col = 3
+
+        # Row calculations! It's clunky, I know.
+        if num in range(1, 4):
+            self.row = 1
+        elif num in range(4,7):
+            self.row = 2
+        elif num in range(7,10):
+            self.row = 3
+        elif num in range(10,13):
+            self.row = 4
+        elif num in range(13,16):
+            self.row = 5
+        elif num in range(16,19):
+            self.row = 6
+        elif num in range(19,22):
+            self.row = 7
+        elif num in range(22,25):
+            self.row = 8
+        elif num in range(25,28):
+            self.row = 9
+        elif num in range(28,31):
+            self.row = 10
+        elif num in range(31,34):
+            self.row = 11
+        elif num in range(34,37):
+            self.row = 12
+
 
         # Next we give a number which third in a range of 36 its in.
         if num in range(1, 13):

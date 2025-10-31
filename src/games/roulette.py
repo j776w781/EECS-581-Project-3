@@ -123,6 +123,11 @@ class RouletteScreen(QWidget):
         self.ui.p_32_35.clicked.connect(lambda: self.apply_bet("p_32_35"))
         self.ui.p_33_36.clicked.connect(lambda: self.apply_bet("p_33_36"))
 
+        #triple bets
+        self.ui.tr_0_1_2.clicked.connect(lambda: self.apply_bet("tr_0_1_2"))
+        self.ui.tr_0_2_3.clicked.connect(lambda: self.apply_bet("tr_0_2_3"))
+
+
         # Single row bets
         self.ui.r_1.clicked.connect(lambda: self.apply_bet("r_1"))
         self.ui.r_2.clicked.connect(lambda: self.apply_bet("r_2"))
@@ -150,6 +155,12 @@ class RouletteScreen(QWidget):
         self.ui.rp_10_11.clicked.connect(lambda: self.apply_bet("rp_10_11"))
         self.ui.rp_11_12.clicked.connect(lambda: self.apply_bet("rp_11_12"))
 
+        #Twelves bets
+        self.ui.tw_1.clicked.connect(lambda: self.apply_bet("tw_1"))
+        self.ui.tw_2.clicked.connect(lambda: self.apply_bet("tw_2"))
+        self.ui.tw_3.clicked.connect(lambda: self.apply_bet("tw_3"))
+
+
         #TEMPLATE FOR BUTTON CONNECTIONS
         #Assumes the user has clicked the 3 space, placing a bet on 3.
         #SINGLE NUMBER betcode should be of the form s_#, where s stands for single, # is the actual betting number.
@@ -172,11 +183,19 @@ class RouletteScreen(QWidget):
     #NOTE: We could also use this to add chip graphics if we have time/update the "chips bet" for a button.
     #If we have to update the function call for that(pass in self.ui.[button] as well, I can do the tedium, since I should have thought about this before.)
     def apply_bet(self, betcode, chipamount=50):
-        #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
-        self.game.add_bet(betcode, chipamount)
-        #Removes the chips from the user's balance. Does not immediately kick them out.
-        self.state.chips = self.state.chips-chipamount
-        self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+
+        #No betting once you've run out of chips.
+        if self.state.chips > 0:
+            #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
+            self.game.add_bet(betcode, chipamount)
+            #Removes the chips from the user's balance. Does not immediately kick them out.
+            self.state.chips = self.state.chips-chipamount
+            #Updates chip total on GUI.
+            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+        #Let's the user know they're out.
+        else:
+            QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
+
 
 
     # Function to animate wheel to spin.
@@ -188,7 +207,10 @@ class RouletteScreen(QWidget):
         self.animation.setDuration(4000)  # 4 seconds
 
         # Use the power of MATH to spin the wheel to our random desintation. 
-        target_index = self.game.wheel.spin()
+        #target_index = self.game.wheel.spin()
+
+        #Lets the GameLogic class give us the index for the wheel animation and the numerical result.
+        target_index, result = self.game.spin_wheel()
         final_angle = (5*-360) + target_index * -9.729 # Spins 5 full times before landing on random value.
 
         # Set start and ending values of animation.
@@ -199,35 +221,237 @@ class RouletteScreen(QWidget):
 
         # Do not enable the spin button again until the animation is completely finished.
         QTimer.singleShot(4000, Qt.TimerType.PreciseTimer, lambda: self.ui.spinButton.setEnabled(True))
+        QTimer.singleShot(4100, Qt.TimerType.PreciseTimer, lambda: self.aftermath())
 
         # Now grab the legitimate result (that should line up with the wheel).
-        result = self.game.wheel.order[target_index]
+        #result = self.game.wheel.order[target_index]
         print("The winning number is:", result) # Test print to see result.
+
+    
+    '''
+    This function should be called immediately after the wheel animation has spun. All it does is obtain the final payout,
+    add it to the player's chips, and notify the user of how many chips they won.
+    '''
+    def aftermath(self):
+        #Get our payout from our bets.
+        payout = self.game.generate_payout()
+        #Update our chips with the payout.
+        self.state.chips += payout
+        #Update the GUI's chip total.
+        self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+        #Let the user know what they've won.
+        QMessageBox.information(self, "Chips gained.", f"Good job! Your bets gained you {payout} chips!")
+        #Reset the Roulette's result and bets.
+        self.game.reset()
+
+        
+
+
+
+
 
 class Roulette:
     def __init__(self):
         self.table = Table()
         self.wheel = Wheel()
         self.bets = []
-        self.result = 0
+        self.result = None
 
 
+
+    #Simple function that restores the initial state of the Roulette class.
+    def reset(self):
+        #Clear all prior bets.
+        self.bets = []
+        #Remove the prior wheel result.
+        self.result = None
+        print("Game reset.")
+
+
+
+    #Basic wrapper for the wheel class. I don't think the RouletteScreen class really needs
+    #to interact with the Wheel class at all (coupling).
+    def spin_wheel(self):
+        #Get the proper index, since RouletteScreen will need it for the animation.
+        idx = self.wheel.spin()
+        #Save the result of the wheel spin for payout generation.
+        self.result = self.wheel.order[idx]
+        #Return the wheel index and numerical result for the RouletteScreen's use.
+        return idx, self.result.value
+
+
+
+
+    '''
+    This is the function used to add a bet for future payout generation. Note that bets in this
+    program will be represented as a "tuple" (a two element list for indexing ability). The 
+    first index will be the bet_code as defined below:
+
+    #SINGLE NUMBER betcode should be of the form s_#, where s stands for single, # is the actual betting number.
+    Pairs: p_#_#
+    Triples: tr_#_#_#
+    Quads: q_#_#_#_#
+    Rows: r_# (Row 1 is 1, 2, 3)
+    Row Pair: rp_#_# (# are row numbers)
+    Col: c_# (Col 1 is the one with 1)
+    Twelves(Thirds): tw_#
+    Halves: h_#
+    Red/black: rd/b
+    Even/Odd: e/o
+
+    There should only be one instance of a bet_code in self.bets at any given time. Therefore, if a user
+    decides to add chips onto a bet they've made before, this code intuitively adds those chips to the existing
+    bet in self.bets.
+    '''
     def add_bet(self, bet_code, chips_bet):
+        #If there's no bets currently, no need to check existing bets for matches.
         if len(self.bets) == 0:
+            #Just add the bet.
             self.bets.append([bet_code, chips_bet])
             print(f"Bet added: {bet_code} for {chips_bet}")
             return
+        #If there are bets, must check to see if the user is increasing a previous bet or making a new one.
         else:
+            #Go through each bet one-by-one.
             for i in range(len(self.bets)):
+                #Check for a matching bet_code.
                 if self.bets[i][0] == bet_code:
+                    #If there's a match, don't add a new bet, just increase the chips of the prior bet.
                     self.bets[i][1] += chips_bet
                     print(f"Bet for {bet_code} increased to {self.bets[i][1]} chips")
                     return
+            #If the code makes it through, there were no matches, so this is a new bet. Add it.
             self.bets.append([bet_code, chips_bet])
             print(f"Bet added: {bet_code} for {chips_bet}")
             return
-        
 
-        
-        #Don't worry about this. Just send me your bets and I'll be implemented later.
+
+
+    '''
+    This bulky function takes in a bet "tuple" ([bet_code, chip amount]). It checks if the
+    wheel's result, saved in self.result, validates the bet. If so, it returns the proper
+    payout amount based on roulette rules. If not, it merely returns 0.
+
+    NOTE: You'll see that each payout multiplier is increased by 1. This is because the 
+    betted chips are initially removed from the user's balance, so they must also be 
+    restored upon success. Therefore, a 1x payout becomes 2x, and a 2x becomes 3x, and
+    so on.
+    '''
+    def val_bet(self, bet):
+        #Split up the bet code for further use.
+        bet_code = bet[0].split("_")
+        #Used for payout calculations.
+        chips = bet[1]
+
+        #Simplest way to check for each bet type.
+        match bet_code[0]:
+            #Case for single bet. Next element in bet_code will be the number.
+            case "s":
+                if int(bet_code[1]) == self.result.value:
+                    return 36*chips
+                else:
+                    return 0
+            #Case for pair bet. Next elements in bet_code will be the numbers.
+            case "p":
+                vals = [int(bet_code[1]), int(bet_code[2])]
+                if self.result.value in vals:
+                    return 18*chips
+                else:
+                    return 0
+            #Case for triples bet. Next elements in bet_code will be the numbers.
+            case "tr":
+                vals = [int(bet_code[1]), int(bet_code[2]), int(bet_code[3])]
+                if self.result.value in vals:
+                    return 12*chips
+                else:
+                    return 0
+            #Case for quad bet. Next elements in bet_code will be the numbers.
+            case "q":
+                vals = [int(bet_code[1]), int(bet_code[2]), int(bet_code[3]), int(bet_code[4])]
+                if self.result.value in vals:
+                    return 12*chips
+                else:
+                    return 0
+            #Case for row bet. Next element in bet_code will be the row number.
+            case "r":
+                if self.result.row == int(bet_code[1]):
+                    return 12*chips
+                else:
+                    return 0
+            #Case for row pair bet. Next elements in bet_code will be the row numbers.
+            case "rp":
+                rows = [int(bet_code[1]), int(bet_code[2])]
+                if self.result.row in rows:
+                    return 6*chips
+                else:
+                    return 0
+            #Case for red bet. Shouldn't have any other elements in bet_code.
+            case "rd":
+                if self.result.color == "red":
+                    return 2*chips
+                else:
+                    return 0
+            #Case for black bet. Shouldn't have any other elements in bet_code.
+            case "b":
+                if self.result.color == "black":
+                    return 2*chips
+                else:
+                    return 0
+            #Case for even bet. Shouldn't have any other elements in bet_code.
+            case "e":
+                if self.result.isEven and self.result.value != 0:
+                    return 2*chips
+                else:
+                    return 0
+            #Case for odd bet. Shouldn't have any other elements in bet_code.
+            case "o":
+                if not self.result.isEven:
+                    return 2*chips
+                else:
+                    return 
+            #Case for halves bet. Next element should be which half.
+            case "h":
+                if int(bet_code[1]) == self.result.half:
+                    return 2*chips
+                else:
+                    return 0
+            #Case for thirds(or twelves) bet. Next element should be which third(or twelve).
+            case "tw":
+                if int(bet_code[1]) == self.result.third:
+                    return 3*chips
+                else:
+                    return 0
+            #Case for column bet. Next element should be the column number.
+            case "c":
+                if int(bet_code[1]) == self.result.col:
+                    return 3*chips
+                else:
+                    return 0
+            #This case should never be reached. But, just in case, any invalid bet should have no payout.
+            case _:
+                return 0
         return
+
+
+
+    '''
+    This function should be called after the wheel has been spun and a result
+    has been saved. It will process all recorded bets, computing the total
+    payout from all the bets and returning it to the caller.
+    '''
+    def generate_payout(self):
+        #Total bet payout initialization
+        tot_payout = 0
+        #Process all bets.
+        for bet in self.bets:
+            #Payout for each bet is computed.
+            payout = self.val_bet(bet)
+            #Simple debugging statement(make sure bets are actually matching).
+            if payout > 0:
+                print(f"Bet {bet[0]} netted {payout} chips.")
+            #Add whatever payout(never less than 0) to the total.
+            tot_payout += payout
+        
+        print(f"Your total payout is: {tot_payout}.")
+        #Return this for the RouletteScreen to use.
+        return tot_payout
