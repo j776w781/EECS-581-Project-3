@@ -49,6 +49,7 @@ class MainWindow(QMainWindow):
         self.menu.app_exit.connect(self.close)
 
         self.blackjack.switch_to_menu.connect(self.show_menu_screen)
+        self.roulette.switch_to_menu.connect(self.show_menu_screen)
 
     #Switch to blackjack
     def show_blackjack_screen(self):

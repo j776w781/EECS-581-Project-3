@@ -930,6 +930,18 @@ class Ui_RouletteScreen(object):
 "}")
         self.tr_0_2_3.setText("")
         self.tr_0_2_3.setObjectName("tr_0_2_3")
+        self.leaveButton = QtWidgets.QPushButton(parent=Form)
+        self.leaveButton.setGeometry(QtCore.QRect(10, 560, 81, 31))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        self.leaveButton.setFont(font)
+        self.leaveButton.setStyleSheet("QPushButton {background-color: qlineargradient(\n"
+"            x1:0, y1:0, x2:0, y2:1,\n"
+"            stop:0 #ff0000,\n"
+"            stop:1 #7d0000\n"
+"    );\n"
+"}")
+        self.leaveButton.setObjectName("leaveButton")
         self.wheelLabel.raise_()
         self.theDirtySolution.raise_()
         self.tableLabel.raise_()
@@ -1022,6 +1034,7 @@ class Ui_RouletteScreen(object):
         self.tw_3.raise_()
         self.tr_0_1_2.raise_()
         self.tr_0_2_3.raise_()
+        self.leaveButton.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -1031,3 +1044,4 @@ class Ui_RouletteScreen(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.totalLabel.setText(_translate("Form", "My Total: "))
         self.spinButton.setText(_translate("Form", "SPIN!!!"))
+        self.leaveButton.setText(_translate("Form", "Leave"))

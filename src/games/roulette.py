@@ -26,6 +26,7 @@ class AnimatedWheel(QObject):
     rotation = pyqtProperty(float, getRotation, setRotation)
 
 class RouletteScreen(QWidget):
+    #Connect to main window.
     switch_to_menu = pyqtSignal()
 
     def __init__(self, state, parent=None):
@@ -63,6 +64,9 @@ class RouletteScreen(QWidget):
 
         # Spin button handling. Animates wheel.
         self.ui.spinButton.clicked.connect(self.spin)
+
+        #Leave button
+        self.ui.leaveButton.clicked.connect(self.leave)
 
         # Split bets
         self.ui.p_1_2.clicked.connect(lambda: self.apply_bet("p_1_2"))
@@ -246,8 +250,11 @@ class RouletteScreen(QWidget):
 
         
 
-
-
+    def leave(self):
+        if len(self.game.bets) != 0:
+            QMessageBox.information(self, "Abandoning chips", f"Haha, you just gave up your chips.")
+        self.game.reset()
+        self.switch_to_menu.emit()
 
 
 class Roulette:
