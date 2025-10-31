@@ -512,7 +512,7 @@ class Roulette:
                 if not self.result.isEven:
                     return 2*chips
                 else:
-                    return 
+                    return 0
             #Case for halves bet. Next element should be which half.
             case "h":
                 if int(bet_code[1]) == self.result.half:
