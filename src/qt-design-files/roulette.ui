@@ -1998,6 +1998,783 @@ QPushButton:hover{
     <string>Leave</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="s_3">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>19</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_1">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_4">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_6">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_7">
+   <property name="geometry">
+    <rect>
+     <x>174</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_9">
+   <property name="geometry">
+    <rect>
+     <x>174</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_12">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_10">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_13">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_15">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_16">
+   <property name="geometry">
+    <rect>
+     <x>344</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_18">
+   <property name="geometry">
+    <rect>
+     <x>344</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_19">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_21">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_22">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_24">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_25">
+   <property name="geometry">
+    <rect>
+     <x>514</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_27">
+   <property name="geometry">
+    <rect>
+     <x>514</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_28">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_30">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_31">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_33">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_34">
+   <property name="geometry">
+    <rect>
+     <x>684</x>
+     <y>150</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_36">
+   <property name="geometry">
+    <rect>
+     <x>684</x>
+     <y>20</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_5">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_8">
+   <property name="geometry">
+    <rect>
+     <x>174</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_11">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_14">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_17">
+   <property name="geometry">
+    <rect>
+     <x>344</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_20">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_23">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_26">
+   <property name="geometry">
+    <rect>
+     <x>514</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_29">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_32">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_35">
+   <property name="geometry">
+    <rect>
+     <x>684</x>
+     <y>80</y>
+     <width>55</width>
+     <height>67</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="s_0">
+   <property name="geometry">
+    <rect>
+     <x>7</x>
+     <y>20</y>
+     <width>52</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <zorder>wheelLabel</zorder>
   <zorder>theDirtySolution</zorder>
   <zorder>tableLabel</zorder>
@@ -2028,69 +2805,106 @@ QPushButton:hover{
   <zorder>spinButton</zorder>
   <zorder>label</zorder>
   <zorder>graphicsView</zorder>
-  <zorder>p_1_2</zorder>
-  <zorder>p_2_3</zorder>
-  <zorder>p_4_5</zorder>
-  <zorder>p_5_6</zorder>
-  <zorder>p_7_8</zorder>
-  <zorder>p_8_9</zorder>
-  <zorder>p_10_11</zorder>
-  <zorder>p_13_14</zorder>
-  <zorder>p_11_12</zorder>
-  <zorder>p_14_15</zorder>
-  <zorder>p_16_17</zorder>
-  <zorder>p_17_18</zorder>
-  <zorder>p_19_20</zorder>
-  <zorder>p_20_21</zorder>
-  <zorder>p_22_23</zorder>
-  <zorder>p_23_24</zorder>
-  <zorder>p_25_26</zorder>
-  <zorder>p_26_27</zorder>
-  <zorder>p_28_29</zorder>
-  <zorder>p_29_30</zorder>
-  <zorder>p_31_32</zorder>
-  <zorder>p_32_33</zorder>
-  <zorder>p_34_35</zorder>
-  <zorder>p_35_36</zorder>
-  <zorder>p_1_4</zorder>
-  <zorder>p_2_5</zorder>
-  <zorder>p_3_6</zorder>
-  <zorder>p_4_7</zorder>
-  <zorder>p_5_8</zorder>
-  <zorder>p_6_9</zorder>
-  <zorder>p_7_10</zorder>
-  <zorder>p_8_11</zorder>
-  <zorder>p_9_12</zorder>
-  <zorder>p_10_13</zorder>
-  <zorder>p_11_14</zorder>
-  <zorder>p_12_15</zorder>
-  <zorder>p_13_16</zorder>
-  <zorder>p_14_17</zorder>
-  <zorder>p_15_18</zorder>
-  <zorder>p_16_19</zorder>
-  <zorder>p_17_20</zorder>
-  <zorder>p_18_21</zorder>
-  <zorder>p_19_22</zorder>
-  <zorder>p_20_23</zorder>
-  <zorder>p_21_24</zorder>
-  <zorder>p_22_25</zorder>
-  <zorder>p_23_26</zorder>
-  <zorder>p_24_27</zorder>
-  <zorder>p_25_28</zorder>
-  <zorder>p_26_29</zorder>
-  <zorder>p_27_30</zorder>
-  <zorder>p_28_31</zorder>
-  <zorder>p_29_32</zorder>
-  <zorder>p_30_33</zorder>
-  <zorder>p_31_34</zorder>
-  <zorder>p_32_35</zorder>
-  <zorder>p_33_36</zorder>
   <zorder>tw_1</zorder>
   <zorder>tw_2</zorder>
   <zorder>tw_3</zorder>
+  <zorder>leaveButton</zorder>
+  <zorder>s_3</zorder>
+  <zorder>s_2</zorder>
+  <zorder>s_1</zorder>
+  <zorder>s_4</zorder>
+  <zorder>s_6</zorder>
+  <zorder>s_7</zorder>
+  <zorder>s_9</zorder>
+  <zorder>s_12</zorder>
+  <zorder>s_10</zorder>
+  <zorder>s_13</zorder>
+  <zorder>s_15</zorder>
+  <zorder>s_16</zorder>
+  <zorder>s_18</zorder>
+  <zorder>s_19</zorder>
+  <zorder>s_21</zorder>
+  <zorder>s_22</zorder>
+  <zorder>s_24</zorder>
+  <zorder>s_25</zorder>
+  <zorder>s_27</zorder>
+  <zorder>s_28</zorder>
+  <zorder>s_30</zorder>
+  <zorder>s_31</zorder>
+  <zorder>s_33</zorder>
+  <zorder>s_34</zorder>
+  <zorder>s_36</zorder>
+  <zorder>s_5</zorder>
+  <zorder>s_8</zorder>
+  <zorder>s_11</zorder>
+  <zorder>s_14</zorder>
+  <zorder>s_17</zorder>
+  <zorder>s_20</zorder>
+  <zorder>s_23</zorder>
+  <zorder>s_26</zorder>
+  <zorder>s_29</zorder>
+  <zorder>s_32</zorder>
+  <zorder>s_35</zorder>
+  <zorder>p_9_12</zorder>
+  <zorder>p_8_9</zorder>
+  <zorder>p_8_11</zorder>
+  <zorder>p_7_8</zorder>
+  <zorder>p_7_10</zorder>
+  <zorder>p_6_9</zorder>
+  <zorder>p_5_8</zorder>
+  <zorder>p_5_6</zorder>
+  <zorder>p_4_7</zorder>
+  <zorder>p_4_5</zorder>
+  <zorder>p_3_6</zorder>
+  <zorder>p_35_36</zorder>
+  <zorder>p_34_35</zorder>
+  <zorder>p_33_36</zorder>
+  <zorder>p_32_35</zorder>
+  <zorder>p_32_33</zorder>
+  <zorder>p_31_34</zorder>
+  <zorder>p_31_32</zorder>
+  <zorder>p_30_33</zorder>
+  <zorder>p_2_5</zorder>
+  <zorder>p_2_3</zorder>
+  <zorder>p_29_32</zorder>
+  <zorder>p_29_30</zorder>
+  <zorder>p_28_31</zorder>
+  <zorder>p_28_29</zorder>
+  <zorder>p_27_30</zorder>
+  <zorder>p_26_29</zorder>
+  <zorder>p_26_27</zorder>
+  <zorder>p_25_28</zorder>
+  <zorder>p_25_26</zorder>
+  <zorder>p_24_27</zorder>
+  <zorder>p_23_26</zorder>
+  <zorder>p_23_24</zorder>
+  <zorder>p_22_25</zorder>
+  <zorder>p_22_23</zorder>
+  <zorder>p_21_24</zorder>
+  <zorder>p_20_23</zorder>
+  <zorder>p_20_21</zorder>
+  <zorder>p_1_4</zorder>
+  <zorder>p_1_2</zorder>
+  <zorder>p_19_22</zorder>
+  <zorder>p_19_20</zorder>
+  <zorder>p_18_21</zorder>
+  <zorder>p_17_20</zorder>
+  <zorder>p_17_18</zorder>
+  <zorder>p_16_19</zorder>
+  <zorder>p_16_17</zorder>
+  <zorder>p_15_18</zorder>
+  <zorder>p_14_17</zorder>
+  <zorder>p_14_15</zorder>
+  <zorder>p_13_16</zorder>
+  <zorder>p_13_14</zorder>
+  <zorder>p_12_15</zorder>
+  <zorder>p_11_14</zorder>
+  <zorder>p_11_12</zorder>
+  <zorder>p_10_13</zorder>
+  <zorder>p_10_11</zorder>
+  <zorder>s_0</zorder>
   <zorder>tr_0_1_2</zorder>
   <zorder>tr_0_2_3</zorder>
-  <zorder>leaveButton</zorder>
  </widget>
  <resources/>
  <connections/>
