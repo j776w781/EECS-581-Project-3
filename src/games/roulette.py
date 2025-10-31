@@ -110,8 +110,6 @@ class RouletteScreen(QWidget):
         self.ui.s_35.clicked.connect(lambda: self.apply_bet("s_35"))
         self.ui.s_36.clicked.connect(lambda: self.apply_bet("s_36"))
 
-
-
         # Split bets
         self.ui.p_1_2.clicked.connect(lambda: self.apply_bet("p_1_2"))
         self.ui.p_2_3.clicked.connect(lambda: self.apply_bet("p_2_3"))
@@ -175,6 +173,29 @@ class RouletteScreen(QWidget):
         self.ui.tr_0_1_2.clicked.connect(lambda: self.apply_bet("tr_0_1_2"))
         self.ui.tr_0_2_3.clicked.connect(lambda: self.apply_bet("tr_0_2_3"))
 
+        # Quad bets
+        self.ui.q_1_2_4_5.clicked.connect(lambda: self.apply_bet("q_1_2_4_5"))
+        self.ui.q_2_3_5_6.clicked.connect(lambda: self.apply_bet("q_2_3_5_6"))
+        self.ui.q_4_5_7_8.clicked.connect(lambda: self.apply_bet("q_4_5_7_8"))
+        self.ui.q_5_6_8_9.clicked.connect(lambda: self.apply_bet("q_5_6_8_9"))
+        self.ui.q_7_8_10_11.clicked.connect(lambda: self.apply_bet("q_7_8_10_11"))
+        self.ui.q_8_9_11_12.clicked.connect(lambda: self.apply_bet("q_8_9_11_12"))
+        self.ui.q_10_11_13_14.clicked.connect(lambda: self.apply_bet("q_10_11_13_14"))
+        self.ui.q_11_12_14_15.clicked.connect(lambda: self.apply_bet("q_11_12_14_15"))
+        self.ui.q_13_14_16_17.clicked.connect(lambda: self.apply_bet("q_13_14_16_17"))
+        self.ui.q_14_15_17_18.clicked.connect(lambda: self.apply_bet("q_14_15_17_18"))
+        self.ui.q_16_17_19_20.clicked.connect(lambda: self.apply_bet("q_16_17_19_20"))
+        self.ui.q_17_18_20_21.clicked.connect(lambda: self.apply_bet("q_17_18_20_21"))
+        self.ui.q_19_20_22_23.clicked.connect(lambda: self.apply_bet("q_19_20_22_23"))
+        self.ui.q_20_21_23_24.clicked.connect(lambda: self.apply_bet("q_20_21_23_24"))
+        self.ui.q_22_23_25_26.clicked.connect(lambda: self.apply_bet("q_22_23_25_26"))
+        self.ui.q_23_24_26_27.clicked.connect(lambda: self.apply_bet("q_23_24_26_27"))
+        self.ui.q_25_26_28_29.clicked.connect(lambda: self.apply_bet("q_25_26_28_29"))
+        self.ui.q_26_27_29_30.clicked.connect(lambda: self.apply_bet("q_26_27_29_30"))
+        self.ui.q_28_29_31_32.clicked.connect(lambda: self.apply_bet("q_28_29_31_32"))
+        self.ui.q_29_30_32_33.clicked.connect(lambda: self.apply_bet("q_29_30_32_33"))
+        self.ui.q_31_32_34_35.clicked.connect(lambda: self.apply_bet("q_31_32_34_35"))
+        self.ui.q_32_33_35_36.clicked.connect(lambda: self.apply_bet("q_32_33_35_36"))
 
         # Single row bets
         self.ui.r_1.clicked.connect(lambda: self.apply_bet("r_1"))
@@ -203,10 +224,29 @@ class RouletteScreen(QWidget):
         self.ui.rp_10_11.clicked.connect(lambda: self.apply_bet("rp_10_11"))
         self.ui.rp_11_12.clicked.connect(lambda: self.apply_bet("rp_11_12"))
 
+        # Half bets
+        self.ui.h_1.clicked.connect(lambda: self.apply_bet("h_1"))
+        self.ui.h_2.clicked.connect(lambda: self.apply_bet("h_2"))
+
+        # Column bets
+        self.ui.c_1.clicked.connect(lambda: self.apply_bet("c_3"))
+        self.ui.c_2.clicked.connect(lambda: self.apply_bet("c_2"))
+        self.ui.c_3.clicked.connect(lambda: self.apply_bet("c_1"))
+
         #Twelves bets
         self.ui.tw_1.clicked.connect(lambda: self.apply_bet("tw_1"))
         self.ui.tw_2.clicked.connect(lambda: self.apply_bet("tw_2"))
         self.ui.tw_3.clicked.connect(lambda: self.apply_bet("tw_3"))
+
+        # Even/Odd bets
+        self.ui.even.clicked.connect(lambda: self.apply_bet("e"))
+        self.ui.odd.clicked.connect(lambda: self.apply_bet("o"))
+
+        # Red/Black bets
+        self.ui.red.clicked.connect(lambda: self.apply_bet("rd"))
+        self.ui.black.clicked.connect(lambda: self.apply_bet("b"))
+
+
 
 
         #TEMPLATE FOR BUTTON CONNECTIONS

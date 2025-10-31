@@ -881,7 +881,7 @@ class Ui_RouletteScreen(object):
         self.p_33_36.setText("")
         self.p_33_36.setObjectName("p_33_36")
         self.tw_1 = QtWidgets.QPushButton(parent=Form)
-        self.tw_1.setGeometry(QtCore.QRect(60, 220, 221, 41))
+        self.tw_1.setGeometry(QtCore.QRect(62, 214, 224, 48))
         self.tw_1.setStyleSheet("QPushButton {\n"
 "    background-color: rgba(255, 255, 255, 0);\n"
 "}\n"
@@ -890,26 +890,6 @@ class Ui_RouletteScreen(object):
 "}")
         self.tw_1.setText("")
         self.tw_1.setObjectName("tw_1")
-        self.tw_2 = QtWidgets.QPushButton(parent=Form)
-        self.tw_2.setGeometry(QtCore.QRect(290, 220, 221, 41))
-        self.tw_2.setStyleSheet("QPushButton {\n"
-"    background-color: rgba(255, 255, 255, 0);\n"
-"}\n"
-"QPushButton:hover{\n"
-"    background-color: rgba(255, 255, 255, 60);\n"
-"}")
-        self.tw_2.setText("")
-        self.tw_2.setObjectName("tw_2")
-        self.tw_3 = QtWidgets.QPushButton(parent=Form)
-        self.tw_3.setGeometry(QtCore.QRect(520, 220, 221, 41))
-        self.tw_3.setStyleSheet("QPushButton {\n"
-"    background-color: rgba(255, 255, 255, 0);\n"
-"}\n"
-"QPushButton:hover{\n"
-"    background-color: rgba(255, 255, 255, 60);\n"
-"}")
-        self.tw_3.setText("")
-        self.tw_3.setObjectName("tw_3")
         self.tr_0_1_2 = QtWidgets.QPushButton(parent=Form)
         self.tr_0_1_2.setGeometry(QtCore.QRect(50, 140, 21, 20))
         self.tr_0_1_2.setStyleSheet("QPushButton {\n"
@@ -1312,6 +1292,336 @@ class Ui_RouletteScreen(object):
 "}")
         self.s_0.setText("")
         self.s_0.setObjectName("s_0")
+        self.q_1_2_4_5 = QtWidgets.QPushButton(parent=Form)
+        self.q_1_2_4_5.setGeometry(QtCore.QRect(107, 138, 21, 20))
+        self.q_1_2_4_5.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_1_2_4_5.setText("")
+        self.q_1_2_4_5.setObjectName("q_1_2_4_5")
+        self.q_2_3_5_6 = QtWidgets.QPushButton(parent=Form)
+        self.q_2_3_5_6.setGeometry(QtCore.QRect(107, 72, 21, 20))
+        self.q_2_3_5_6.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_2_3_5_6.setText("")
+        self.q_2_3_5_6.setObjectName("q_2_3_5_6")
+        self.q_4_5_7_8 = QtWidgets.QPushButton(parent=Form)
+        self.q_4_5_7_8.setGeometry(QtCore.QRect(163, 138, 21, 20))
+        self.q_4_5_7_8.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_4_5_7_8.setText("")
+        self.q_4_5_7_8.setObjectName("q_4_5_7_8")
+        self.q_5_6_8_9 = QtWidgets.QPushButton(parent=Form)
+        self.q_5_6_8_9.setGeometry(QtCore.QRect(163, 72, 21, 20))
+        self.q_5_6_8_9.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_5_6_8_9.setText("")
+        self.q_5_6_8_9.setObjectName("q_5_6_8_9")
+        self.q_8_9_11_12 = QtWidgets.QPushButton(parent=Form)
+        self.q_8_9_11_12.setGeometry(QtCore.QRect(220, 72, 21, 20))
+        self.q_8_9_11_12.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_8_9_11_12.setText("")
+        self.q_8_9_11_12.setObjectName("q_8_9_11_12")
+        self.q_7_8_10_11 = QtWidgets.QPushButton(parent=Form)
+        self.q_7_8_10_11.setGeometry(QtCore.QRect(220, 138, 21, 20))
+        self.q_7_8_10_11.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_7_8_10_11.setText("")
+        self.q_7_8_10_11.setObjectName("q_7_8_10_11")
+        self.q_13_14_16_17 = QtWidgets.QPushButton(parent=Form)
+        self.q_13_14_16_17.setGeometry(QtCore.QRect(334, 138, 21, 20))
+        self.q_13_14_16_17.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_13_14_16_17.setText("")
+        self.q_13_14_16_17.setObjectName("q_13_14_16_17")
+        self.q_14_15_17_18 = QtWidgets.QPushButton(parent=Form)
+        self.q_14_15_17_18.setGeometry(QtCore.QRect(334, 72, 21, 20))
+        self.q_14_15_17_18.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_14_15_17_18.setText("")
+        self.q_14_15_17_18.setObjectName("q_14_15_17_18")
+        self.q_10_11_13_14 = QtWidgets.QPushButton(parent=Form)
+        self.q_10_11_13_14.setGeometry(QtCore.QRect(276, 138, 21, 20))
+        self.q_10_11_13_14.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_10_11_13_14.setText("")
+        self.q_10_11_13_14.setObjectName("q_10_11_13_14")
+        self.q_11_12_14_15 = QtWidgets.QPushButton(parent=Form)
+        self.q_11_12_14_15.setGeometry(QtCore.QRect(276, 72, 21, 20))
+        self.q_11_12_14_15.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_11_12_14_15.setText("")
+        self.q_11_12_14_15.setObjectName("q_11_12_14_15")
+        self.q_17_18_20_21 = QtWidgets.QPushButton(parent=Form)
+        self.q_17_18_20_21.setGeometry(QtCore.QRect(390, 72, 21, 20))
+        self.q_17_18_20_21.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_17_18_20_21.setText("")
+        self.q_17_18_20_21.setObjectName("q_17_18_20_21")
+        self.q_16_17_19_20 = QtWidgets.QPushButton(parent=Form)
+        self.q_16_17_19_20.setGeometry(QtCore.QRect(390, 138, 21, 20))
+        self.q_16_17_19_20.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_16_17_19_20.setText("")
+        self.q_16_17_19_20.setObjectName("q_16_17_19_20")
+        self.q_19_20_22_23 = QtWidgets.QPushButton(parent=Form)
+        self.q_19_20_22_23.setGeometry(QtCore.QRect(447, 138, 21, 20))
+        self.q_19_20_22_23.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_19_20_22_23.setText("")
+        self.q_19_20_22_23.setObjectName("q_19_20_22_23")
+        self.q_20_21_23_24 = QtWidgets.QPushButton(parent=Form)
+        self.q_20_21_23_24.setGeometry(QtCore.QRect(447, 72, 21, 20))
+        self.q_20_21_23_24.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_20_21_23_24.setText("")
+        self.q_20_21_23_24.setObjectName("q_20_21_23_24")
+        self.q_22_23_25_26 = QtWidgets.QPushButton(parent=Form)
+        self.q_22_23_25_26.setGeometry(QtCore.QRect(503, 138, 21, 20))
+        self.q_22_23_25_26.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_22_23_25_26.setText("")
+        self.q_22_23_25_26.setObjectName("q_22_23_25_26")
+        self.q_23_24_26_27 = QtWidgets.QPushButton(parent=Form)
+        self.q_23_24_26_27.setGeometry(QtCore.QRect(503, 72, 21, 20))
+        self.q_23_24_26_27.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_23_24_26_27.setText("")
+        self.q_23_24_26_27.setObjectName("q_23_24_26_27")
+        self.q_25_26_28_29 = QtWidgets.QPushButton(parent=Form)
+        self.q_25_26_28_29.setGeometry(QtCore.QRect(560, 138, 21, 20))
+        self.q_25_26_28_29.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_25_26_28_29.setText("")
+        self.q_25_26_28_29.setObjectName("q_25_26_28_29")
+        self.q_26_27_29_30 = QtWidgets.QPushButton(parent=Form)
+        self.q_26_27_29_30.setGeometry(QtCore.QRect(560, 72, 21, 20))
+        self.q_26_27_29_30.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_26_27_29_30.setText("")
+        self.q_26_27_29_30.setObjectName("q_26_27_29_30")
+        self.q_28_29_31_32 = QtWidgets.QPushButton(parent=Form)
+        self.q_28_29_31_32.setGeometry(QtCore.QRect(617, 138, 21, 20))
+        self.q_28_29_31_32.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_28_29_31_32.setText("")
+        self.q_28_29_31_32.setObjectName("q_28_29_31_32")
+        self.q_29_30_32_33 = QtWidgets.QPushButton(parent=Form)
+        self.q_29_30_32_33.setGeometry(QtCore.QRect(617, 72, 21, 20))
+        self.q_29_30_32_33.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_29_30_32_33.setText("")
+        self.q_29_30_32_33.setObjectName("q_29_30_32_33")
+        self.q_31_32_34_35 = QtWidgets.QPushButton(parent=Form)
+        self.q_31_32_34_35.setGeometry(QtCore.QRect(674, 138, 21, 20))
+        self.q_31_32_34_35.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_31_32_34_35.setText("")
+        self.q_31_32_34_35.setObjectName("q_31_32_34_35")
+        self.q_32_33_35_36 = QtWidgets.QPushButton(parent=Form)
+        self.q_32_33_35_36.setGeometry(QtCore.QRect(674, 72, 21, 20))
+        self.q_32_33_35_36.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.q_32_33_35_36.setText("")
+        self.q_32_33_35_36.setObjectName("q_32_33_35_36")
+        self.h_1 = QtWidgets.QPushButton(parent=Form)
+        self.h_1.setGeometry(QtCore.QRect(60, 264, 113, 51))
+        self.h_1.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.h_1.setText("")
+        self.h_1.setObjectName("h_1")
+        self.h_2 = QtWidgets.QPushButton(parent=Form)
+        self.h_2.setGeometry(QtCore.QRect(628, 266, 111, 46))
+        self.h_2.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.h_2.setText("")
+        self.h_2.setObjectName("h_2")
+        self.even = QtWidgets.QPushButton(parent=Form)
+        self.even.setGeometry(QtCore.QRect(175, 265, 111, 48))
+        self.even.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.even.setText("")
+        self.even.setObjectName("even")
+        self.odd = QtWidgets.QPushButton(parent=Form)
+        self.odd.setGeometry(QtCore.QRect(515, 265, 111, 48))
+        self.odd.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.odd.setText("")
+        self.odd.setObjectName("odd")
+        self.red = QtWidgets.QPushButton(parent=Form)
+        self.red.setGeometry(QtCore.QRect(289, 265, 111, 48))
+        self.red.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.red.setText("")
+        self.red.setObjectName("red")
+        self.black = QtWidgets.QPushButton(parent=Form)
+        self.black.setGeometry(QtCore.QRect(402, 265, 111, 48))
+        self.black.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.black.setText("")
+        self.black.setObjectName("black")
+        self.tw_2 = QtWidgets.QPushButton(parent=Form)
+        self.tw_2.setGeometry(QtCore.QRect(289, 214, 224, 48))
+        self.tw_2.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.tw_2.setText("")
+        self.tw_2.setObjectName("tw_2")
+        self.tw_3 = QtWidgets.QPushButton(parent=Form)
+        self.tw_3.setGeometry(QtCore.QRect(516, 214, 224, 48))
+        self.tw_3.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.tw_3.setText("")
+        self.tw_3.setObjectName("tw_3")
+        self.c_1 = QtWidgets.QPushButton(parent=Form)
+        self.c_1.setGeometry(QtCore.QRect(742, 18, 54, 63))
+        self.c_1.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.c_1.setText("")
+        self.c_1.setObjectName("c_1")
+        self.c_2 = QtWidgets.QPushButton(parent=Form)
+        self.c_2.setGeometry(QtCore.QRect(742, 83, 54, 64))
+        self.c_2.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.c_2.setText("")
+        self.c_2.setObjectName("c_2")
+        self.c_3 = QtWidgets.QPushButton(parent=Form)
+        self.c_3.setGeometry(QtCore.QRect(742, 148, 54, 64))
+        self.c_3.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.c_3.setText("")
+        self.c_3.setObjectName("c_3")
         self.wheelLabel.raise_()
         self.theDirtySolution.raise_()
         self.tableLabel.raise_()
@@ -1343,8 +1653,6 @@ class Ui_RouletteScreen(object):
         self.label.raise_()
         self.graphicsView.raise_()
         self.tw_1.raise_()
-        self.tw_2.raise_()
-        self.tw_3.raise_()
         self.leaveButton.raise_()
         self.s_3.raise_()
         self.s_2.raise_()
@@ -1442,6 +1750,39 @@ class Ui_RouletteScreen(object):
         self.s_0.raise_()
         self.tr_0_1_2.raise_()
         self.tr_0_2_3.raise_()
+        self.q_1_2_4_5.raise_()
+        self.q_2_3_5_6.raise_()
+        self.q_4_5_7_8.raise_()
+        self.q_5_6_8_9.raise_()
+        self.q_8_9_11_12.raise_()
+        self.q_7_8_10_11.raise_()
+        self.q_13_14_16_17.raise_()
+        self.q_14_15_17_18.raise_()
+        self.q_10_11_13_14.raise_()
+        self.q_11_12_14_15.raise_()
+        self.q_17_18_20_21.raise_()
+        self.q_16_17_19_20.raise_()
+        self.q_19_20_22_23.raise_()
+        self.q_20_21_23_24.raise_()
+        self.q_22_23_25_26.raise_()
+        self.q_23_24_26_27.raise_()
+        self.q_25_26_28_29.raise_()
+        self.q_26_27_29_30.raise_()
+        self.q_28_29_31_32.raise_()
+        self.q_29_30_32_33.raise_()
+        self.q_31_32_34_35.raise_()
+        self.q_32_33_35_36.raise_()
+        self.h_1.raise_()
+        self.h_2.raise_()
+        self.even.raise_()
+        self.odd.raise_()
+        self.red.raise_()
+        self.black.raise_()
+        self.tw_2.raise_()
+        self.tw_3.raise_()
+        self.c_1.raise_()
+        self.c_2.raise_()
+        self.c_3.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
