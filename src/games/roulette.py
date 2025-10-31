@@ -255,6 +255,10 @@ class RouletteScreen(QWidget):
         QMessageBox.information(self, "Chips gained.", f"Good job! Your bets gained you {payout} chips!")
         #Reset the Roulette's result and bets.
         self.game.reset()
+        # If player has no chips get them out!
+        if self.state.chips == 0:
+            QMessageBox.information(self, "No chips.", "No chips? Get out!")
+            self.leave()
         #Re-enable betting.
         self.can_bet = True
 
