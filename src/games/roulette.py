@@ -36,6 +36,9 @@ class RouletteScreen(QWidget):
         self.ui.tableLabel.setPixmap(QPixmap(TABLE_DIR))
         self.ui.wheelLabel.setPixmap(QPixmap(WHEEL_DIR))
         self.ui.label.setPixmap(QPixmap(PTR_DIR))
+
+        #Used to stop betting during wheel spin.
+        self.can_bet = True
         
         self.state = state
         self.game = Roulette()
@@ -187,23 +190,28 @@ class RouletteScreen(QWidget):
     #NOTE: We could also use this to add chip graphics if we have time/update the "chips bet" for a button.
     #If we have to update the function call for that(pass in self.ui.[button] as well, I can do the tedium, since I should have thought about this before.)
     def apply_bet(self, betcode, chipamount=50):
+        #This effectively disables all the betting buttons(can still click, but nothing happens)
+        if self.can_bet:
+            #No betting once you've run out of chips.
+            if self.state.chips > 0:
+                #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
+                self.game.add_bet(betcode, chipamount)
+                #Removes the chips from the user's balance. Does not immediately kick them out.
+                self.state.chips = self.state.chips-chipamount
+                #Updates chip total on GUI.
+                self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+            #Let's the user know they're out.
+            else:
+                QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
 
-        #No betting once you've run out of chips.
-        if self.state.chips > 0:
-            #Passes the betcode and chipamount to the Roulette class, which will record the bet for a possible payout.
-            self.game.add_bet(betcode, chipamount)
-            #Removes the chips from the user's balance. Does not immediately kick them out.
-            self.state.chips = self.state.chips-chipamount
-            #Updates chip total on GUI.
-            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
-        #Let's the user know they're out.
-        else:
-            QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
 
 
 
     # Function to animate wheel to spin.
     def spin(self):
+        #Disable betting during the wheel spin.
+        self.can_bet = False
+
         print('Spinning...')
         self.ui.spinButton.setEnabled(False)
         self.rotatable_wheel = AnimatedWheel(self.wheel_item)
@@ -247,13 +255,18 @@ class RouletteScreen(QWidget):
         QMessageBox.information(self, "Chips gained.", f"Good job! Your bets gained you {payout} chips!")
         #Reset the Roulette's result and bets.
         self.game.reset()
+        #Re-enable betting.
+        self.can_bet = True
 
         
 
     def leave(self):
+        #If the user has already placed bets, let them know the bad news.
         if len(self.game.bets) != 0:
             QMessageBox.information(self, "Abandoning chips", f"Haha, you just gave up your chips.")
+        #Reset game state.
         self.game.reset()
+        #Re-enable betting.
         self.switch_to_menu.emit()
 
 
