@@ -68,7 +68,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
-    fonts = ["BROADW", "HARLOWSI", "MAGNETOB"]
+    fonts = ["BROADW", "HARLOWSI", "MAGNETOB", "BROADWFILLED"]
     # --- FONT LOADING SECTION ---
     for f in fonts:
         base_dir = os.path.dirname(__file__)
