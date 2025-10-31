@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QGraphicsV
 from PyQt6.QtCore import QObject, QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor
 from .ui.roulette_ui import Ui_RouletteScreen
-from .objects.table import Number, Table, Wheel
+from .objects.wheel import Wheel
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -357,7 +357,6 @@ class RouletteScreen(QWidget):
 
 class Roulette:
     def __init__(self):
-        self.table = Table()
         self.wheel = Wheel()
         self.bets = []
         self.result = None

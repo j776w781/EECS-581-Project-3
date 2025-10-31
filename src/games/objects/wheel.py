@@ -77,18 +77,6 @@ class Number:
     
     def __eq__(self, other):
         return self.value == other.value
-
-class Table:
-    def __init__(self):
-        self.table = []
-        for i in range(37):
-            self.table.append(Number(i))
-    
-    def __str__(self):
-        output = ''
-        for i in range(len(self.table)):
-            output += str(self.table[i]) + '\n'
-        return output[:len(output)-1]
     
 class Wheel:
     def __init__(self):
