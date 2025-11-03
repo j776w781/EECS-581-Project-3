@@ -85,7 +85,7 @@ class BlackJackScreen(QWidget):
 
         self.state = state
         self.pot = 0
-        self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+        self.ui.chipsNum.setText(f"Chip Total: {self.state.chips}")
         self.ui.potNum.setText(f"Pot: {self.pot}")
         self.ui.betButton.clicked.connect(self.betMore)        
 
@@ -199,7 +199,7 @@ class BlackJackScreen(QWidget):
         else:
             self.pot += 50
             self.state.chips -= 50
-            self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+            self.ui.chipsNum.setText(f"Chip Total: {self.state.chips}")
             self.ui.potNum.setText(f"Pot: {self.pot}")
         return 
 
@@ -248,12 +248,12 @@ class BlackJackScreen(QWidget):
         elif winner == "player":
             QMessageBox.information(self, "You Win", "You Win")
             self.state.chips += self.pot*2
-            self.ui.chipsNum.setText(f"Your total: {self.state.chips}")
+            self.ui.chipsNum.setText(f"Chip Total: {self.state.chips}")
             self.addDeckBack()
         elif winner == "tie":
             QMessageBox.information(self, "You Tie", "You Tie")
             self.state.chips += self.pot
-            self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+            self.ui.chipsNum.setText(f"Chip Total: {self.state.chips}")
             self.ui.potNum.setText(f"Pot: {self.pot}")
             self.addDeckBack()
 
@@ -275,7 +275,7 @@ class BlackJackScreen(QWidget):
 
         self.game = BlackJack()
         self.pot = 0
-        self.ui.chipsNum.setText(f"Your Total: {self.state.chips}")
+        self.ui.chipsNum.setText(f"Chip Total: {self.state.chips}")
         self.ui.potNum.setText(f"Pot: {self.pot}")
 
 
