@@ -7,6 +7,7 @@ class Poker:
         self.playerHand = Hand() # We need the player hand of course.
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
+        self.pot = 0
         self.fold = False # This will likely be valuable in interrupting gameflow.
 
     # Method to deal initial two cards to a given player.
