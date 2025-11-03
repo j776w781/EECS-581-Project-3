@@ -14,10 +14,13 @@ class Poker:
         hand.add(self.deck.draw())
         hand.add(self.deck.draw())
 
-    # Game flow occurs in three stages: flop, turn, and river.
-    # We are going to abstract each stage into methods.
-    # So while the methods are quite elementary, (and two are exactly the same)
-        # The abstraction will make later coding easier (at least for me it will).
+    '''
+    Game flow occurs in three stages: flop, turn, and river.
+    We are going to abstract each stage into methods.
+    So while the methods are quite elementary, (and two are exactly the same for that matter)
+    the abstraction will make later coding easier (at least for me it will).
+    '''
+
     def flop(self):
         self.board.append(self.deck.draw())
         self.board.append(self.deck.draw())
