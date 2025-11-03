@@ -40,6 +40,8 @@ class Hand:
 
         # We will look through every five card hand and get properties to determine if its the best hand.
         for combo in combos:
+            if bestCombo == None:
+                bestCombo = combo
             # Determine if hand has flush.
             suits = [card.suit for card in combo]
             isFlush = len(set(suits)) == 1 # If all suits are the same, duplicates should be removed and 1 suit should remain.
@@ -96,7 +98,7 @@ class Hand:
             if handRanks.index(handRank) > bestRank:
                 bestRank = handRanks.index(handRank)
                 bestCombo = combo
-            elif handRank == bestRank: # In tie breaker case, we go by highest value card.
+            elif handRanks.index(handRank) == bestRank: # In tie breaker case, we go by highest value card.
                 if sorted([card.rank for card in combo], reverse=True) > sorted([card.rank for card in bestCombo], reverse=True):
                     bestCombo = combo
 
@@ -104,24 +106,22 @@ class Hand:
         return handRanks[bestRank], bestCombo
 
 def main():
-    hand_type = ''
-    while hand_type != "Pair":
-        deck = Deck()
-        hand = Hand()
-        hand.add(deck.draw())
-        hand.add(deck.draw())
-        board = []
-        board.append(deck.draw())
-        board.append(deck.draw())
-        board.append(deck.draw())
-        board.append(deck.draw())
-        board.append(deck.draw())
-        print('Board: ')
-        print(board)
-        print('\nHand: ')
-        print(hand, '\n')
-        hand_type, best_hand = hand.getBestHand(board)
-        print(hand_type)
-        print(best_hand)
+    deck = Deck()
+    hand = Hand()
+    hand.add(deck.draw())
+    hand.add(deck.draw())
+    board = []
+    board.append(deck.draw())
+    board.append(deck.draw())
+    board.append(deck.draw())
+    board.append(deck.draw())
+    board.append(deck.draw())
+    print('Board: ')
+    print(board)
+    print('\nHand: ')
+    print(hand, '\n')
+    hand_type, best_hand = hand.getBestHand(board)
+    print(hand_type)
+    print(best_hand)
 
 main()
