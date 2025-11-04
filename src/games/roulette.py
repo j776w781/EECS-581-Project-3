@@ -4,6 +4,10 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor
 from .ui.roulette_ui import Ui_RouletteScreen
 from .objects.wheel import Wheel
 import os
+from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtCore import QUrl
+
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TABLE_DIR = os.path.join(BASE_DIR, "../assets/table.jpg")
@@ -33,9 +37,16 @@ class RouletteScreen(QWidget):
         super().__init__(parent)
         self.ui = Ui_RouletteScreen()
         self.ui.setupUi(self)
+        self.ui.rulesButton.clicked.connect(self.show_rules)
         self.ui.tableLabel.setPixmap(QPixmap(TABLE_DIR))
         self.ui.wheelLabel.setPixmap(QPixmap(WHEEL_DIR))
         self.ui.label.setPixmap(QPixmap(PTR_DIR))
+        # Roulette spin sound
+        self.spin_sound_player = QMediaPlayer()
+        self.spin_audio_output = QAudioOutput()
+        self.spin_sound_player.setAudioOutput(self.spin_audio_output)
+        SOUND_DIR = os.path.abspath(os.path.join(BASE_DIR, "../assets/roulette_spin.mp3"))
+        self.spin_sound_player.setSource(QUrl.fromLocalFile(SOUND_DIR))
 
         #Used to stop betting during wheel spin.
         self.can_bet = True
@@ -285,13 +296,43 @@ class RouletteScreen(QWidget):
             else:
                 QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
 
-
-
+    def show_rules(self):
+        rules_text = (
+            "European Roulette Rules:\n\n"
+            "1. The board displays numbers 0-36 and a spinning wheel.\n"
+            "2. Players can only bet using their existing chips; chips aren't lost until the spin.\n"
+            "3. Bets and payouts:\n"
+            "   • Single number (straight) → 35x\n"
+            "   • Two-number line → 17x\n"
+            "   • Three-number row edge → 11x\n"
+            "   • Four-number corner → 11x\n"
+            "   • Special 0 bets (0-1-2 or 0-2-3) → 11x\n"
+            "   • Two-row edge → 5x\n"
+            "   • Red/Black → 1x\n"
+            "   • Odd/Even → 1x\n"
+            "   • 1-18 / 19-36 → 1x\n"
+            "   • 1st, 2nd, 3rd dozen → 2x\n"
+            "   • Column bet → 2x\n"
+            "4. After placing bets, spin the wheel. The result determines winners.\n"
+            "5. Zero results cause all even bets to lose.\n"
+            "6. Winning bets are rewarded with chips according to the payout rules.\n"
+            "7. Losing bets deduct chips; if you run out, you exit to the main menu.\n"
+            "8. You may leave anytime, forfeiting current bets.\n"
+            "9. Consult this instruction panel anytime for guidance."
+        )
+        msg = QMessageBox()
+        msg.setWindowTitle("Roulette Rules")
+        msg.setText(rules_text)
+        msg.exec()
 
     # Function to animate wheel to spin.
     def spin(self):
         #Disable betting during the wheel spin.
         self.can_bet = False
+        self.ui.spinButton.setEnabled(False)
+
+        # Play the roulette spin sound
+        self.spin_sound_player.play()
 
         print('Spinning...')
         self.ui.spinButton.setEnabled(False)
