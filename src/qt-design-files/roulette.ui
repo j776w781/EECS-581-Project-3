@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>RouletteScreen</class>
+ <widget class="QWidget" name="RouletteScreen">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,6 +21,9 @@
     <width>800</width>
     <height>600</height>
    </size>
+  </property>
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -116,9 +119,9 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>400</y>
+     <y>410</y>
      <width>791</width>
-     <height>231</height>
+     <height>221</height>
     </rect>
    </property>
    <property name="text">
@@ -3363,7 +3366,7 @@ QPushButton:hover{
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="c_1">
+  <widget class="QPushButton" name="c_3">
    <property name="geometry">
     <rect>
      <x>742</x>
@@ -3405,7 +3408,7 @@ QPushButton:hover{
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="c_3">
+  <widget class="QPushButton" name="c_1">
    <property name="geometry">
     <rect>
      <x>742</x>
@@ -3597,10 +3600,13 @@ QPushButton:hover{
   <zorder>black</zorder>
   <zorder>tw_2</zorder>
   <zorder>tw_3</zorder>
-  <zorder>c_1</zorder>
-  <zorder>c_2</zorder>
   <zorder>c_3</zorder>
+<<<<<<< Updated upstream
   <zorder>rulesButton</zorder>
+=======
+  <zorder>c_2</zorder>
+  <zorder>c_1</zorder>
+>>>>>>> Stashed changes
  </widget>
  <resources/>
  <connections/>
