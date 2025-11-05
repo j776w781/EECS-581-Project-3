@@ -17,6 +17,7 @@ class MenuScreen(QWidget):
 	app_exit = pyqtSignal()
 	switch_to_blackjack = pyqtSignal()
 	switch_to_roulette = pyqtSignal()
+	switch_to_poker = pyqtSignal()
 
 	def __init__(self, state, parent=None):
 		super().__init__(parent)
@@ -60,6 +61,10 @@ class MenuScreen(QWidget):
 	#Switches to poker
 	def poker(self):
 		print("Poker clicked!")
+		if self.state.chips == 0:
+			QMessageBox.information(self, "Out", "You don't have any chips!\nCome back when you have more!")
+		else:
+			self.switch_to_poker.emit()
 
 	#switches to sabacc
 	def sabacc(self):

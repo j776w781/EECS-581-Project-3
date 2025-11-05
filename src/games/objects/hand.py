@@ -1,4 +1,4 @@
-from deck import Deck
+from .deck import Deck
 from itertools import combinations
 from collections import Counter
 
@@ -104,24 +104,3 @@ class Hand:
 
         # Once we've checked every 5-card combination for best hand, return them!
         return handRanks[bestRank], bestCombo
-
-def main():
-    deck = Deck()
-    hand = Hand()
-    hand.add(deck.draw())
-    hand.add(deck.draw())
-    board = []
-    board.append(deck.draw())
-    board.append(deck.draw())
-    board.append(deck.draw())
-    board.append(deck.draw())
-    board.append(deck.draw())
-    print('Board: ')
-    print(board)
-    print('\nHand: ')
-    print(hand, '\n')
-    hand_type, best_hand = hand.getBestHand(board)
-    print(hand_type)
-    print(best_hand)
-
-main()
