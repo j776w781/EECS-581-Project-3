@@ -240,9 +240,9 @@ class RouletteScreen(QWidget):
         self.ui.h_2.clicked.connect(lambda: self.apply_bet("h_2"))
 
         # Column bets
-        self.ui.c_1.clicked.connect(lambda: self.apply_bet("c_1"))
+        self.ui.c_1.clicked.connect(lambda: self.apply_bet("c_3"))
         self.ui.c_2.clicked.connect(lambda: self.apply_bet("c_2"))
-        self.ui.c_3.clicked.connect(lambda: self.apply_bet("c_3"))
+        self.ui.c_3.clicked.connect(lambda: self.apply_bet("c_1"))
 
         #Twelves bets
         self.ui.tw_1.clicked.connect(lambda: self.apply_bet("tw_1"))

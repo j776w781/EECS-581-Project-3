@@ -1,35 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
-from PyQt6.QtGui import QPixmap, QPainter
-from .ui.poker_ui import Ui_PokerScreen
 from .objects.deck import Deck
 from .objects.hand import Hand
-import os
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
-ASSET_DIR = os.path.join(BASE_DIR, "../assets")
-
-class PokerScreen(QWidget):
-    switch_to_menu = pyqtSignal()
-
-    def __init__(self, state, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_PokerScreen()
-        self.ui.setupUi(self)
-        self.ui.playerHandLabel.setGeometry(QRect(280, 520, 240, 61))
-        self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
-        self.ui.opp2.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
-        self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/king_hippo.png"))
-
-        self.state = state
-        self.game = Poker()
-
-        self.ui.leaveButton.clicked.connect(self.leave)
-
-    def leave(self):
-        self.switch_to_menu.emit()
-
 
 class Poker:
     def __init__(self):
