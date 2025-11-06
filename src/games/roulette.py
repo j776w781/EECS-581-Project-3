@@ -327,39 +327,43 @@ class RouletteScreen(QWidget):
 
     # Function to animate wheel to spin.
     def spin(self):
-        #Disable betting during the wheel spin.
-        self.can_bet = False
-        self.ui.spinButton.setEnabled(False)
+        if self.game.bets != []:
 
-        # Play the roulette spin sound
-        self.spin_sound_player.play()
+            #Disable betting during the wheel spin.
+            self.can_bet = False
+            self.ui.spinButton.setEnabled(False)
 
-        print('Spinning...')
-        self.ui.spinButton.setEnabled(False)
-        self.rotatable_wheel = AnimatedWheel(self.wheel_item)
-        self.animation = QPropertyAnimation(self.rotatable_wheel, b'rotation')
-        self.animation.setDuration(4000)  # 4 seconds
+            # Play the roulette spin sound
+            self.spin_sound_player.play()
 
-        # Use the power of MATH to spin the wheel to our random desintation. 
-        #target_index = self.game.wheel.spin()
+            print('Spinning...')
+            self.ui.spinButton.setEnabled(False)
+            self.rotatable_wheel = AnimatedWheel(self.wheel_item)
+            self.animation = QPropertyAnimation(self.rotatable_wheel, b'rotation')
+            self.animation.setDuration(4000)  # 4 seconds
 
-        #Lets the GameLogic class give us the index for the wheel animation and the numerical result.
-        target_index, result = self.game.spin_wheel()
-        final_angle = (5*-360) + target_index * -9.729 # Spins 5 full times before landing on random value.
+            # Use the power of MATH to spin the wheel to our random desintation. 
+            #target_index = self.game.wheel.spin()
 
-        # Set start and ending values of animation.
-        self.animation.setStartValue(0)
-        self.animation.setEndValue(final_angle)  # spin 5 full turns + offset
-        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic) # Adjusts acceleration of animation.
-        self.animation.start() # Begin the animation!
+            #Lets the GameLogic class give us the index for the wheel animation and the numerical result.
+            target_index, result = self.game.spin_wheel()
+            final_angle = (5*-360) + target_index * -9.729 # Spins 5 full times before landing on random value.
 
-        # Do not enable the spin button again until the animation is completely finished.
-        QTimer.singleShot(4000, Qt.TimerType.PreciseTimer, lambda: self.ui.spinButton.setEnabled(True))
-        QTimer.singleShot(4100, Qt.TimerType.PreciseTimer, lambda: self.aftermath())
+            # Set start and ending values of animation.
+            self.animation.setStartValue(0)
+            self.animation.setEndValue(final_angle)  # spin 5 full turns + offset
+            self.animation.setEasingCurve(QEasingCurve.Type.OutCubic) # Adjusts acceleration of animation.
+            self.animation.start() # Begin the animation!
 
-        # Now grab the legitimate result (that should line up with the wheel).
-        #result = self.game.wheel.order[target_index]
-        print("The winning number is:", result) # Test print to see result.
+            # Do not enable the spin button again until the animation is completely finished.
+            QTimer.singleShot(4000, Qt.TimerType.PreciseTimer, lambda: self.ui.spinButton.setEnabled(True))
+            QTimer.singleShot(4100, Qt.TimerType.PreciseTimer, lambda: self.aftermath())
+
+            # Now grab the legitimate result (that should line up with the wheel).
+            #result = self.game.wheel.order[target_index]
+            print("The winning number is:", result) # Test print to see result.
+        else:
+            QMessageBox.information(self, "No Bet.", f"You have to place a bet to spin the wheel!")
 
     
     '''
