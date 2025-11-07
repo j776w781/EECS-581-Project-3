@@ -122,6 +122,9 @@ class RouletteScreen(QWidget):
         self.ui.s_36.clicked.connect(lambda: self.apply_bet("s_36"))
 
         # Split bets
+        self.ui.p_0_1.clicked.connect(lambda: self.apply_bet("p_0_1"))
+        self.ui.p_0_2.clicked.connect(lambda: self.apply_bet("p_0_2"))
+        self.ui.p_0_3.clicked.connect(lambda: self.apply_bet("p_0_3"))
         self.ui.p_1_2.clicked.connect(lambda: self.apply_bet("p_1_2"))
         self.ui.p_2_3.clicked.connect(lambda: self.apply_bet("p_2_3"))
         self.ui.p_4_5.clicked.connect(lambda: self.apply_bet("p_4_5"))
