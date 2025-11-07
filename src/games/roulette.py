@@ -314,8 +314,8 @@ class RouletteScreen(QWidget):
         if betcode[0] == "s":
             viewcode = betcode[2:]
         elif betcode[0] == "p":
-            numbers = betcode[1:].split("_")
-            viewcode = "Pair " + "".join(numbers)
+            numbers = betcode[2:].split("_")
+            viewcode = "Pair " + "/".join(numbers)
         elif betcode[0:2] == "tr":
             numbers = betcode[3:].split("_")
             viewcode = "Trio " + "/".join(numbers)
@@ -377,7 +377,7 @@ class RouletteScreen(QWidget):
         msg.exec()
 
     def show_bets(self):
-        bets_text = " ".join(f"{key} for {value} chips\n" for key, value in self.placed_bets.items())
+        bets_text = " ".join(f"{value} chips on {key}\n" for key, value in self.placed_bets.items())
         msg = QMessageBox()
         msg.setWindowTitle("Bets Placed")
         msg.setText(bets_text)
