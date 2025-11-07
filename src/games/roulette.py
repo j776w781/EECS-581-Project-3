@@ -322,9 +322,6 @@ class RouletteScreen(QWidget):
         elif betcode[0] == "q":
             numbers = betcode[2:].split("_")
             viewcode = "Quad " + "/".join(numbers)
-        elif betcode[0] == "r":
-            numbers = betcode[1:].split("_")
-            viewcode = "Row " + "".join(numbers)
         elif betcode[0:2] == "rp":
             numbers = betcode[3:].split("_")
             viewcode = "Row Pair " + "/".join(numbers)
@@ -344,8 +341,10 @@ class RouletteScreen(QWidget):
         elif betcode[0] == "b":
             viewcode = "black"
         elif betcode[0:2] == "rd":
-            viewcode = "black"
-
+            viewcode = "red"
+        elif betcode[0] == "r":
+            numbers = betcode[1:].split("_")
+            viewcode = "Row " + "".join(numbers)
         return viewcode
 
     def show_rules(self):
