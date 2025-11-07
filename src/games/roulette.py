@@ -377,7 +377,7 @@ class RouletteScreen(QWidget):
         msg.exec()
 
     def show_bets(self):
-        bets_text = " ".join(f"{key} for {value} chips" for key, value in self.placed_bets.items())
+        bets_text = " ".join(f"{key} for {value} chips\n" for key, value in self.placed_bets.items())
         msg = QMessageBox()
         msg.setWindowTitle("Bets Placed")
         msg.setText(bets_text)
