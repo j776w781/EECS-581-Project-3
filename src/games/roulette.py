@@ -54,6 +54,8 @@ class RouletteScreen(QWidget):
         self.state = state
         self.game = Roulette()
 
+        self.placed_bets = {}
+
         # Set up the scene for wheel animation.
         self.ui.wheelLabel.hide() # Remove static wheel picture.
         self.scene = QGraphicsScene(self) # Create graphic scene.
@@ -81,6 +83,8 @@ class RouletteScreen(QWidget):
 
         #Leave button
         self.ui.leaveButton.clicked.connect(self.leave)
+
+        self.ui.cur_bets.clicked.connect(self.show_bets)
 
         # Single bets
         self.ui.s_0.clicked.connect(lambda: self.apply_bet("s_0"))
@@ -295,9 +299,54 @@ class RouletteScreen(QWidget):
                 self.state.chips = self.state.chips-chipamount
                 #Updates chip total on GUI.
                 self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+                #add the bet to the current bets to display
+                if self.parse_betcode(betcode) not in self.placed_bets.keys():
+                    self.placed_bets[self.parse_betcode(betcode)] = 50
+                else:
+                    self.placed_bets[self.parse_betcode(betcode)] += 50
             #Let's the user know they're out.
             else:
                 QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
+
+    def parse_betcode(self,betcode):
+        numbers = "0123456789"
+        viewcode = ""
+        if betcode[0] == "s":
+            viewcode = betcode[2:]
+        elif betcode[0] == "p":
+            numbers = betcode[1:].split("_")
+            viewcode = "Pair " + "".join(numbers)
+        elif betcode[0:2] == "tr":
+            numbers = betcode[3:].split("_")
+            viewcode = "Trio " + "/".join(numbers)
+        elif betcode[0] == "q":
+            numbers = betcode[2:].split("_")
+            viewcode = "Quad " + "/".join(numbers)
+        elif betcode[0] == "r":
+            numbers = betcode[1:].split("_")
+            viewcode = "Row " + "".join(numbers)
+        elif betcode[0:2] == "rp":
+            numbers = betcode[3:].split("_")
+            viewcode = "Row Pair " + "/".join(numbers)
+        elif betcode[0] == "h":
+            numbers = betcode[1:].split("_")
+            viewcode = "Half " + "".join(numbers)
+        elif betcode[0] == "c":
+            numbers = betcode[1:].split("_")
+            viewcode = "Column " + "".join(numbers)
+        elif betcode[0:2] == "tw":
+            numbers = betcode[2:].split("_")
+            viewcode = "twelve " + "".join(numbers)
+        elif betcode[0] == "e":
+            viewcode = "even"
+        elif betcode[0] == "o":
+            viewcode = "odd"
+        elif betcode[0] == "b":
+            viewcode = "black"
+        elif betcode[0:2] == "rd":
+            viewcode = "black"
+
+        return viewcode
 
     def show_rules(self):
         rules_text = (
@@ -328,6 +377,14 @@ class RouletteScreen(QWidget):
         msg.setText(rules_text)
         msg.exec()
 
+    def show_bets(self):
+        bets_text = " ".join(f"{key} for {value} chips" for key, value in self.placed_bets.items())
+        msg = QMessageBox()
+        msg.setWindowTitle("Bets Placed")
+        msg.setText(bets_text)
+        msg.exec()
+
+
     # Function to animate wheel to spin.
     def spin(self):
         if self.game.bets != []:
@@ -335,6 +392,9 @@ class RouletteScreen(QWidget):
             #Disable betting during the wheel spin.
             self.can_bet = False
             self.ui.spinButton.setEnabled(False)
+
+            #clear the placed bets display
+            self.placed_bets.clear()
 
             # Play the roulette spin sound
             self.spin_sound_player.play()

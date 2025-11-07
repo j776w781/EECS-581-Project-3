@@ -3505,6 +3505,19 @@ QPushButton:hover{
     <string/>
    </property>
   </widget>
+  <widget class="QPushButton" name="cur_bets">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>560</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Current Bets</string>
+   </property>
+  </widget>
   <zorder>wheelLabel</zorder>
   <zorder>theDirtySolution</zorder>
   <zorder>tableLabel</zorder>
@@ -3670,6 +3683,7 @@ QPushButton:hover{
   <zorder>p_0_3</zorder>
   <zorder>p_0_2</zorder>
   <zorder>p_0_1</zorder>
+  <zorder>cur_bets</zorder>
  </widget>
  <resources/>
  <connections/>
