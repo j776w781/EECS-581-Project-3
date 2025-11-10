@@ -1,3 +1,18 @@
+'''
+File: roulette.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Max Biundo, Bisshoy Bhattacharjee
+
+Description:
+Stores the Roulette class, which handles game logic related to Roulette, and RouletteScreen class,
+which renders the GUI and effects the moves ordained by the Roulette class.
+
+Inputs: state: a GameState instance that stores the global chip balance.
+        parent: the main driver of the entire program.
+
+Outputs: Functional GUI for Roulette.
+'''
+
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QGraphicsView, QPushButton, QMessageBox, QGraphicsPixmapItem
 from PyQt6.QtCore import QObject, QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor
@@ -14,6 +29,10 @@ TABLE_DIR = os.path.join(BASE_DIR, "../assets/table.jpg")
 WHEEL_DIR = os.path.join(BASE_DIR, "../assets/wheel.png")
 PTR_DIR = os.path.join(BASE_DIR, "../assets/pointer.png")
 
+'''
+Helper class, which helps us easily animate the spinning wheel.
+The image needs to be repeatedly created during animation.
+'''
 class AnimatedWheel(QObject):
     def __init__(self, pixmap_item):
         super().__init__()
@@ -29,10 +48,15 @@ class AnimatedWheel(QObject):
 
     rotation = pyqtProperty(float, getRotation, setRotation)
 
+
+'''
+Main class for managing the Roulette GUI.
+'''
 class RouletteScreen(QWidget):
     #Connect to main window.
     switch_to_menu = pyqtSignal()
 
+    #Renders initial state of the GUI, including ALL BUTTONS.
     def __init__(self, state, parent=None):
         super().__init__(parent)
         self.ui = Ui_RouletteScreen()
@@ -51,9 +75,13 @@ class RouletteScreen(QWidget):
         #Used to stop betting during wheel spin.
         self.can_bet = True
         
+        #Lets us use the global number of chips.
         self.state = state
+
+        #Game logic.
         self.game = Roulette()
 
+        #MUST BE REMOVED IN REFACTORING -- too coupled
         self.placed_bets = {}
 
         # Set up the scene for wheel animation.
@@ -84,6 +112,7 @@ class RouletteScreen(QWidget):
         #Leave button
         self.ui.leaveButton.clicked.connect(self.leave)
 
+        #Show bet button
         self.ui.cur_bets.clicked.connect(self.show_bets)
 
         # Single bets
@@ -308,6 +337,13 @@ class RouletteScreen(QWidget):
             else:
                 QMessageBox.information(self, "No chips", f"You're all out, buddy! Spin the wheel and start prayin!")
 
+
+    '''
+    Helper function to parse the betcodes described above.
+
+    NOTE: This function has been identified for future refactoring, as it unnecessarily 
+    couples game-logic tasking with GUI management.
+    '''
     def parse_betcode(self,betcode):
         numbers = "0123456789"
         viewcode = ""
@@ -347,6 +383,9 @@ class RouletteScreen(QWidget):
             viewcode = "Row " + "".join(numbers)
         return viewcode
 
+    '''
+    A simple function that prints a QTForm explaining all the roulette bets when the "rules" button is clicked.
+    '''
     def show_rules(self):
         rules_text = (
             "European Roulette Rules:\n\n"
@@ -376,6 +415,9 @@ class RouletteScreen(QWidget):
         msg.setText(rules_text)
         msg.exec()
 
+    '''
+    Simple function that merely prints all the placed bets when the "show bets" button is clicked.
+    '''
     def show_bets(self):
         bets_text = " ".join(f"{value} chips on {key}\n" for key, value in self.placed_bets.items())
         msg = QMessageBox()
@@ -451,7 +493,7 @@ class RouletteScreen(QWidget):
         self.can_bet = True
 
         
-
+    #Activates when the exit button is clicked.
     def leave(self):
         #If the user has already placed bets, let them know the bad news.
         if len(self.game.bets) != 0:
@@ -462,6 +504,7 @@ class RouletteScreen(QWidget):
         self.switch_to_menu.emit()
 
 
+'''Main Game logic class for Roulette.'''
 class Roulette:
     def __init__(self):
         self.wheel = Wheel()

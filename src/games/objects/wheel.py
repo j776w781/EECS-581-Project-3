@@ -1,6 +1,26 @@
+'''
+File: wheel.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Max Biundo, Bisshoy Bhattacharjee
+
+Description:
+Stores critical game objects for Roulette, including the number as a concept and the wheel.
+
+Inputs: None
+
+Outputs: None
+
+'''
+
 import random
 
+
+'''
+This implements a number as we understand it in Roulette. This stores all the pertinent information
+about a number in roulette, such as its color, row, third, half, and more.
+'''
 class Number:
+    #Initializes number.
     def __init__(self, num):
         self.value = num
         self.color = 'black'
@@ -9,8 +29,12 @@ class Number:
         self.third = 0
         self.half = 0
         self.isEven = False
+        #Defines all the relevant attributes.
         self.categorizeNumber(self.value)
 
+    '''
+    Function that sets the proper value for each number attribute.
+    '''
     def categorizeNumber(self, num):
         # First we give a number its color.
         reds = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
@@ -77,10 +101,15 @@ class Number:
     
     def __eq__(self, other):
         return self.value == other.value
-    
+
+
+'''
+Main class representing a roulette wheel.
+'''  
 class Wheel:
     def __init__(self):
         self.order = []
+        #The roulette wheel has a well-defined order for numbers. This makes sure the right numbers are ordered properly.
         order = [28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7]
         for i in range(len(order)):
             self.order.append(Number(order[i]))
