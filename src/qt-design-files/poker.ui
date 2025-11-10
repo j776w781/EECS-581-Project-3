@@ -452,6 +452,11 @@ QPushButton:hover {
     <string>Pot:</string>
    </property>
   </widget>
+  <zorder>river</zorder>
+  <zorder>turn</zorder>
+  <zorder>flop3</zorder>
+  <zorder>flop2</zorder>
+  <zorder>flop1</zorder>
   <zorder>graphicsView</zorder>
   <zorder>playerHandLabel</zorder>
   <zorder>totalLabel</zorder>
@@ -459,11 +464,6 @@ QPushButton:hover {
   <zorder>opp1</zorder>
   <zorder>opp3</zorder>
   <zorder>opp2</zorder>
-  <zorder>flop1</zorder>
-  <zorder>flop2</zorder>
-  <zorder>flop3</zorder>
-  <zorder>turn</zorder>
-  <zorder>river</zorder>
   <zorder>dealButton</zorder>
   <zorder>deckLabel</zorder>
   <zorder>checkcallButton</zorder>

@@ -58,6 +58,7 @@ class PokerScreen(QWidget):
 
         self.player_pos = QPointF(224, 350)
         self.deck_pos = QPointF(80, 350)
+        self.board_pos = [QPointF(90, 205), QPointF(180, 205), QPointF(270, 205), QPointF(360, 205), QPointF(450, 205)]
 
         self.ui.dealButton.clicked.connect(self.deal)
         self.ui.leaveButton.clicked.connect(self.leave)
@@ -73,7 +74,7 @@ class PokerScreen(QWidget):
         else:
             path = os.path.join(CARDS_DIR, "" + str(card.rank) + "_of_" + card.suit + ".png")
         print(path)
-        pixmap = QPixmap(path).scaled(100, 145)
+        pixmap = QPixmap(path).scaled(71, 111)
         return pixmap
     
 
@@ -107,7 +108,20 @@ class PokerScreen(QWidget):
             self.animateCard(self.deck_pos, end, card_sprite)
 
         print(self.game.playerHand)
+
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.flop())
+
         self.ui.dealButton.setEnabled(False)
+
+    def flop(self):
+        self.game.flop()
+        for i, card in enumerate(self.game.board):
+            card_sprite = self.createCard(card)
+            end = self.board_pos[i]
+            self.animateCard(self.deck_pos, end, card_sprite)
+
+        print(self.game.board)
+
 
     def leave(self):
         self.switch_to_menu.emit()
