@@ -128,20 +128,26 @@ class PokerScreen(QWidget):
 
     def checkorcall(self):
         if self.game.activeBet:
+            print("Calling...")
             self.state.chips -= self.game.stake
             self.pot += self.game.stake
             self.game.call()
 
-            # There's probably some AI opp stuff here...
+            # There might be AI opp stuff here or within the game logic. We'll see.
 
             if len(self.game.board) == 3:
+                self.ui.checkcallButton.setText("Check")
+                self.ui.betraiseButton.setText("Bet")
                 self.turn()
             elif len(self.game.board) == 4:
+                self.ui.checkcallButton.setText("Check")
+                self.ui.betraiseButton.setText("Bet")
                 self.river()
         else:
+            print("Checking...")
             self.game.check()
 
-            # There's probably some more stuff here...but eventually
+            # There might be AI stuff here or within the game logic. We'll see.
 
             if len(self.game.board) == 3:
                 self.turn()
@@ -150,9 +156,14 @@ class PokerScreen(QWidget):
 
     def betorraise(self):
         if self.game.activeBet:
+            print("Raising...")
             self.game._raise()
         else:
-            self.game.bet()
+            print("Betting...")
+            if len(self.game.board) < 5:
+                self.ui.checkcallButton.setText("Call")
+                self.ui.betraiseButton.setText("Raise")
+                self.game.bet()
 
     def flop(self):
         self.game.flop()
@@ -184,6 +195,8 @@ class PokerScreen(QWidget):
         self.scene.clear()
         self.pot = 0
         self.ui.potLabel.setText(f"Pot: {self.pot}")
+        self.ui.checkcallButton.setText("Check")
+        self.ui.betraiseButton.setText("Bet")
         self.game = Poker()
         self.ui.dealButton.setEnabled(True)
         self.ui.checkcallButton.setEnabled(False)
@@ -249,12 +262,14 @@ class Poker:
     def call(self):
         # There will be code here to give opponents their turns.
 
-        # Otherwise the end should be...
+        # Otherwise the end might be...
+        self.activeBet = False
         self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
         print(self.handRank)
         print(self.bestHand)
 
     def bet(self):
+        self.activeBet = True
         pass
 
     def _raise(self):
