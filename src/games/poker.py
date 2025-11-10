@@ -61,6 +61,10 @@ class PokerScreen(QWidget):
         self.board_pos = [QPointF(90, 205), QPointF(180, 205), QPointF(270, 205), QPointF(360, 205), QPointF(450, 205)]
 
         self.ui.dealButton.clicked.connect(self.deal)
+        self.ui.checkcallButton.clicked.connect(self.checkorcall)
+        self.ui.checkcallButton.setEnabled(False)
+        self.ui.betraiseButton.clicked.connect(self.betorraise)
+        self.ui.betraiseButton.setEnabled(False)
         self.ui.leaveButton.clicked.connect(self.leave)
 
     '''
@@ -117,8 +121,38 @@ class PokerScreen(QWidget):
 
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.flop())
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.leaveButton.setEnabled(True))
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.checkcallButton.setEnabled(True))
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.betraiseButton.setEnabled(True))
 
         self.ui.dealButton.setEnabled(False)
+
+    def checkorcall(self):
+        if self.game.activeBet:
+            self.state.chips -= self.game.stake
+            self.pot += self.game.stake
+            self.game.call()
+
+            # There's probably some AI opp stuff here...
+
+            if len(self.game.board) == 3:
+                self.turn()
+            elif len(self.game.board) == 4:
+                self.river()
+        else:
+            self.game.check()
+
+            # There's probably some more stuff here...but eventually
+
+            if len(self.game.board) == 3:
+                self.turn()
+            elif len(self.game.board) == 4:
+                self.river()
+
+    def betorraise(self):
+        if self.game.activeBet:
+            self.game._raise()
+        else:
+            self.game.bet()
 
     def flop(self):
         self.game.flop()
@@ -129,6 +163,22 @@ class PokerScreen(QWidget):
 
         print(self.game.board)
 
+    def turn(self):
+        self.game.turn()
+        card_sprite = self.createCard(self.game.board[3])
+        end = self.board_pos[3]
+        self.animateCard(self.deck_pos, end, card_sprite)
+
+        print(self.game.board)
+
+    def river(self):
+        self.game.river()
+        card_sprite = self.createCard(self.game.board[4])
+        end = self.board_pos[4]
+        self.animateCard(self.deck_pos, end, card_sprite)
+
+        print(self.game.board)
+
 
     def leave(self):
         self.scene.clear()
@@ -136,6 +186,8 @@ class PokerScreen(QWidget):
         self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.game = Poker()
         self.ui.dealButton.setEnabled(True)
+        self.ui.checkcallButton.setEnabled(False)
+        self.ui.betraiseButton.setEnabled(False)
         self.switch_to_menu.emit()
 
 
@@ -143,8 +195,12 @@ class Poker:
     def __init__(self):
         self.deck = Deck() # We need the deck of course.
         self.playerHand = Hand() # We need the player hand of course.
+        self.bestHand = []
+        self.handRank = 0
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
+        self.activeBet = False # We need to know if a bet is currently occurring.
+        self.stake = 0
         self.fold = False # This will likely be valuable in interrupting gameflow.
 
     # Method to deal initial two cards to a given player.
@@ -153,10 +209,22 @@ class Poker:
         hand.add(self.deck.draw())
 
     '''
-    Game flow occurs in three stages: flop, turn, and river.
+    Game flow occurs in three stages: Flop, Turn, and River.
     We are going to abstract each stage into methods.
     So while the methods are quite elementary, (and two are exactly the same for that matter)
     the abstraction will make later coding easier (at least for me it will).
+
+    At the beginning, we will deal and post ante (50 chips). Then the cards will be dealt
+    and Flop will start. People go around checking until someone bets. This will create an active bet.
+    
+    During an active bet, you can't check. You either call (match the bet), raise (increase the bet), 
+    or fold (give up the hand). Once everybody calls/checks. The bet is inactive and the next round can start
+    assuming there is more than one player remaining.
+
+    Then Turn starts. The fourth card is revealed and players go around doing the previous actions of Flop.
+    Once Turn ends, River starts. River progresses the same as Flop and Turn.
+
+    When River ends, all hands are revealed. The greatest hand will have the pot added to their Chip Total.
     '''
 
     def flop(self):
@@ -169,6 +237,28 @@ class Poker:
 
     def river(self):
         self.board.append(self.deck.draw())
+
+    def check(self):
+        # There will be code here to give opponents their turns.
+
+        # Otherwise the end should be...
+        self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
+        print(self.handRank)
+        print(self.bestHand)
+
+    def call(self):
+        # There will be code here to give opponents their turns.
+
+        # Otherwise the end should be...
+        self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
+        print(self.handRank)
+        print(self.bestHand)
+
+    def bet(self):
+        pass
+
+    def _raise(self):
+        pass
 
     def analyzeHand(self, hand):
         hand_type, best_hand = self.playerHand.getBestHand(self.board)
