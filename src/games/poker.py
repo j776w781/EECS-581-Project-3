@@ -56,8 +56,8 @@ class PokerScreen(QWidget):
         self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.game = Poker()
 
-        self.player_pos = QPointF(224, 350)
-        self.deck_pos = QPointF(80, 350)
+        self.player_pos = QPointF(224, 400)
+        self.deck_pos = QPointF(-20, 345)
         self.board_pos = [QPointF(90, 205), QPointF(180, 205), QPointF(270, 205), QPointF(360, 205), QPointF(450, 205)]
 
         self.ui.dealButton.clicked.connect(self.deal)
@@ -101,6 +101,12 @@ class PokerScreen(QWidget):
 
     def deal(self):
         print("Dealing cards...")
+        self.ui.leaveButton.setEnabled(False)
+        self.pot += 50
+        self.state.chips -= 50
+        self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
+        self.ui.potLabel.setText(f'Pot: {self.pot}')
+
         self.game.deal(self.game.playerHand)
         for i, card in enumerate(self.game.playerHand.hand):
             card_sprite = self.createCard(card)
@@ -110,6 +116,7 @@ class PokerScreen(QWidget):
         print(self.game.playerHand)
 
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.flop())
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.leaveButton.setEnabled(True))
 
         self.ui.dealButton.setEnabled(False)
 
@@ -124,6 +131,11 @@ class PokerScreen(QWidget):
 
 
     def leave(self):
+        self.scene.clear()
+        self.pot = 0
+        self.ui.potLabel.setText(f"Pot: {self.pot}")
+        self.game = Poker()
+        self.ui.dealButton.setEnabled(True)
         self.switch_to_menu.emit()
 
 
