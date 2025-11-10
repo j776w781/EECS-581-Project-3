@@ -10,6 +10,30 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
 ASSET_DIR = os.path.join(BASE_DIR, "../assets")
 
+'''
+Helper class. Required for animated sprites, which need to be
+recreated repeatedly during animation.
+'''
+class AnimatedCard(QGraphicsObject):
+    def __init__(self, pixmap):
+        super().__init__()
+        self._pixmap = pixmap
+        self._pos = QPointF(0, 0)
+
+    def boundingRect(self):
+        return QRectF(0, 0, self._pixmap.width(), self._pixmap.height())
+
+    def paint(self, painter, option, widget=None):
+        painter.drawPixmap(0, 0, self._pixmap)
+
+    def getPos(self):
+        return super().pos()
+
+    def setPos(self, pos):
+        super().setPos(pos)
+
+    pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
+
 class PokerScreen(QWidget):
     switch_to_menu = pyqtSignal()
 
@@ -21,11 +45,69 @@ class PokerScreen(QWidget):
         self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
         self.ui.opp2.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
         self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/king_hippo.png"))
+        self.ui.deckLabel.setPixmap(QPixmap(CARDS_DIR + "/card_back.jpg"))
+        
+        self.scene = QGraphicsScene(0, 0, 600, 590, self)
+        self.ui.graphicsView.setScene(self.scene)
 
         self.state = state
+        self.pot = 0
+        self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+        self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.game = Poker()
 
+        self.player_pos = QPointF(224, 350)
+        self.deck_pos = QPointF(80, 350)
+
+        self.ui.dealButton.clicked.connect(self.deal)
         self.ui.leaveButton.clicked.connect(self.leave)
+
+    '''
+    Helpful function for obtaining the proper pixmap for a Card instance, based
+    on rank, suit, and if its hidden.
+    '''
+    def createCard(self, card, hidden=False):
+        print("Creating cards...")
+        if hidden:
+            path = os.path.join(CARDS_DIR, "card_back.jpg")
+        else:
+            path = os.path.join(CARDS_DIR, "" + str(card.rank) + "_of_" + card.suit + ".png")
+        print(path)
+        pixmap = QPixmap(path).scaled(100, 145)
+        return pixmap
+    
+
+    '''
+    Handles animation of a card. Takes in starting postiion, ending poisition, and pixmap.
+    '''
+    def animateCard(self, start, end, pixmap):
+        print("Animating cards...")
+        card_sprite = AnimatedCard(pixmap)
+        self.scene.addItem(card_sprite)
+
+        anim = QPropertyAnimation(card_sprite, b'pos')
+        anim.setDuration(700)
+        anim.setStartValue(start)
+        anim.setEndValue(end)
+        anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+        anim.start()
+
+        if not hasattr(self, '_anims'):
+            self._anims = []
+        self._anims.append(anim)
+
+        return card_sprite
+
+    def deal(self):
+        print("Dealing cards...")
+        self.game.deal(self.game.playerHand)
+        for i, card in enumerate(self.game.playerHand.hand):
+            card_sprite = self.createCard(card)
+            end = self.player_pos + QPointF(i * 80, 0)
+            self.animateCard(self.deck_pos, end, card_sprite)
+
+        print(self.game.playerHand)
+        self.ui.dealButton.setEnabled(False)
 
     def leave(self):
         self.switch_to_menu.emit()
@@ -37,7 +119,6 @@ class Poker:
         self.playerHand = Hand() # We need the player hand of course.
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
-        self.pot = 0
         self.fold = False # This will likely be valuable in interrupting gameflow.
 
     # Method to deal initial two cards to a given player.

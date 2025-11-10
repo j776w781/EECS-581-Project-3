@@ -49,11 +49,21 @@ class Ui_PokerScreen(object):
         font.setFamily("Broadway")
         font.setPointSize(20)
         self.leaveButton.setFont(font)
-        self.leaveButton.setStyleSheet("QPushButton {background-color: qlineargradient(\n"
-"            x1:0, y1:0, x2:0, y2:1,\n"
-"            stop:0 #ff0000,\n"
-"            stop:1 #7d0000\n"
+        self.leaveButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
 "    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: white;\n"
 "}")
         self.leaveButton.setObjectName("leaveButton")
         self.opp1 = QtWidgets.QLabel(parent=PokerScreen)
@@ -94,6 +104,140 @@ class Ui_PokerScreen(object):
         self.river.setGeometry(QtCore.QRect(550, 210, 71, 111))
         self.river.setText("")
         self.river.setObjectName("river")
+        self.dealButton = QtWidgets.QPushButton(parent=PokerScreen)
+        self.dealButton.setGeometry(QtCore.QRect(110, 540, 131, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(24)
+        self.dealButton.setFont(font)
+        self.dealButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #64ff00,\n"
+"        stop:1 #7d9d00\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #64ff00,\n"
+"        stop:1 #7d9d00\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.dealButton.setObjectName("dealButton")
+        self.deckLabel = QtWidgets.QLabel(parent=PokerScreen)
+        self.deckLabel.setGeometry(QtCore.QRect(80, 350, 71, 111))
+        self.deckLabel.setText("")
+        self.deckLabel.setPixmap(QtGui.QPixmap("../assets/cards/card_back.jpg"))
+        self.deckLabel.setScaledContents(True)
+        self.deckLabel.setObjectName("deckLabel")
+        self.checkcallButton = QtWidgets.QPushButton(parent=PokerScreen)
+        self.checkcallButton.setGeometry(QtCore.QRect(570, 440, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(24)
+        self.checkcallButton.setFont(font)
+        self.checkcallButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ffff00,\n"
+"        stop:1 #7d7d00\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ffff00,\n"
+"        stop:1 #7d7d00\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.checkcallButton.setObjectName("checkcallButton")
+        self.betraiseButton = QtWidgets.QPushButton(parent=PokerScreen)
+        self.betraiseButton.setGeometry(QtCore.QRect(570, 490, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(24)
+        self.betraiseButton.setFont(font)
+        self.betraiseButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff6600,\n"
+"        stop:1 #6e4e00\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff6600,\n"
+"        stop:1 #6e4e00\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.betraiseButton.setObjectName("betraiseButton")
+        self.foldButton = QtWidgets.QPushButton(parent=PokerScreen)
+        self.foldButton.setGeometry(QtCore.QRect(570, 540, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(24)
+        self.foldButton.setFont(font)
+        self.foldButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.foldButton.setObjectName("foldButton")
+        self.graphicsView = QtWidgets.QGraphicsView(parent=PokerScreen)
+        self.graphicsView.setGeometry(QtCore.QRect(0, 0, 801, 601))
+        self.graphicsView.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
+        self.graphicsView.setObjectName("graphicsView")
+        self.potLabel = QtWidgets.QLabel(parent=PokerScreen)
+        self.potLabel.setGeometry(QtCore.QRect(570, 390, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(24)
+        self.potLabel.setFont(font)
+        self.potLabel.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"            stop:0 #7d7a7a, \n"
+"            stop:1 #c7bfbf);\n"
+"            color: black;\n"
+"}")
+        self.potLabel.setObjectName("potLabel")
+        self.graphicsView.raise_()
+        self.playerHandLabel.raise_()
+        self.totalLabel.raise_()
+        self.leaveButton.raise_()
+        self.opp1.raise_()
+        self.opp3.raise_()
+        self.opp2.raise_()
+        self.flop1.raise_()
+        self.flop2.raise_()
+        self.flop3.raise_()
+        self.turn.raise_()
+        self.river.raise_()
+        self.dealButton.raise_()
+        self.deckLabel.raise_()
+        self.checkcallButton.raise_()
+        self.betraiseButton.raise_()
+        self.foldButton.raise_()
+        self.potLabel.raise_()
 
         self.retranslateUi(PokerScreen)
         QtCore.QMetaObject.connectSlotsByName(PokerScreen)
@@ -104,3 +248,8 @@ class Ui_PokerScreen(object):
         self.playerHandLabel.setText(_translate("PokerScreen", "Player Hand"))
         self.totalLabel.setText(_translate("PokerScreen", "Chip Total: "))
         self.leaveButton.setText(_translate("PokerScreen", "Leave"))
+        self.dealButton.setText(_translate("PokerScreen", "Deal!"))
+        self.checkcallButton.setText(_translate("PokerScreen", "Check"))
+        self.betraiseButton.setText(_translate("PokerScreen", "Bet"))
+        self.foldButton.setText(_translate("PokerScreen", "Fold"))
+        self.potLabel.setText(_translate("PokerScreen", "Pot:"))
