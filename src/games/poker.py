@@ -264,7 +264,7 @@ class Poker:
 
         # Otherwise the end might be...
         self.activeBet = False
-        self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
+        self.handRank, self.bestHand = self.analyzeHand()
         print(self.handRank)
         print(self.bestHand)
 
@@ -275,7 +275,6 @@ class Poker:
     def _raise(self):
         pass
 
-    def analyzeHand(self, hand):
+    def analyzeHand(self):
         hand_type, best_hand = self.playerHand.getBestHand(self.board)
-        print(hand_type)
-        print(best_hand)
+        return hand_type, best_hand
