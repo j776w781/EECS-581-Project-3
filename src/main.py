@@ -6,7 +6,7 @@ Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, M
 Description: Main skeleton for the program. Facilitates switching between all GUI elements.
 '''
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow, QStackedWidget, QMessageBox
 from PyQt6.QtGui import QFontDatabase, QFont
 import os
 import sys
@@ -75,6 +75,13 @@ class MainWindow(QMainWindow):
     def show_menu_screen(self):
         self.menu.ui.bankLabel.setText(f"Chip Total: {self.state.chips}")
         self.stack.setCurrentWidget(self.menu)
+        if self.state.chips == 0:
+            QMessageBox.information(
+            self,
+            "Game Over",
+			"Seriously? You're out? Then you're out!"
+            )
+            app.exit()
 
 
 if __name__ == "__main__":
