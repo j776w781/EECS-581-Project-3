@@ -56,16 +56,53 @@ class PokerScreen(QWidget):
         self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.game = Poker()
 
-        self.player_pos = QPointF(224, 400)
+        # Track positions
+        self.player_pos = QPointF(224, 380)
         self.deck_pos = QPointF(-20, 345)
-        self.board_pos = [QPointF(90, 205), QPointF(180, 205), QPointF(270, 205), QPointF(360, 205), QPointF(450, 205)]
+        self.board_pos = [QPointF(90, 185), QPointF(180, 185), QPointF(270, 185), QPointF(360, 185), QPointF(450, 185)]
 
+        # Handle buttons (except all in defined below)
         self.ui.dealButton.clicked.connect(self.deal)
         self.ui.checkcallButton.clicked.connect(self.checkorcall)
         self.ui.checkcallButton.setEnabled(False)
         self.ui.betraiseButton.clicked.connect(self.betorraise)
         self.ui.betraiseButton.setEnabled(False)
+        self.ui.foldButton.clicked.connect(self.fold)
+        self.ui.foldButton.setEnabled(False)
         self.ui.leaveButton.clicked.connect(self.leave)
+
+        # All in button goes crazy
+        self.ui.allinButton.clicked.connect(self.allIn)
+        self.ui.allinButton.setEnabled(False)
+        self.colors = [
+                "#39ff14",
+                "#ff073a",
+                "#00ffff",
+                "#ff6ec7",
+                "#ffff33",
+                "#00ffcc"
+        ]
+        self.color_index = 0
+        # Create timer that runs flash function every 75ms
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.flash)
+        self.timer.start(75)
+
+    # Cycles through different neon colors.
+    def flash(self):
+        color = self.colors[self.color_index]
+        self.ui.allinButton.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {color};
+                color: black;
+                border: 3px solid white;
+                border-radius: 15px;
+                font-weight: bold;
+            }}
+        """)
+        self.color_index = (self.color_index + 1) % len(self.colors)
+        if self.color_index > 1000000: # This is so we don't overload the program with some kind of overflow.
+            self.color_index = 0
 
     '''
     Helpful function for obtaining the proper pixmap for a Card instance, based
@@ -123,6 +160,8 @@ class PokerScreen(QWidget):
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.leaveButton.setEnabled(True))
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.checkcallButton.setEnabled(True))
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.betraiseButton.setEnabled(True))
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.foldButton.setEnabled(True))
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.allinButton.setEnabled(True))
 
         self.ui.dealButton.setEnabled(False)
 
@@ -164,6 +203,14 @@ class PokerScreen(QWidget):
                 self.ui.checkcallButton.setText("Call")
                 self.ui.betraiseButton.setText("Raise")
                 self.game.bet()
+
+    def fold(self):
+        print("Folding...")
+        pass
+
+    def allIn(self):
+        print("All in!")
+        pass
 
     def flop(self):
         self.game.flop()

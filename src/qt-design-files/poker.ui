@@ -126,7 +126,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>220</y>
+     <y>200</y>
      <width>91</width>
      <height>91</height>
     </rect>
@@ -145,7 +145,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>690</x>
-     <y>220</y>
+     <y>200</y>
      <width>91</width>
      <height>91</height>
     </rect>
@@ -183,7 +183,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>210</y>
+     <y>190</y>
      <width>71</width>
      <height>111</height>
     </rect>
@@ -196,7 +196,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>280</x>
-     <y>210</y>
+     <y>190</y>
      <width>71</width>
      <height>111</height>
     </rect>
@@ -209,7 +209,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>370</x>
-     <y>210</y>
+     <y>190</y>
      <width>71</width>
      <height>111</height>
     </rect>
@@ -222,7 +222,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>210</y>
+     <y>190</y>
      <width>71</width>
      <height>111</height>
     </rect>
@@ -235,7 +235,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>210</y>
+     <y>190</y>
      <width>71</width>
      <height>111</height>
     </rect>
@@ -304,7 +304,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>440</y>
+     <y>360</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -341,7 +341,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>490</y>
+     <y>410</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -378,7 +378,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>540</y>
+     <y>460</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -428,7 +428,7 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>390</y>
+     <y>310</y>
      <width>201</width>
      <height>41</height>
     </rect>
@@ -452,6 +452,105 @@ QPushButton:hover {
     <string>Pot:</string>
    </property>
   </widget>
+  <widget class="QSpinBox" name="oppCount">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>231</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="keyboardTracking">
+    <bool>false</bool>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>3</number>
+   </property>
+   <property name="value">
+    <number>3</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgba(0, 0, 0, 0)</string>
+   </property>
+   <property name="text">
+    <string>Opponents:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="allinButton">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>510</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway Flat 3D Filled</family>
+     <pointsize>36</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	font-weight: bold;
+	border-radius: 15px;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	font-weight: bold;
+	border-radius: 15px;
+}</string>
+   </property>
+   <property name="text">
+    <string>ALL IN!!!</string>
+   </property>
+  </widget>
   <zorder>river</zorder>
   <zorder>turn</zorder>
   <zorder>flop3</zorder>
@@ -470,6 +569,9 @@ QPushButton:hover {
   <zorder>betraiseButton</zorder>
   <zorder>foldButton</zorder>
   <zorder>potLabel</zorder>
+  <zorder>oppCount</zorder>
+  <zorder>label</zorder>
+  <zorder>allinButton</zorder>
  </widget>
  <resources/>
  <connections/>
