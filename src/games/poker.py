@@ -14,6 +14,7 @@ ASSET_DIR = os.path.join(BASE_DIR, "../assets")
 #=================================================#
 #============== ANIMATED CARD CLASS ==============#
 #=================================================#
+
 class AnimatedCard(QGraphicsObject):
     def __init__(self, pixmap):
         super().__init__()
@@ -123,24 +124,24 @@ class PokerScreen(QWidget):
     def fontControl(self):
         # Font Size Control (Adjust this until the fonts work work for you guys)
         font = self.ui.label.font()
-        font.setPointSize(24)
+        font.setPointSize(24) # <<< Adjust me!
         self.ui.label.setFont(font)
 
         font = self.ui.oppCount.font()
-        font.setPointSize(24)
+        font.setPointSize(24) # <<< Adjsut me!
         self.ui.oppCount.setFont(font)
 
         font = self.ui.playerHandLabel.font()
-        font.setPointSize(36)
+        font.setPointSize(36) # <<< Adjust me!
         self.ui.playerHandLabel.setFont(font)
 
         font = self.ui.totalLabel.font()
-        font.setPointSize(24)
+        font.setPointSize(24) # <<< Adjust me!
         self.ui.totalLabel.setFont(font)
 
         for i in range(self.game.oppNo):
             font = self.oppWidgets[i+3].font()
-            font.setPointSize(14)
+            font.setPointSize(14) # <<< Adjust me!
             self.oppWidgets[i+3].setFont(font)
 
 #=================== UPDATE PLAYERS ===================#
