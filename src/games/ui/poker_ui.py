@@ -66,24 +66,24 @@ class Ui_PokerScreen(object):
 "    color: white;\n"
 "}")
         self.leaveButton.setObjectName("leaveButton")
-        self.opp1 = QtWidgets.QLabel(parent=PokerScreen)
-        self.opp1.setGeometry(QtCore.QRect(20, 200, 91, 91))
-        self.opp1.setText("")
-        self.opp1.setPixmap(QtGui.QPixmap("../assets/glass_joe.png"))
-        self.opp1.setScaledContents(True)
-        self.opp1.setObjectName("opp1")
         self.opp3 = QtWidgets.QLabel(parent=PokerScreen)
-        self.opp3.setGeometry(QtCore.QRect(690, 200, 91, 91))
+        self.opp3.setGeometry(QtCore.QRect(20, 200, 91, 91))
         self.opp3.setText("")
-        self.opp3.setPixmap(QtGui.QPixmap("../assets/king_hippo.png"))
+        self.opp3.setPixmap(QtGui.QPixmap("../assets/glass_joe.png"))
         self.opp3.setScaledContents(True)
         self.opp3.setObjectName("opp3")
         self.opp2 = QtWidgets.QLabel(parent=PokerScreen)
-        self.opp2.setGeometry(QtCore.QRect(360, 10, 91, 91))
+        self.opp2.setGeometry(QtCore.QRect(690, 200, 91, 91))
         self.opp2.setText("")
-        self.opp2.setPixmap(QtGui.QPixmap("../assets/super_macho_man.png"))
+        self.opp2.setPixmap(QtGui.QPixmap("../assets/king_hippo.png"))
         self.opp2.setScaledContents(True)
         self.opp2.setObjectName("opp2")
+        self.opp1 = QtWidgets.QLabel(parent=PokerScreen)
+        self.opp1.setGeometry(QtCore.QRect(360, 10, 91, 91))
+        self.opp1.setText("")
+        self.opp1.setPixmap(QtGui.QPixmap("../assets/super_macho_man.png"))
+        self.opp1.setScaledContents(True)
+        self.opp1.setObjectName("opp1")
         self.flop1 = QtWidgets.QLabel(parent=PokerScreen)
         self.flop1.setGeometry(QtCore.QRect(190, 190, 71, 111))
         self.flop1.setText("")
@@ -221,12 +221,12 @@ class Ui_PokerScreen(object):
 "}")
         self.potLabel.setObjectName("potLabel")
         self.oppCount = QtWidgets.QSpinBox(parent=PokerScreen)
-        self.oppCount.setGeometry(QtCore.QRect(0, 20, 231, 61))
+        self.oppCount.setGeometry(QtCore.QRect(10, 20, 271, 61))
         font = QtGui.QFont()
         font.setFamily("Broadway")
         font.setPointSize(24)
         self.oppCount.setFont(font)
-        self.oppCount.setStyleSheet("")
+        self.oppCount.setStyleSheet("color: black;")
         self.oppCount.setFrame(True)
         self.oppCount.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.oppCount.setKeyboardTracking(False)
@@ -235,12 +235,13 @@ class Ui_PokerScreen(object):
         self.oppCount.setProperty("value", 3)
         self.oppCount.setObjectName("oppCount")
         self.label = QtWidgets.QLabel(parent=PokerScreen)
-        self.label.setGeometry(QtCore.QRect(10, 30, 161, 41))
+        self.label.setGeometry(QtCore.QRect(20, 30, 161, 41))
         font = QtGui.QFont()
         font.setFamily("Broadway")
         font.setPointSize(24)
         self.label.setFont(font)
-        self.label.setStyleSheet("background-color: rgba(0, 0, 0, 0)")
+        self.label.setStyleSheet("background-color: rgba(0, 0, 0, 0);\n"
+"color: black;")
         self.label.setObjectName("label")
         self.allinButton = QtWidgets.QPushButton(parent=PokerScreen)
         self.allinButton.setGeometry(QtCore.QRect(570, 510, 201, 71))
@@ -268,6 +269,48 @@ class Ui_PokerScreen(object):
 "    border-radius: 15px;\n"
 "}")
         self.allinButton.setObjectName("allinButton")
+        self.oppTotal3 = QtWidgets.QLabel(parent=PokerScreen)
+        self.oppTotal3.setGeometry(QtCore.QRect(20, 170, 91, 21))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(14)
+        self.oppTotal3.setFont(font)
+        self.oppTotal3.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"            stop:0 #7d7a7a, \n"
+"            stop:1 #c7bfbf);\n"
+"            color: black;\n"
+"}")
+        self.oppTotal3.setObjectName("oppTotal3")
+        self.oppTotal2 = QtWidgets.QLabel(parent=PokerScreen)
+        self.oppTotal2.setGeometry(QtCore.QRect(690, 170, 91, 21))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(14)
+        self.oppTotal2.setFont(font)
+        self.oppTotal2.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"            stop:0 #7d7a7a, \n"
+"            stop:1 #c7bfbf);\n"
+"            color: black;\n"
+"}")
+        self.oppTotal2.setObjectName("oppTotal2")
+        self.oppTotal1 = QtWidgets.QLabel(parent=PokerScreen)
+        self.oppTotal1.setGeometry(QtCore.QRect(360, 110, 91, 21))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        font.setPointSize(14)
+        self.oppTotal1.setFont(font)
+        self.oppTotal1.setStyleSheet("QLabel {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"            stop:0 #7d7a7a, \n"
+"            stop:1 #c7bfbf);\n"
+"            color: black;\n"
+"}")
+        self.oppTotal1.setObjectName("oppTotal1")
         self.river.raise_()
         self.turn.raise_()
         self.flop3.raise_()
@@ -277,9 +320,9 @@ class Ui_PokerScreen(object):
         self.playerHandLabel.raise_()
         self.totalLabel.raise_()
         self.leaveButton.raise_()
-        self.opp1.raise_()
         self.opp3.raise_()
         self.opp2.raise_()
+        self.opp1.raise_()
         self.dealButton.raise_()
         self.deckLabel.raise_()
         self.checkcallButton.raise_()
@@ -289,6 +332,9 @@ class Ui_PokerScreen(object):
         self.oppCount.raise_()
         self.label.raise_()
         self.allinButton.raise_()
+        self.oppTotal3.raise_()
+        self.oppTotal2.raise_()
+        self.oppTotal1.raise_()
 
         self.retranslateUi(PokerScreen)
         QtCore.QMetaObject.connectSlotsByName(PokerScreen)
@@ -306,3 +352,6 @@ class Ui_PokerScreen(object):
         self.potLabel.setText(_translate("PokerScreen", "Pot:"))
         self.label.setText(_translate("PokerScreen", "Opponents:"))
         self.allinButton.setText(_translate("PokerScreen", "ALL IN!!!"))
+        self.oppTotal3.setText(_translate("PokerScreen", "Chips:"))
+        self.oppTotal2.setText(_translate("PokerScreen", "Chips:"))
+        self.oppTotal1.setText(_translate("PokerScreen", "Chips:"))

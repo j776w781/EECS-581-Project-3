@@ -122,7 +122,7 @@ QPushButton:hover {
     <string>Leave</string>
    </property>
   </widget>
-  <widget class="QLabel" name="opp1">
+  <widget class="QLabel" name="opp3">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -141,7 +141,7 @@ QPushButton:hover {
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="opp3">
+  <widget class="QLabel" name="opp2">
    <property name="geometry">
     <rect>
      <x>690</x>
@@ -160,7 +160,7 @@ QPushButton:hover {
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="opp2">
+  <widget class="QLabel" name="opp1">
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -455,9 +455,9 @@ QPushButton:hover {
   <widget class="QSpinBox" name="oppCount">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>20</y>
-     <width>231</width>
+     <width>271</width>
      <height>61</height>
     </rect>
    </property>
@@ -468,7 +468,7 @@ QPushButton:hover {
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">color: black;</string>
    </property>
    <property name="frame">
     <bool>true</bool>
@@ -492,7 +492,7 @@ QPushButton:hover {
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>30</y>
      <width>161</width>
      <height>41</height>
@@ -505,7 +505,8 @@ QPushButton:hover {
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(0, 0, 0, 0)</string>
+    <string notr="true">background-color: rgba(0, 0, 0, 0);
+color: black;</string>
    </property>
    <property name="text">
     <string>Opponents:</string>
@@ -551,6 +552,90 @@ QPushButton:hover {
     <string>ALL IN!!!</string>
    </property>
   </widget>
+  <widget class="QLabel" name="oppTotal3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>170</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    background-color: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+            stop:0 #7d7a7a, 
+            stop:1 #c7bfbf);
+            color: black;
+}</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="oppTotal2">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>170</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    background-color: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+            stop:0 #7d7a7a, 
+            stop:1 #c7bfbf);
+            color: black;
+}</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="oppTotal1">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>110</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    background-color: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+            stop:0 #7d7a7a, 
+            stop:1 #c7bfbf);
+            color: black;
+}</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
   <zorder>river</zorder>
   <zorder>turn</zorder>
   <zorder>flop3</zorder>
@@ -560,9 +645,9 @@ QPushButton:hover {
   <zorder>playerHandLabel</zorder>
   <zorder>totalLabel</zorder>
   <zorder>leaveButton</zorder>
-  <zorder>opp1</zorder>
   <zorder>opp3</zorder>
   <zorder>opp2</zorder>
+  <zorder>opp1</zorder>
   <zorder>dealButton</zorder>
   <zorder>deckLabel</zorder>
   <zorder>checkcallButton</zorder>
@@ -572,6 +657,9 @@ QPushButton:hover {
   <zorder>oppCount</zorder>
   <zorder>label</zorder>
   <zorder>allinButton</zorder>
+  <zorder>oppTotal3</zorder>
+  <zorder>oppTotal2</zorder>
+  <zorder>oppTotal1</zorder>
  </widget>
  <resources/>
  <connections/>

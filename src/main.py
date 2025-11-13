@@ -94,10 +94,4 @@ if __name__ == "__main__":
         font_id = QFontDatabase.addApplicationFont(font_path)
         font_families = QFontDatabase.applicationFontFamilies(font_id)
         if font_families:
-            #app.setFont(QFont(font_families[0]))
-            print(f"Loaded custom font: {font_families[0]}")
-        else:
-            print("Font loaded but no families found.")
-    window = MainWindow()
-    window.show()
-    app.exec()
+            #app.setFont(QFont(

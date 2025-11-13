@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButto
 from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.poker_ui import Ui_PokerScreen
+from .objects.opponent import Opponent
 from .objects.deck import Deck
 from .objects.hand import Hand
 import os
@@ -42,9 +43,9 @@ class PokerScreen(QWidget):
         self.ui = Ui_PokerScreen()
         self.ui.setupUi(self)
         self.ui.playerHandLabel.setGeometry(QRect(280, 520, 240, 61))
-        self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
-        self.ui.opp2.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
-        self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/king_hippo.png"))
+        self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
+        self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
+        self.ui.opp2.setPixmap(QPixmap(ASSET_DIR + "/king_hippo.png"))
         self.ui.deckLabel.setPixmap(QPixmap(CARDS_DIR + "/card_back.jpg"))
         
         self.scene = QGraphicsScene(0, 0, 600, 590, self)
@@ -56,12 +57,18 @@ class PokerScreen(QWidget):
         self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.game = Poker()
 
+        # Opponent widgets (the icons and such)
+        self.oppWidgets = [self.ui.opp1, self.ui.opp2, self.ui.opp3, self.ui.oppTotal1, self.ui.oppTotal2, self.ui.oppTotal3]
+        self.updatePlayers(3)
+
         # Track positions
         self.player_pos = QPointF(224, 380)
+        self.opps_pos = [QPointF(360, 5), QPointF(540, 50), QPointF(-90, 50)]
         self.deck_pos = QPointF(-20, 345)
         self.board_pos = [QPointF(90, 185), QPointF(180, 185), QPointF(270, 185), QPointF(360, 185), QPointF(450, 185)]
 
         # Handle buttons (except all in defined below)
+        self.ui.oppCount.valueChanged.connect(self.updatePlayers)
         self.ui.dealButton.clicked.connect(self.deal)
         self.ui.checkcallButton.clicked.connect(self.checkorcall)
         self.ui.checkcallButton.setEnabled(False)
@@ -88,6 +95,8 @@ class PokerScreen(QWidget):
         self.timer.timeout.connect(self.flash)
         self.timer.start(75)
 
+        self.fontControl()
+
     # Cycles through different neon colors.
     def flash(self):
         color = self.colors[self.color_index]
@@ -103,6 +112,39 @@ class PokerScreen(QWidget):
         self.color_index = (self.color_index + 1) % len(self.colors)
         if self.color_index > 1000000: # This is so we don't overload the program with some kind of overflow.
             self.color_index = 0
+
+    def fontControl(self):
+        # Font Size Control (Adjust this until the fonts work work for you guys)
+        font = self.ui.label.font()
+        font.setPointSize(24)
+        self.ui.label.setFont(font)
+
+        font = self.ui.oppCount.font()
+        font.setPointSize(24)
+        self.ui.oppCount.setFont(font)
+
+        font = self.ui.playerHandLabel.font()
+        font.setPointSize(36)
+        self.ui.playerHandLabel.setFont(font)
+
+        font = self.ui.totalLabel.font()
+        font.setPointSize(24)
+        self.ui.totalLabel.setFont(font)
+
+        for i in range(self.game.oppNo):
+            font = self.oppWidgets[i+3].font()
+            font.setPointSize(14)
+            self.oppWidgets[i+3].setFont(font)
+
+    def updatePlayers(self, value):
+        for i in range(3):
+            if i < value:
+                self.oppWidgets[i].show()
+                self.oppWidgets[i+3].show()
+            if i >= value:
+                self.oppWidgets[i].hide()
+                self.oppWidgets[i+3].hide()
+        self.game.oppNo = value
 
     '''
     Helpful function for obtaining the proper pixmap for a Card instance, based
@@ -142,18 +184,42 @@ class PokerScreen(QWidget):
 
     def deal(self):
         print("Dealing cards...")
+        # First we hide insignificant details.
         self.ui.leaveButton.setEnabled(False)
-        self.pot += 50
-        self.state.chips -= 50
-        self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
+        self.ui.oppCount.setEnabled(False)
+        self.ui.label.hide()
+        self.ui.oppCount.hide()
+
+        # Game makes opponents
+        if self.game.started == False:
+            self.game.createOpponents()
+        
+        for i in range(self.game.oppNo):
+            self.oppWidgets[i+3].setText(f'Chips: {self.game.opps[i].chipTotal}')
+
+        # Game deals cards.
+        self.game.deal()
+
+        self.pot += self.game.stake
+        for i in range(len(self.game.opps)):
+            self.pot += self.game.opps[i].stake
+        self.ui.totalLabel.setText(f'Chip Total: {self.state.chips - self.game.stake}')
         self.ui.potLabel.setText(f'Pot: {self.pot}')
 
-        self.game.deal(self.game.playerHand)
+        # UI animates cards to player hand.
         for i, card in enumerate(self.game.playerHand.hand):
             card_sprite = self.createCard(card)
             end = self.player_pos + QPointF(i * 80, 0)
             self.animateCard(self.deck_pos, end, card_sprite)
 
+        # UI animates cards for each opponent
+        for i in range(len(self.game.opps)):
+            print(f"Animating to {self.game.opps[i].name}")
+            for j, card in enumerate(self.game.opps[i].oppHand.hand):
+                card_sprite = self.createCard(card, True)
+                end = self.opps_pos[i] + QPointF(j * 80, 0)
+                self.animateCard(self.deck_pos, end, card_sprite)
+        
         print(self.game.playerHand)
 
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.flop())
@@ -168,8 +234,6 @@ class PokerScreen(QWidget):
     def checkorcall(self):
         if self.game.activeBet:
             print("Calling...")
-            self.state.chips -= self.game.stake
-            self.pot += self.game.stake
             self.game.call()
 
             # There might be AI opp stuff here or within the game logic. We'll see.
@@ -248,6 +312,11 @@ class PokerScreen(QWidget):
         self.ui.dealButton.setEnabled(True)
         self.ui.checkcallButton.setEnabled(False)
         self.ui.betraiseButton.setEnabled(False)
+        self.ui.oppCount.setEnabled(True)
+        self.ui.label.show()
+        self.ui.oppCount.show()
+        self.ui.oppCount.setValue(3)
+        self.updatePlayers(3)
         self.switch_to_menu.emit()
 
 
@@ -257,16 +326,34 @@ class Poker:
         self.playerHand = Hand() # We need the player hand of course.
         self.bestHand = []
         self.handRank = 0
+        self.stake = 0
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
+        self.opps = []
+        self.started = False
         self.activeBet = False # We need to know if a bet is currently occurring.
-        self.stake = 0
         self.fold = False # This will likely be valuable in interrupting gameflow.
 
+    def createOpponents(self):
+        names = ["Super Macho Man", "King Hippo", "Glass Joe"]
+        for i in range(self.oppNo):
+            self.opps.append(Opponent(names[i]))
+            self.opps[i].chipTotal = 1000
+
     # Method to deal initial two cards to a given player.
-    def deal(self, hand):
-        hand.add(self.deck.draw())
-        hand.add(self.deck.draw())
+    def deal(self):
+        self.started = True
+        self.stake += 50 # Ante
+        self.playerHand.add(self.deck.draw())
+        self.playerHand.add(self.deck.draw())
+
+        for i in range(len(self.opps)):
+            print(f"{self.opps[i].name} gets dealt.")
+            self.opps[i].chipTotal -= 50 # Opponent ante
+            self.opps[i].stake += 50
+            self.opps[i].oppHand.add(self.deck.draw())
+            self.opps[i].oppHand.add(self.deck.draw())
+
 
     '''
     Game flow occurs in three stages: Flop, Turn, and River.
