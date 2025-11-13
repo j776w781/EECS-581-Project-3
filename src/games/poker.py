@@ -159,7 +159,6 @@ class PokerScreen(QWidget):
         print(path)
         pixmap = QPixmap(path).scaled(71, 111)
         return pixmap
-    
 
     '''
     Handles animation of a card. Takes in starting postiion, ending poisition, and pixmap.
@@ -192,7 +191,7 @@ class PokerScreen(QWidget):
 
         # Game makes opponents
         if self.game.started == False:
-            self.game.createOpponents()
+            self.game.createOpponents(self.game)
         
         # Displays the opponent chip totals.
         for i in range(self.game.oppNo):
@@ -201,6 +200,7 @@ class PokerScreen(QWidget):
         # Game deals cards.
         self.game.deal()
 
+        # Game updates pot.
         self.pot += self.game.stake
         for i in range(len(self.game.opps)):
             self.pot += self.game.opps[i].stake
@@ -225,56 +225,65 @@ class PokerScreen(QWidget):
 
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.flop())
         QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.leaveButton.setEnabled(True))
-        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.checkcallButton.setEnabled(True))
-        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.betraiseButton.setEnabled(True))
-        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.foldButton.setEnabled(True))
-        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.ui.allinButton.setEnabled(True))
+        QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.enablePlayerActions(True))
 
         self.ui.dealButton.setEnabled(False)
 
+    def enablePlayerActions(self, enable):
+        self.ui.checkcallButton.setEnabled(enable)
+        self.ui.betraiseButton.setEnabled(enable)
+        self.ui.foldButton.setEnabled(enable)
+        self.ui.allinButton.setEnabled(enable)
+
+    def nextTurn(self):
+        current_turn = self.game.turn_index
+        self.game.turn_index = (self.game.turn_index + 1) % (self.game.oppNo + 1)
+        if current_turn == 0: # Player turn
+            self.enablePlayerActions(True)
+        else:
+            self.enablePlayerActions(False)
+            QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
+
+    def opponentTurn(self, index):
+        self.game.opps[index-1].decision()
+        #self.game.next_turn
+        self.nextTurn()
+
+
     def checkorcall(self):
         if self.game.activeBet:
-            print("Calling...")
+            # Game logic of a check happens here.
             self.game.call()
 
-            # There might be AI opp stuff here or within the game logic. We'll see.
-
-            if len(self.game.board) == 3:
-                self.ui.checkcallButton.setText("Check")
-                self.ui.betraiseButton.setText("Bet")
-                self.turn()
-            elif len(self.game.board) == 4:
-                self.ui.checkcallButton.setText("Check")
-                self.ui.betraiseButton.setText("Bet")
-                self.river()
+            self.ui.checkcallButton.setText("Check")
+            self.ui.betraiseButton.setText("Bet")
         else:
-            print("Checking...")
+            # Game logic of a check happens here.
             self.game.check()
 
-            # There might be AI stuff here or within the game logic. We'll see.
-
-            if len(self.game.board) == 3:
-                self.turn()
-            elif len(self.game.board) == 4:
-                self.river()
+        self.nextTurn()
 
     def betorraise(self):
         if self.game.activeBet:
-            print("Raising...")
             self.game._raise()
         else:
-            print("Betting...")
             if len(self.game.board) < 5:
                 self.ui.checkcallButton.setText("Call")
                 self.ui.betraiseButton.setText("Raise")
                 self.game.bet()
 
+        self.nextTurn()
+
     def fold(self):
-        print("Folding...")
+        self.game.fold()
+
+        self.nextTurn()
         pass
 
     def allIn(self):
-        print("All in!")
+        self.game.allIn()
+
+        self.nextTurn()
         pass
 
     def flop(self):
@@ -284,7 +293,8 @@ class PokerScreen(QWidget):
             end = self.board_pos[i]
             self.animateCard(self.deck_pos, end, card_sprite)
 
-        print(self.game.board)
+        self.game.start_round()
+        self.nextTurn()
 
     def turn(self):
         self.game.turn()
@@ -333,14 +343,15 @@ class Poker:
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
         self.opps = []
+        self.turn_index = 0
         self.started = False
         self.activeBet = False # We need to know if a bet is currently occurring.
-        self.fold = False # This will likely be valuable in interrupting gameflow.
+        self.folded = False # This will likely be valuable in interrupting gameflow.
 
-    def createOpponents(self):
+    def createOpponents(self, game):
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
-            self.opps.append(Opponent(names[i]))
+            self.opps.append(Opponent(names[i], game))
             self.opps[i].chipTotal = 1000
 
     # Method to deal initial two cards to a given player.
@@ -356,6 +367,7 @@ class Poker:
             self.opps[i].stake += 50
             self.opps[i].oppHand.add(self.deck.draw())
             self.opps[i].oppHand.add(self.deck.draw())
+
 
 
     '''
@@ -376,6 +388,12 @@ class Poker:
 
     When River ends, all hands are revealed. The greatest hand will have the pot added to their Chip Total.
     '''
+    def start_round(self):
+        self.turn_index = 0
+        self.active_players = self.oppNo + 1
+
+    def next_turn(self):
+        self.turn_index = (self.turn_index + 1) % self.active_players
 
     def flop(self):
         self.board.append(self.deck.draw())
@@ -389,28 +407,35 @@ class Poker:
         self.board.append(self.deck.draw())
 
     def check(self):
-        # There will be code here to give opponents their turns.
+        print("Checking...")
 
-        # Otherwise the end should be...
+        # Otherwise the end we'll keep these in mind.
         self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
         print(self.handRank)
         print(self.bestHand)
 
     def call(self):
-        # There will be code here to give opponents their turns.
+        print("Calling...")
 
         # Otherwise the end might be...
-        self.activeBet = False
+        #self.activeBet = False
         self.handRank, self.bestHand = self.analyzeHand()
         print(self.handRank)
         print(self.bestHand)
 
     def bet(self):
-        self.activeBet = True
-        pass
+        #self.activeBet = True
+        print("Betting...")
 
     def _raise(self):
-        pass
+        print("Raising...")
+
+    def fold(self):
+        print("Folding...")
+
+    def allIn(self):
+        print("GOING ALL IN!!!")
+
 
     def analyzeHand(self):
         hand_type, best_hand = self.playerHand.getBestHand(self.board)
