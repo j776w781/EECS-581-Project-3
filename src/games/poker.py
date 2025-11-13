@@ -11,10 +11,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
 ASSET_DIR = os.path.join(BASE_DIR, "../assets")
 
-'''
-Helper class. Required for animated sprites, which need to be
-recreated repeatedly during animation.
-'''
+#=================================================#
+#============== ANIMATED CARD CLASS ==============#
+#=================================================#
 class AnimatedCard(QGraphicsObject):
     def __init__(self, pixmap):
         super().__init__()
@@ -34,6 +33,10 @@ class AnimatedCard(QGraphicsObject):
         super().setPos(pos)
 
     pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
+
+#=================================================#
+#================POKER SCREEN GUI=================#
+#=================================================#
 
 class PokerScreen(QWidget):
     switch_to_menu = pyqtSignal()
@@ -97,7 +100,7 @@ class PokerScreen(QWidget):
 
         self.fontControl()
 
-    # Cycles through different neon colors.
+    # Cycles through different neon colors for the allinButton
     def flash(self):
         color = self.colors[self.color_index]
         self.ui.allinButton.setStyleSheet(f"""
@@ -112,6 +115,10 @@ class PokerScreen(QWidget):
         self.color_index = (self.color_index + 1) % len(self.colors)
         if self.color_index > 1000000: # This is so we don't overload the program with some kind of overflow.
             self.color_index = 0
+
+#=================== FOR MY FELLOW DEVS ===================#
+# I don't know how the GUI looks for you guys, but play with these values until the screen looks semi normal
+#==========================================================#
 
     def fontControl(self):
         # Font Size Control (Adjust this until the fonts work work for you guys)
@@ -135,6 +142,10 @@ class PokerScreen(QWidget):
             font = self.oppWidgets[i+3].font()
             font.setPointSize(14)
             self.oppWidgets[i+3].setFont(font)
+
+#=================== UPDATE PLAYERS ===================#
+#===When oppCount value changes, update visible opps===#
+#======================================================#
 
     def updatePlayers(self, value):
         for i in range(3):
@@ -180,6 +191,8 @@ class PokerScreen(QWidget):
         self._anims.append(anim)
 
         return card_sprite
+
+#=================== POKER GUI START SEQUENCE ===================#
 
     def deal(self):
         print("Dealing cards...")
@@ -230,11 +243,15 @@ class PokerScreen(QWidget):
 
         self.ui.dealButton.setEnabled(False)
 
+#=================== POKER GUI HELPER FUNCTION ===================#
+
     def enablePlayerActions(self, enable):
         self.ui.checkcallButton.setEnabled(enable)
         self.ui.betraiseButton.setEnabled(enable)
         self.ui.foldButton.setEnabled(enable)
         self.ui.allinButton.setEnabled(enable)
+
+#=================== POKER GUI GAME STATE TRACKING ===================#
 
     def nextTurn(self):
         if self.game.checked == len(self.game.players):
@@ -313,6 +330,8 @@ class PokerScreen(QWidget):
         self.ui.foldButton.setEnabled(False)
         self.ui.allinButton.setEnabled(False)
 
+#=================== POKER GUI BUTTON ACTIONS ===================#
+
     def checkorcall(self):
         if self.game.activeBet:
             # Game logic of a check happens here.
@@ -348,6 +367,8 @@ class PokerScreen(QWidget):
 
         self.nextTurn()
         pass
+
+#=================== POKER GAME FLOW ANIMATIONS ===================#
 
     def flop(self):
         self.game.flop()
@@ -404,25 +425,29 @@ class PokerScreen(QWidget):
         self.ui.oppTotal3.setText("Chips:")
         self.switch_to_menu.emit()
 
+#=================================================#
+#===============POKER LOGIC CLASS=================#
+#=================================================#
 
 class Poker:
     def __init__(self):
         self.deck = Deck() # We need the deck of course.
-        self.name = "Player"
+        self.name = "Player" # ID for Player essentially
         self.playerHand = Hand() # We need the player hand of course.
-        self.bestHand = []
-        self.handRank = 0
-        self.stake = 0
+        self.bestHand = [] # Keeps track of player's best hand.
+        self.handRank = 0 # Holds hand rank in comparison to other players.
+        self.stake = 0 # Holds chips the player has bet for a given round.
         self.board = [] # Keeps track of cards in center.
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
-        self.opps = []
-        self.turn_index = 0
-        self.players = []
-        self.checked = 0
-        self.started = False
+        self.opps = [] # Holds Opponent instances.
+        self.turn_index = 0 # Keeps track of who's turn in Poker it is.
+        self.players = [] # Full list of players, user and opponents.
+        self.checked = 0 # Keeps track of how many people have passed without betting/raising.
+        self.started = False # Keeps track of whether the Poker instance is fresh.
         self.activeBet = False # We need to know if a bet is currently occurring.
         self.folded = False # This will likely be valuable in interrupting gameflow.
 
+    # Method creates opponents at the start of a fresh instance of Poker.
     def createOpponents(self, game):
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
@@ -443,20 +468,6 @@ class Poker:
             self.opps[i].oppHand.add(self.deck.draw())
             self.opps[i].oppHand.add(self.deck.draw())
 
-
-    '''
-    At the beginning, we will deal and post ante (50 chips). Then the cards will be dealt
-    and Flop will start. People go around checking until someone bets. This will create an active bet.
-    
-    During an active bet, you can't check. You either call (match the bet), raise (increase the bet), 
-    or fold (give up the hand). Once everybody calls/checks. The bet is inactive and the next round can start
-    assuming there is more than one player remaining.
-
-    Then Turn starts. The fourth card is revealed and players go around doing the previous actions of Flop.
-    Once Turn ends, River starts. River progresses the same as Flop and Turn.
-
-    When River ends, all hands are revealed. The greatest hand will have the pot added to their Chip Total.
-    '''
     def start_round(self):
         self.turn_index = 0
 
@@ -477,36 +488,40 @@ class Poker:
     def check(self, index=0):
         print("Checking...")
         self.checked += 1
-        # Otherwise the end we'll keep these in mind.
-        self.handRank, self.bestHand = self.analyzeHand()
-        print(self.handRank)
-        print(self.bestHand)
+        # TO DO: ???
+            # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
 
     def call(self, index=0):
         print("Calling...")
         self.checked += 1
-        # Otherwise the end might be...
-        #self.activeBet = False
-        self.handRank, self.bestHand = self.analyzeHand()
-        print(self.handRank)
-        print(self.bestHand)
+        # TO DO: IMPLEMENT CALL METHOD FURTHER.
+        # BIG IDEA: FIND LARGEST STAKE OF PLAYERS AND MATCH IT.
 
     def bet(self, index=0):
         print("Betting...")
         self.checked = 1
-        self.activeBet = True
-        self.players[index].stake += 50
+        # TO DO: IMPLEMENT BET METHOD FURTHER.
+        # BIG IDEA: INCREASE STAKE OF CALLER BY 50 AND SET self.activeBet TO TRUE
+            # THIS MEANS CHANGING SOME UI ELEMENTS TO REFLECT A BET IS OCCURRING
 
     def _raise(self, index=0):
         print("Raising...")
         self.checked = 1
-        self.players[index].stake += 50
+        # TO DO: IMPLEMENT RAISE METHOD
+        # BIG IDEA: FIND LARGEST STAKE OF PLAEYRS AND INCREASE IT BY 50.
+            # MIGHT NEED TO KEEP BETACTIVE? NOT CONFIDENT THOUGH.
 
     def fold(self):
         print("Folding...")
+        # TO DO: IMPLEMENT FOLD METHOD
+        # BIG IDEA: REMOVE PLAYERS FROM self.players
+            # THIS SHOULD HOPEFULLY PREVENT YOU FROM HAVING TO IMPLEMENT FOLD CHECKS IN OTHER METHODS.
 
     def allIn(self):
         print("GOING ALL IN!!!")
+        # TO DO: IMPLEMENT ALL IN METHOD
+        # BIG IDEA: RAISE OR BET WITH FULL CHIP TOTAL AS THE AMOUNT.
+            # RAISE OR BET WILL DEPEND ON IF A BET IS ACTIVE.
 
     def get_results(self):
         print("Ending game...")
