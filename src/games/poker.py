@@ -204,6 +204,7 @@ class PokerScreen(QWidget):
         self.pot += self.game.stake
         for i in range(len(self.game.opps)):
             self.pot += self.game.opps[i].stake
+            self.oppWidgets[i+3].setText(f'Chip: {self.game.opps[i].chipTotal - self.game.opps[i].stake}')
         self.ui.totalLabel.setText(f'Chip Total: {self.state.chips - self.game.stake}')
         self.ui.potLabel.setText(f'Pot: {self.pot}')
 
@@ -236,6 +237,10 @@ class PokerScreen(QWidget):
         self.ui.allinButton.setEnabled(enable)
 
     def nextTurn(self):
+        if self.game.checked == len(self.game.players):
+            self.endRound()
+            return
+
         current_turn = self.game.turn_index
         self.game.turn_index = (self.game.turn_index + 1) % (self.game.oppNo + 1)
         if current_turn == 0: # Player turn
@@ -245,10 +250,68 @@ class PokerScreen(QWidget):
             QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
 
     def opponentTurn(self, index):
-        self.game.opps[index-1].decision()
+        self.game.opps[index-1].decision(index)
         #self.game.next_turn
         self.nextTurn()
 
+    def endRound(self):
+        self.enablePlayerActions(False)
+        self.game.checked = 0
+
+        if len(self.game.board) == 3:
+            self.turn()
+        elif len(self.game.board) == 4:
+            self.river()
+        else:
+            self.gameOver()
+
+    def gameOver(self):
+        winner = self.game.get_results()
+        for i in range(len(self.game.players)):
+            if winner == i and i == 0:
+                self.state.chips -= self.game.stake
+                self.state.chips += self.pot
+                self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
+            elif winner == i:
+                self.game.players[i].chipTotal -= self.game.players[i].stake
+                self.game.players[i].chipTotal += self.pot
+                self.oppWidgets[self.game.players[i].id + 3].setText(f'Chips: {self.game.players[i].chipTotal}')
+            else:
+                if i == 0:
+                    self.state.chips -= self.game.stake
+                    self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
+                else:
+                    self.game.players[i].chipTotal -= self.game.players[i].stake
+                    self.oppWidgets[self.game.players[i].id + 3].setText(f'Chip: {self.game.players[i].chipTotal}')
+        self.reset()
+
+    def reset(self):
+        for card in self.scene.items():
+            self.scene.removeItem(card)
+
+        for i, card in enumerate(self.game.playerHand.hand):
+            card_sprite = self.createCard(card)
+            end = self.player_pos + QPointF(i * 80, 0)
+            self.animateCard(end, self.deck_pos, card_sprite)
+
+        for i in range(len(self.game.opps)):
+            for j, card in enumerate(self.game.opps[i].oppHand.hand):
+                card_sprite = self.createCard(card)
+                end = self.opps_pos[i] + QPointF(j * 80, 0)
+                self.animateCard(end, self.deck_pos, card_sprite)
+        
+        QTimer.singleShot(1000, Qt.TimerType.PreciseTimer, lambda: self.scene.clear())
+
+        self.game.reset()
+        self.pot = 0
+        self.ui.potLabel.setText(f"Pot: {self.pot}")
+        self.ui.checkcallButton.setText("Check")
+        self.ui.betraiseButton.setText("Bet")
+        self.ui.dealButton.setEnabled(True)
+        self.ui.checkcallButton.setEnabled(False)
+        self.ui.betraiseButton.setEnabled(False)
+        self.ui.foldButton.setEnabled(False)
+        self.ui.allinButton.setEnabled(False)
 
     def checkorcall(self):
         if self.game.activeBet:
@@ -302,6 +365,9 @@ class PokerScreen(QWidget):
         end = self.board_pos[3]
         self.animateCard(self.deck_pos, end, card_sprite)
 
+        self.game.start_round()
+        self.nextTurn()
+
         print(self.game.board)
 
     def river(self):
@@ -310,11 +376,14 @@ class PokerScreen(QWidget):
         end = self.board_pos[4]
         self.animateCard(self.deck_pos, end, card_sprite)
 
-        print(self.game.board)
+        self.game.start_round()
+        self.nextTurn()
 
+        print(self.game.board)
 
     def leave(self):
         self.scene.clear()
+        self.state.chips -= self.game.stake
         self.pot = 0
         self.ui.potLabel.setText(f"Pot: {self.pot}")
         self.ui.checkcallButton.setText("Check")
@@ -330,12 +399,16 @@ class PokerScreen(QWidget):
         self.ui.oppCount.show()
         self.ui.oppCount.setValue(3)
         self.updatePlayers(3)
+        self.ui.oppTotal1.setText("Chips:")
+        self.ui.oppTotal2.setText("Chips:")
+        self.ui.oppTotal3.setText("Chips:")
         self.switch_to_menu.emit()
 
 
 class Poker:
     def __init__(self):
         self.deck = Deck() # We need the deck of course.
+        self.name = "Player"
         self.playerHand = Hand() # We need the player hand of course.
         self.bestHand = []
         self.handRank = 0
@@ -344,6 +417,8 @@ class Poker:
         self.oppNo = 0 # We need to know how many opponents we have in order to make that many later.
         self.opps = []
         self.turn_index = 0
+        self.players = []
+        self.checked = 0
         self.started = False
         self.activeBet = False # We need to know if a bet is currently occurring.
         self.folded = False # This will likely be valuable in interrupting gameflow.
@@ -351,8 +426,9 @@ class Poker:
     def createOpponents(self, game):
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
-            self.opps.append(Opponent(names[i], game))
+            self.opps.append(Opponent(names[i], game, i))
             self.opps[i].chipTotal = 1000
+        self.players = ['Player'] + self.opps
 
     # Method to deal initial two cards to a given player.
     def deal(self):
@@ -363,19 +439,12 @@ class Poker:
 
         for i in range(len(self.opps)):
             print(f"{self.opps[i].name} gets dealt.")
-            self.opps[i].chipTotal -= 50 # Opponent ante
             self.opps[i].stake += 50
             self.opps[i].oppHand.add(self.deck.draw())
             self.opps[i].oppHand.add(self.deck.draw())
 
 
-
     '''
-    Game flow occurs in three stages: Flop, Turn, and River.
-    We are going to abstract each stage into methods.
-    So while the methods are quite elementary, (and two are exactly the same for that matter)
-    the abstraction will make later coding easier (at least for me it will).
-
     At the beginning, we will deal and post ante (50 chips). Then the cards will be dealt
     and Flop will start. People go around checking until someone bets. This will create an active bet.
     
@@ -390,10 +459,9 @@ class Poker:
     '''
     def start_round(self):
         self.turn_index = 0
-        self.active_players = self.oppNo + 1
 
     def next_turn(self):
-        self.turn_index = (self.turn_index + 1) % self.active_players
+        self.turn_index = (self.turn_index + 1) % len(self.players)
 
     def flop(self):
         self.board.append(self.deck.draw())
@@ -406,29 +474,33 @@ class Poker:
     def river(self):
         self.board.append(self.deck.draw())
 
-    def check(self):
+    def check(self, index=0):
         print("Checking...")
-
+        self.checked += 1
         # Otherwise the end we'll keep these in mind.
-        self.handRank, self.bestHand = self.playerHand.getBestHand(self.board)
+        self.handRank, self.bestHand = self.analyzeHand()
         print(self.handRank)
         print(self.bestHand)
 
-    def call(self):
+    def call(self, index=0):
         print("Calling...")
-
+        self.checked += 1
         # Otherwise the end might be...
         #self.activeBet = False
         self.handRank, self.bestHand = self.analyzeHand()
         print(self.handRank)
         print(self.bestHand)
 
-    def bet(self):
-        #self.activeBet = True
+    def bet(self, index=0):
         print("Betting...")
+        self.checked = 1
+        self.activeBet = True
+        self.players[index].stake += 50
 
-    def _raise(self):
+    def _raise(self, index=0):
         print("Raising...")
+        self.checked = 1
+        self.players[index].stake += 50
 
     def fold(self):
         print("Folding...")
@@ -436,6 +508,49 @@ class Poker:
     def allIn(self):
         print("GOING ALL IN!!!")
 
+    def get_results(self):
+        print("Ending game...")
+        self.handRank, self.bestHand = self.analyzeHand()
+
+        handRanks = [
+                "High Card", "Pair", "Two Pair", "Three of a Kind", "Straight",
+                 "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush"
+        ]
+
+        bestRank = handRanks.index(self.handRank)
+        bestCombo = self.bestHand
+        bestPlayerIndex = 0
+
+        for i in range(1, len(self.players)):
+            # Compare poker hands by higher index.
+            if handRanks.index(self.players[i].handRank) > bestRank:
+                bestRank = handRanks.index(self.players[i].handRank)
+                bestCombo = self.players[i].bestHand
+                bestPlayerIndex = i
+            elif handRanks.index(self.players[i].handRank) == bestRank: # In tie breaker case, we go by highest value card.
+                if sorted([card.rank for card in self.players[i].bestHand], reverse=True) > sorted([card.rank for card in bestCombo], reverse=True):
+                    bestCombo = self.players[i].bestHand
+                    bestPlayerIndex = i
+        print('Best player is:', self.players[bestPlayerIndex])
+        print('Best hand is:', bestCombo)
+        return bestPlayerIndex
+
+    def reset(self):
+        self.deck.shuffle()
+        self.playerHand = Hand()
+
+        self.bestHand = []
+        self.bestRank = 0
+        self.stake = 0
+        self.board = []
+        self.turn_index = 0
+        self.checked = 0
+        self.activeBet = False
+        self.folded = False
+
+        for i in range(1, len(self.players)):
+            self.players[i].stake = 0
+            self.players[i].oppHand = Hand()
 
     def analyzeHand(self):
         hand_type, best_hand = self.playerHand.getBestHand(self.board)
