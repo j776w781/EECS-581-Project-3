@@ -25,6 +25,7 @@ class Opponent:
         self.handRank, self.bestHand = self.oppHand.getBestHand(self.game.board)
         print(f"{self.name}'s Best Hand:")
         print(self.handRank)
+        print(self.bestHand)
 
         # For now I just have the AI defaulting to checking.
         hand_strengths = {
@@ -53,29 +54,9 @@ class Opponent:
             else:
                 self.game._raise(id) if random.random() < 0.6 else self.game.call(id)
         else:
-            self.game.check(id)
             if strength > 0.75 and random.random() < 0.5:
                 self.game.bet(id)
             elif strength > 0.5 and random.random() < 0.3:
                 self.game.bet(id)
             else:
                 self.game.check(id)
-
-        '''
-        if self.game.activeBet:
-            num = random.randint(0, 2)
-            if num == 0:
-                self.game.call(id)
-            elif num == 1:
-                self.game._raise(id)
-            elif num == 2:
-                self.game.fold(id)
-        else:
-            num = random.randint(0, 2)
-            if num == 0:
-                self.game.check(id)
-            elif num == 1:
-                self.game.bet(id)
-            elif num == 2:
-                self.game.fold(id)
-        '''

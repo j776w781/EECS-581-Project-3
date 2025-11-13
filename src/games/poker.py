@@ -269,7 +269,6 @@ class PokerScreen(QWidget):
 
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
-        #self.game.next_turn
         self.nextTurn()
 
     def endRound(self):
@@ -335,11 +334,8 @@ class PokerScreen(QWidget):
 
     def checkorcall(self):
         if self.game.activeBet:
-            # Game logic of a check happens here.
+            # Game logic of a call happens here.
             self.game.call()
-
-            self.ui.checkcallButton.setText("Check")
-            self.ui.betraiseButton.setText("Bet")
         else:
             # Game logic of a check happens here.
             self.game.check()
@@ -350,10 +346,9 @@ class PokerScreen(QWidget):
         if self.game.activeBet:
             self.game._raise()
         else:
-            if len(self.game.board) < 5:
-                self.ui.checkcallButton.setText("Call")
-                self.ui.betraiseButton.setText("Raise")
-                self.game.bet()
+            self.ui.checkcallButton.setText("Call")
+            self.ui.betraiseButton.setText("Raise")
+            self.game.bet()
 
         self.nextTurn()
 
@@ -361,13 +356,11 @@ class PokerScreen(QWidget):
         self.game.fold()
 
         self.nextTurn()
-        pass
 
     def allIn(self):
         self.game.allIn()
 
         self.nextTurn()
-        pass
 
 #=================== POKER GAME FLOW ANIMATIONS ===================#
 
@@ -378,6 +371,8 @@ class PokerScreen(QWidget):
             end = self.board_pos[i]
             self.animateCard(self.deck_pos, end, card_sprite)
 
+        self.ui.checkcallButton.setText("Check")
+        self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
         self.nextTurn()
 
@@ -387,6 +382,8 @@ class PokerScreen(QWidget):
         end = self.board_pos[3]
         self.animateCard(self.deck_pos, end, card_sprite)
 
+        self.ui.checkcallButton.setText("Check")
+        self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
         self.nextTurn()
 
@@ -398,6 +395,8 @@ class PokerScreen(QWidget):
         end = self.board_pos[4]
         self.animateCard(self.deck_pos, end, card_sprite)
 
+        self.ui.checkcallButton.setText("Check")
+        self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
         self.nextTurn()
 
@@ -487,33 +486,38 @@ class Poker:
         self.board.append(self.deck.draw())
 
     def check(self, index=0):
-        print("Checking...")
+        #print("Checking...")
         self.checked += 1
         # TO DO: ???
             # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
 
     def call(self, index=0):
         print("Calling...")
-        self.checked += 1
+        self.check(index)
+        
         # TO DO: IMPLEMENT CALL METHOD FURTHER.
         # BIG IDEA: FIND LARGEST STAKE OF PLAYERS AND MATCH IT.
 
     def bet(self, index=0):
         print("Betting...")
-        self.checked = 1
+        self.check(index)
+        
         # TO DO: IMPLEMENT BET METHOD FURTHER.
         # BIG IDEA: INCREASE STAKE OF CALLER BY 50 AND SET self.activeBet TO TRUE
             # THIS MEANS CHANGING SOME UI ELEMENTS TO REFLECT A BET IS OCCURRING
 
     def _raise(self, index=0):
         print("Raising...")
-        self.checked = 1
+        self.check(index)
+
         # TO DO: IMPLEMENT RAISE METHOD
         # BIG IDEA: FIND LARGEST STAKE OF PLAEYRS AND INCREASE IT BY 50.
             # MIGHT NEED TO KEEP BETACTIVE? NOT CONFIDENT THOUGH.
 
-    def fold(self):
+    def fold(self, index=0):
         print("Folding...")
+        self.check(index)
+
         # TO DO: IMPLEMENT FOLD METHOD
         # BIG IDEA: REMOVE PLAYERS FROM self.players
             # THIS SHOULD HOPEFULLY PREVENT YOU FROM HAVING TO IMPLEMENT FOLD CHECKS IN OTHER METHODS.
