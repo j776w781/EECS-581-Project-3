@@ -194,6 +194,7 @@ class PokerScreen(QWidget):
         if self.game.started == False:
             self.game.createOpponents()
         
+        # Displays the opponent chip totals.
         for i in range(self.game.oppNo):
             self.oppWidgets[i+3].setText(f'Chips: {self.game.opps[i].chipTotal}')
 
@@ -312,6 +313,8 @@ class PokerScreen(QWidget):
         self.ui.dealButton.setEnabled(True)
         self.ui.checkcallButton.setEnabled(False)
         self.ui.betraiseButton.setEnabled(False)
+        self.ui.foldButton.setEnabled(False)
+        self.ui.allinButton.setEnabled(False)
         self.ui.oppCount.setEnabled(True)
         self.ui.label.show()
         self.ui.oppCount.show()
