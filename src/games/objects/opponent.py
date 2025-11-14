@@ -27,7 +27,6 @@ class Opponent:
         print(self.handRank)
         print(self.bestHand)
 
-        # For now I just have the AI defaulting to checking.
         hand_strengths = {
             "High Card": 0.1,
             "Pair": 0.25,
