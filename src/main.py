@@ -17,6 +17,7 @@ from games.state.gamestate import GameState
 from games.blackjack import BlackJackScreen
 from games.roulette import RouletteScreen
 from games.poker import PokerScreen
+from games.sabaac import SabaccScreen
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -41,20 +42,24 @@ class MainWindow(QMainWindow):
         self.blackjack = BlackJackScreen(self.state, parent=self)
         self.roulette = RouletteScreen(self.state, parent=self)
         self.poker = PokerScreen(self.state, parent=self)
+        self.sabacc = SabaccScreen(self.state, parent=self)
 
         self.stack.addWidget(self.menu)
         self.stack.addWidget(self.blackjack)
         self.stack.addWidget(self.roulette)
         self.stack.addWidget(self.poker)
+        self.stack.addWidget(self.sabacc)
 
         self.menu.switch_to_blackjack.connect(self.show_blackjack_screen)
         self.menu.switch_to_roulette.connect(self.show_roulette_screen)
         self.menu.switch_to_poker.connect(self.show_poker_screen)
+        self.menu.switch_to_sabacc.connect(self.show_sabacc_screen)
         self.menu.app_exit.connect(self.close)
 
         self.blackjack.switch_to_menu.connect(self.show_menu_screen)
         self.roulette.switch_to_menu.connect(self.show_menu_screen)
         self.poker.switch_to_menu.connect(self.show_menu_screen)
+        self.sabacc.switch_to_menu.connect(self.show_menu_screen)
 
     # Switch to blackjack
     def show_blackjack_screen(self):
@@ -70,6 +75,11 @@ class MainWindow(QMainWindow):
     def show_poker_screen(self):
         self.poker.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
         self.stack.setCurrentWidget(self.poker)
+
+    # Switch to sabacc
+    def show_sabacc_screen(self):
+        self.poker.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
+        self.stack.setCurrentWidget(self.sabacc)
 
     # Switch to menu
     def show_menu_screen(self):

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>799</width>
+    <height>598</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGraphicsView" name="graphicsView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>801</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="leaveButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>540</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixedsys</family>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	color: black;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>Leave</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="dealButton">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>540</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixedsys</family>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #64ff00,
+		stop:1 #7d9d00
+    );
+	color: black;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #64ff00,
+		stop:1 #7d9d00
+    );
+	color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>Deal!</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
