@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
-from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QMessageBox
+from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QTimer, pyqtSignal, Qt, QTimer
+from PyQt6.QtGui import QPixmap
 from .ui.poker_ui import Ui_PokerScreen
 from .objects.opponent import Opponent
 from .objects.deck import Deck, AnimatedCard

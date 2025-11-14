@@ -13,9 +13,9 @@ Inputs: state: a GameState instance that stores the global chip balance.
 Outputs: Functional GUI for Roulette.
 '''
 
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QGraphicsView, QPushButton, QMessageBox, QGraphicsPixmapItem
-from PyQt6.QtCore import QObject, QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
-from PyQt6.QtGui import QPixmap, QPainter, QColor
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QMessageBox, QGraphicsPixmapItem
+from PyQt6.QtCore import QObject, QPropertyAnimation, QEasingCurve, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
+from PyQt6.QtGui import QPixmap
 from .ui.roulette_ui import Ui_RouletteScreen
 from .objects.wheel import Wheel
 import os

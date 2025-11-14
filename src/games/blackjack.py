@@ -14,9 +14,9 @@ Outputs: Functional GUI for Blackjack.
 
 
 
-from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
-from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
-from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtWidgets import QWidget, QGraphicsScene, QPushButton, QMessageBox
+from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QTimer, pyqtSignal, Qt, QTimer
+from PyQt6.QtGui import QPixmap
 from .ui.blackjack_ui import Ui_BlackJackScreen
 from .objects.deck import Deck, AnimatedCard
 import os
