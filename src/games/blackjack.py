@@ -18,39 +18,12 @@ from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButto
 from PyQt6.QtCore import QPropertyAnimation, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.blackjack_ui import Ui_BlackJackScreen
-from .objects.deck import Deck
+from .objects.deck import Deck, AnimatedCard
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
 CHIPS_DIR = os.path.join(BASE_DIR, "../assets")
-
-
-'''
-Helper class. Required for animated sprites, which need to be
-recreated repeatedly during animation.
-'''
-class AnimatedCard(QGraphicsObject):
-    def __init__(self, pixmap):
-        super().__init__()
-        self._pixmap = pixmap
-        self._pos = QPointF(0, 0)
-
-    def boundingRect(self):
-        return QRectF(0, 0, self._pixmap.width(), self._pixmap.height())
-
-    def paint(self, painter, option, widget=None):
-        painter.drawPixmap(0, 0, self._pixmap)
-
-    def getPos(self):
-        return super().pos()
-
-    def setPos(self, pos):
-        super().setPos(pos)
-
-    pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
-
-
 
 '''
 Main class for managing GUI and effecting changes based on game logic.

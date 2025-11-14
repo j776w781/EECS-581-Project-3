@@ -5,8 +5,31 @@ Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, M
 
 Description: Implementation for Playing card and card deck.
 '''
-
+from PyQt6.QtWidgets import QGraphicsObject
+from PyQt6.QtCore import QPointF, QRectF, pyqtProperty
 import random
+
+# Implementation for an animated playing card.
+# Displays to PyQt GUIs.
+class AnimatedCard(QGraphicsObject):
+    def __init__(self, pixmap):
+        super().__init__()
+        self._pixmap = pixmap
+        self._pos = QPointF(0, 0)
+
+    def boundingRect(self):
+        return QRectF(0, 0, self._pixmap.width(), self._pixmap.height())
+
+    def paint(self, painter, option, widget=None):
+        painter.drawPixmap(0, 0, self._pixmap)
+
+    def getPos(self):
+        return super().pos()
+
+    def setPos(self, pos):
+        super().setPos(pos)
+
+    pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
 
 #Implementation for playing card, whic just has a suit and rank.
 class Card:

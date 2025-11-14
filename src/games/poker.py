@@ -3,37 +3,13 @@ from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QRect
 from PyQt6.QtGui import QPixmap, QPainter
 from .ui.poker_ui import Ui_PokerScreen
 from .objects.opponent import Opponent
-from .objects.deck import Deck
+from .objects.deck import Deck, AnimatedCard
 from .objects.hand import Hand
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/cards")
 ASSET_DIR = os.path.join(BASE_DIR, "../assets")
-
-#=================================================#
-#============== ANIMATED CARD CLASS ==============#
-#=================================================#
-
-class AnimatedCard(QGraphicsObject):
-    def __init__(self, pixmap):
-        super().__init__()
-        self._pixmap = pixmap
-        self._pos = QPointF(0, 0)
-
-    def boundingRect(self):
-        return QRectF(0, 0, self._pixmap.width(), self._pixmap.height())
-
-    def paint(self, painter, option, widget=None):
-        painter.drawPixmap(0, 0, self._pixmap)
-
-    def getPos(self):
-        return super().pos()
-
-    def setPos(self, pos):
-        super().setPos(pos)
-
-    pos = pyqtProperty(QPointF, fget=getPos, fset=setPos)
 
 #=================================================#
 #================POKER SCREEN GUI=================#
