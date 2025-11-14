@@ -51,19 +51,14 @@ class Sabaac_Deck:
         return output
     
     def draw(self):
+        if len(self.deck) == 0:
+            return None
         card = random.choice(self.deck)
         index = self.deck.index(card)
         self.deck.pop(index)
         return card
     
-    def shuffle(self):
-        self.deck = []
-        signs = ['pos', 'neg']
-        suits = ['square', 'circle', 'triangle']
-        ranks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        for sign in signs:
-            for suit in suits:
-                for rank in ranks:
-                    self.deck.append(Sabaac_Card(sign, rank, suit))
-        self.deck.append(Sabaac_Card('zero', 0, 'revan'))
-        self.deck.append(Sabaac_Card('zero', 0, 'anakin'))
+    def shuffle(self, deck= []):
+        self.deck = deck
+        self.deck = random.shuffle(self.deck)
+        return self.deck
