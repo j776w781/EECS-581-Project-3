@@ -5,7 +5,7 @@ Description: Implementation for Sabaac playing card and card deck.
 """
 import random
 
-class Sabaac_Card:
+class Sabacc_Card:
     def __init__(self, sign, rank, suit):
         self.sign = sign
         self.rank = rank
@@ -25,7 +25,7 @@ class Sabaac_Card:
         return self.rank + other.rank
 
 
-class Sabaac_Deck:
+class Sabacc_Deck:
     def __init__(self):
         self.deck = []
         signs = ['pos', 'neg']
@@ -34,9 +34,9 @@ class Sabaac_Deck:
         for sign in signs:
             for suit in suits:
                 for rank in ranks:
-                    self.deck.append(Sabaac_Card(sign, rank, suit))
-        self.deck.append(Sabaac_Card('zero', 0, 'revan'))
-        self.deck.append(Sabaac_Card('zero', 0, 'anakin'))
+                    self.deck.append(Sabacc_Card(sign, rank, suit))
+        self.deck.append(Sabacc_Card('zero', 0, 'revan'))
+        self.deck.append(Sabacc_Card('zero', 0, 'anakin'))
 
     def __getitem__(self, i):
         if isinstance(i, int):

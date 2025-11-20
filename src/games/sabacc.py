@@ -11,7 +11,7 @@ Inputs: player_chips, the number of initial player chips.
 
 Outputs: Functional GUI for Sabaac.
 '''
-from .objects.sabaac_deck import Sabaac_Deck
+from .objects.sabacc_deck import Sabacc_Deck
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QGraphicsObject, QPushButton, QMessageBox
 from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QRectF, pyqtProperty, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter
@@ -40,19 +40,29 @@ class SabaccScreen(QWidget):
         self.ui.graphicsView.setScene(self.scene)
 
         self.ui.leaveButton.clicked.connect(self.leave)
+        self.ui.StartButton.clicked.connect(self.roll_dice)
 
         self.state = state
-        self.game = SabaacManager()
+        self.game = SabaccManager()
 
 
     def leave(self):
         self.switch_to_menu.emit()
 
-class SabaacManager:
-    """Manages the overall Sabaac game control flow."""
+    def roll_dice(self):
+        self.ui.dice1.display(str(random.randint(1,6)))
+        self.ui.dice2.display(str(random.randint(1,6)))
+        print("Rolled Dice")
+        print("Dice 1:", self.ui.dice1.value())
+        print("Dice 2:", self.ui.dice2.value())
 
-class SabaacAI:
-    """Represents an AI player in Sabaac.
+    
+
+class SabaccManager:
+    """Manages the overall Sabacc game control flow."""
+
+class SabaccAI:
+    """Represents an AI player in Sabacc.
     Input: name, position for GUI, difficulty level."""
     def __init__(self, name, position, difficulty):
         self.name = name
@@ -91,39 +101,39 @@ class SabaacAI:
     Inputs: current round number."""
     def make_move(self, num_round):
         checkHand = self.calc_hand_value()
-        checkDiscardValue = Sabaac.discard_pile[len(Sabaac.discard_pile)-1].rank if len(Sabaac.discard_pile) > 0 else None
+        checkDiscardValue = Sabacc.discard_pile[len(Sabacc.discard_pile)-1].rank if len(Sabacc.discard_pile) > 0 else None
         optimalSwap = self.checkSwapOptions(self.hand, checkDiscardValue)
         if self.difficulty == "medium":
             if checkHand == 0:
                 # AI decides to stand with a perfect hand
-                Sabaac.stand(self)
+                Sabacc.stand(self)
                 return
             if optimalSwap != None:
                 if num_round == 1 or abs(optimalSwap[1]) < 2:
-                    Sabaac.swap(self, optimalSwap)
+                    Sabacc.swap(self, optimalSwap)
                     return
             if abs(checkHand) < 3:
                 # AI decides to try and win with the current hand
-                Sabaac.stand(self)
+                Sabacc.stand(self)
                 return
             if num_round < 3:
-                Sabaac.junk(self)
+                Sabacc.junk(self)
                 return
-            Sabaac.draw(self)
+            Sabacc.draw(self)
             return
             
-class Sabaac:
-    """Represents a Sabaac game.
+class Sabacc:
+    """Represents a Sabacc game.
     Input: number of players."""
     def __init__(self, num_players):
         self.pot = random.randint(100, 500)
-        self.deck = Sabaac_Deck()
+        self.deck = Sabacc_Deck()
         self.discard_pile = []
         """Give position coordinates here once the GUI is set up"""
         positions = []
-        self.players = [SabaacAI(f"AI Player {i+1}", positions[i], "medium") for i in range(num_players)]
+        self.players = [SabaccAI(f"AI Player {i+1}", positions[i], "medium") for i in range(num_players)]
         """Add user at base position when GUI is set up
-        user = SabaacAI("User", (x/2, 2*y/3), "user")
+        user = SabaccAI("User", (x/2, 2*y/3), "user")
         self.players.append(user)
         """
 

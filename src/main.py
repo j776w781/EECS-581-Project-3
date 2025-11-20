@@ -17,7 +17,7 @@ from games.state.gamestate import GameState
 from games.blackjack import BlackJackScreen
 from games.roulette import RouletteScreen
 from games.poker import PokerScreen
-from games.sabaac import SabaccScreen
+from games.sabacc import SabaccScreen
 
 class MainWindow(QMainWindow):
     def __init__(self):
