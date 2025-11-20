@@ -41,13 +41,13 @@ class Ui_SabaccScreen(object):
 "    color: white;\n"
 "}")
         self.leaveButton.setObjectName("leaveButton")
-        self.dealButton = QtWidgets.QPushButton(parent=Form)
-        self.dealButton.setGeometry(QtCore.QRect(90, 540, 71, 41))
+        self.StartButton = QtWidgets.QPushButton(parent=Form)
+        self.StartButton.setGeometry(QtCore.QRect(90, 540, 71, 41))
         font = QtGui.QFont()
         font.setFamily("Fixedsys")
         font.setPointSize(15)
-        self.dealButton.setFont(font)
-        self.dealButton.setStyleSheet("QPushButton {\n"
+        self.StartButton.setFont(font)
+        self.StartButton.setStyleSheet("QPushButton {\n"
 "    background-color: qlineargradient(\n"
 "        x1:0, y1:0, x2:0, y2:1,\n"
 "        stop:0 #64ff00,\n"
@@ -63,7 +63,31 @@ class Ui_SabaccScreen(object):
 "    );\n"
 "    color: white;\n"
 "}")
-        self.dealButton.setObjectName("dealButton")
+        self.StartButton.setObjectName("StartButton")
+        self.bet5 = QtWidgets.QPushButton(parent=Form)
+        self.bet5.setGeometry(QtCore.QRect(10, 500, 75, 24))
+        self.bet5.setObjectName("bet5")
+        self.bet50 = QtWidgets.QPushButton(parent=Form)
+        self.bet50.setGeometry(QtCore.QRect(10, 460, 75, 24))
+        self.bet50.setObjectName("bet50")
+        self.dice1 = QtWidgets.QLCDNumber(parent=Form)
+        self.dice1.setGeometry(QtCore.QRect(310, 10, 64, 23))
+        self.dice1.setObjectName("dice1")
+        self.dice2 = QtWidgets.QLCDNumber(parent=Form)
+        self.dice2.setGeometry(QtCore.QRect(420, 10, 64, 23))
+        self.dice2.setObjectName("dice2")
+        self.bet100 = QtWidgets.QPushButton(parent=Form)
+        self.bet100.setGeometry(QtCore.QRect(10, 420, 75, 24))
+        self.bet100.setObjectName("bet100")
+        self.rules = QtWidgets.QPushButton(parent=Form)
+        self.rules.setGeometry(QtCore.QRect(90, 500, 75, 24))
+        self.rules.setObjectName("rules")
+        self.betAmount = QtWidgets.QLCDNumber(parent=Form)
+        self.betAmount.setGeometry(QtCore.QRect(100, 460, 64, 23))
+        self.betAmount.setObjectName("betAmount")
+        self.sabacc_pot = QtWidgets.QLCDNumber(parent=Form)
+        self.sabacc_pot.setGeometry(QtCore.QRect(360, 250, 64, 23))
+        self.sabacc_pot.setObjectName("sabacc_pot")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -72,4 +96,8 @@ class Ui_SabaccScreen(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.leaveButton.setText(_translate("Form", "Leave"))
-        self.dealButton.setText(_translate("Form", "Deal!"))
+        self.StartButton.setText(_translate("Form", "Start"))
+        self.bet5.setText(_translate("Form", "Bet +5"))
+        self.bet50.setText(_translate("Form", "Bet +50"))
+        self.bet100.setText(_translate("Form", "Bet +100"))
+        self.rules.setText(_translate("Form", "Rules"))
