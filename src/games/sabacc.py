@@ -40,10 +40,28 @@ class SabaccScreen(QWidget):
         self.ui.graphicsView.setScene(self.scene)
 
         self.ui.leaveButton.clicked.connect(self.leave)
-        self.ui.StartButton.clicked.connect(self.roll_dice)
+        self.ui.rules.clicked.connect(self.show_rules)
+        self.ui.StartButton.clicked.connect(SabaccManager)
 
         self.state = state
-        self.game = SabaccManager()
+        self.game = SabaccManager(self)
+
+    def show_rules(self):
+        rules = (
+            "Sabacc Rules:\n"
+            "10 Chip buy in to enter the game.\n"
+            "1. Each player is dealt two cards.\n"
+            "2. Players take turns to draw a card, swap for the card at the top of the discard pile, stand (pass to the next player), or junk (forfeit the game).\n"
+            "2.5. Players may choose to discard a card after drawing."
+            "3. The goal is to have a hand value closest to zero.\n"
+            "4. Positive and negative cards affect hand value.\n"
+            "5. The game continues for 3 rounds.\n"
+            "5.5. Players bet after every round.\n"
+            "6. The player with the hand value closest to zero wins the money bet after each round."
+            "7. If a player wins with exactly 0, they win the pot.\n"
+        )
+        QMessageBox.information(self, "Sabacc Rules", rules)
+        print("Displayed Sabacc Rules")
 
 
     def leave(self):
@@ -60,6 +78,9 @@ class SabaccScreen(QWidget):
 
 class SabaccManager:
     """Manages the overall Sabacc game control flow."""
+    def __init__(self, screen):
+        self.pot = random.randint(100, 1000)
+        screen.ui.sabacc_pot.display(self.pot)
 
 class SabaccAI:
     """Represents an AI player in Sabacc.
@@ -125,8 +146,7 @@ class SabaccAI:
 class Sabacc:
     """Represents a Sabacc game.
     Input: number of players."""
-    def __init__(self, num_players):
-        self.pot = random.randint(100, 500)
+    def __init__(self, num_players, screen):
         self.deck = Sabacc_Deck()
         self.discard_pile = []
         """Give position coordinates here once the GUI is set up"""
@@ -188,6 +208,14 @@ class Sabacc:
     def game_setup(self):
         for player in self.players:
             self.deal(player, 2)
+
+    def enter_game(self):
+        for player in self.players:
+            if player.numchips < 10:
+                self.players.remove(player)
+        for player in self.players:
+            self.pot += 10
+            player.numchips -= 10
     
     """Executes a round of moves and bets for all players.
     Inputs: current round number."""

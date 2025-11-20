@@ -50,7 +50,7 @@ class Sabacc_Deck:
             output = output + str(self.deck[i]) + '\n'
         return output
     
-    def draw(self):
+    def draw_card(self):
         if len(self.deck) == 0:
             return None
         card = random.choice(self.deck)
