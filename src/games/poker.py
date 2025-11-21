@@ -378,11 +378,13 @@ class PokerScreen(QWidget):
             self.ui.betraiseButton.setText("Raise")
             self.game.bet()
             self.pot += 50
+            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
             self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
     def fold(self):
+        self.state.chips -= self.game.stake
         self.game.fold(0)  # 0 = human player
         self.enablePlayerActions(False)  # Disable buttons after fold
         self.nextTurn()
