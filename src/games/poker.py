@@ -142,12 +142,11 @@ class PokerScreen(QWidget):
     on rank, suit, and if its hidden.
     '''
     def createCard(self, card, hidden=False):
-        print("Creating cards...")
         if hidden:
             path = os.path.join(CARDS_DIR, "card_back.jpg")
         else:
             path = os.path.join(CARDS_DIR, "" + str(card.rank) + "_of_" + card.suit + ".png")
-        print(path)
+        #print(path)
         pixmap = QPixmap(path).scaled(71, 111)
         return pixmap
 
@@ -155,7 +154,6 @@ class PokerScreen(QWidget):
     Handles animation of a card. Takes in starting postiion, ending poisition, and pixmap.
     '''
     def animateCard(self, start, end, pixmap):
-        print("Animating cards...")
         card_sprite = AnimatedCard(pixmap)
         self.scene.addItem(card_sprite)
 
@@ -258,6 +256,8 @@ class PokerScreen(QWidget):
             self.pot += self.game.opps[i].stake
         self.ui.potLabel.setText(f'Pot: {self.pot}')
 
+        if len(self.game.activePlayers) == 1:
+            self.gameOver()
 
         if self.game.checked == len(self.game.activePlayers):
             self.endRound()
@@ -285,6 +285,7 @@ class PokerScreen(QWidget):
     def endRound(self):
         self.enablePlayerActions(False)
         self.game.checked = 0
+        self.game.activeBet = False
 
         if len(self.game.board) == 3:
             self.turn()
@@ -310,12 +311,14 @@ class PokerScreen(QWidget):
 
     def gameOver(self):
         winner = self.game.get_results()
+        print("Winning index is", winner)
         for i in range(len(self.game.players)):
             if winner == i and i == 0:
                 self.state.chips -= self.game.stake
                 self.state.chips += self.pot
                 self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
             elif winner == i:
+                print("Winner is", self.game.players[winner].name)
                 self.game.players[i].chipTotal -= self.game.players[i].stake
                 self.game.players[i].chipTotal += self.pot
                 self.oppWidgets[self.game.players[i].id + 3].setText(f'Chips: {self.game.players[i].chipTotal}')
@@ -589,7 +592,6 @@ class Poker:
             self.players[index].folded = True
             self.players[index].oppHand = Hand()
             self.players[index].chipTotal -= self.players[index].stake
-            self.players[index].stake = 0
             self.activePlayers.remove(self.players[index])
 
     def allIn(self):
@@ -600,6 +602,9 @@ class Poker:
 
     def get_results(self):
         print("Ending game...")
+        if len(self.activePlayers) == 1:
+            return self.players.index(self.activePlayers[0])
+        
         self.handRank, self.bestHand = self.analyzeHand()
 
         handRanks = [
@@ -613,6 +618,8 @@ class Poker:
 
         for i in range(1, len(self.players)):
             # Compare poker hands by higher index.
+            if self.players[i] not in self.activePlayers:
+                continue
             if handRanks.index(self.players[i].handRank) > bestRank:
                 bestRank = handRanks.index(self.players[i].handRank)
                 bestCombo = self.players[i].bestHand
@@ -621,8 +628,6 @@ class Poker:
                 if sorted([card.rank for card in self.players[i].bestHand], reverse=True) > sorted([card.rank for card in bestCombo], reverse=True):
                     bestCombo = self.players[i].bestHand
                     bestPlayerIndex = i
-        print('Best player is:', self.players[bestPlayerIndex])
-        print('Best hand is:', bestCombo)
         return bestPlayerIndex
 
     def reset(self):
