@@ -243,6 +243,7 @@ class PokerScreen(QWidget):
 #=================== POKER GUI HELPER FUNCTION ===================#
 
     def enablePlayerActions(self, enable):
+        self.ui.leaveButton.setEnabled(enable)
         self.ui.checkcallButton.setEnabled(enable)
         self.ui.betraiseButton.setEnabled(enable)
         self.ui.foldButton.setEnabled(enable)
@@ -354,6 +355,7 @@ class PokerScreen(QWidget):
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.ui.dealButton.setEnabled(True)
+        self.ui.leaveButton.setEnabled(True)
         self.ui.checkcallButton.setEnabled(False)
         self.ui.betraiseButton.setEnabled(False)
         self.ui.foldButton.setEnabled(False)
@@ -543,6 +545,7 @@ class Poker:
 
     def bet(self, index=0):
         print("Betting...")
+        self.checked = 1
         self.activeBet = True
         if index == 0:
             self.stake += 50
@@ -629,8 +632,11 @@ class Poker:
         self.activeBet = False
         self.folded = False
         self.removeOpponents()
-        self.activePlayers = self.players
+        self.activePlayers = []
+        for player in self.players:
+            self.activePlayers.append(player)
         for i in range(1, len(self.players)):
+            self.players[i].folded = False
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
 
