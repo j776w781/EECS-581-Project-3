@@ -476,7 +476,7 @@ class Poker:
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
             self.opps.append(Opponent(names[i], game, i))
-            self.opps[i].chipTotal = random.randint(750, 1250)
+            self.opps[i].chipTotal = random.randint(15, 25) * 50
         self.players = ['Player'] + self.opps
 
     def removeOpponents(self):
