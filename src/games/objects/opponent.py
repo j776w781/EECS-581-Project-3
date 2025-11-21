@@ -18,6 +18,7 @@ class Opponent:
         self.chipTotal = 0
         self.id = id
         self.active = True
+        self.folded = False
 
     def __str__(self):
         return self.name
@@ -25,9 +26,9 @@ class Opponent:
     def decision(self, id):
         if self.active == True:
             self.handRank, self.bestHand = self.oppHand.getBestHand(self.game.board)
-            print(f"{self.name}'s Best Hand:")
-            print(self.handRank)
-            print(self.bestHand)
+            #print(f"{self.name}'s Best Hand:")
+            #print(self.handRank)
+            #print(self.bestHand)
 
             hand_strengths = {
                 "High Card": 0.1,
