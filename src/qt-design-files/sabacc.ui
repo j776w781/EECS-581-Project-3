@@ -40,8 +40,9 @@
    </property>
    <property name="font">
     <font>
-     <family>Fixedsys</family>
+     <family>Courier New</family>
      <pointsize>15</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
@@ -77,8 +78,9 @@ QPushButton:hover {
    </property>
    <property name="font">
     <font>
-     <family>Fixedsys</family>
+     <family>Courier New</family>
      <pointsize>15</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
@@ -132,8 +134,8 @@ QPushButton:hover {
   <widget class="QLCDNumber" name="dice1">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>520</y>
+     <x>10</x>
+     <y>50</y>
      <width>64</width>
      <height>23</height>
     </rect>
@@ -142,8 +144,8 @@ QPushButton:hover {
   <widget class="QLCDNumber" name="dice2">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>560</y>
+     <x>10</x>
+     <y>80</y>
      <width>64</width>
      <height>23</height>
     </rect>
@@ -188,8 +190,8 @@ QPushButton:hover {
   <widget class="QLCDNumber" name="sabacc_pot">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>250</y>
+     <x>410</x>
+     <y>380</y>
      <width>64</width>
      <height>23</height>
     </rect>
@@ -267,115 +269,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QToolButton" name="card1">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>500</y>
-     <width>22</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="card2">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>500</y>
-     <width>22</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="card3">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>500</y>
-     <width>22</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="card4">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>500</y>
-     <width>22</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="card5">
-   <property name="geometry">
-    <rect>
-     <x>510</x>
-     <y>500</y>
-     <width>22</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>...</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="opponents1">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>570</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>1</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="opponents2">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>540</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>2</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="opponents3">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>510</y>
-     <width>75</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>3</string>
-   </property>
-  </widget>
   <widget class="QLCDNumber" name="gamePot">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>290</y>
+     <x>290</x>
+     <y>380</y>
      <width>64</width>
      <height>23</height>
     </rect>
@@ -384,7 +282,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <widget class="QLabel" name="deckback">
    <property name="geometry">
     <rect>
-     <x>280</x>
+     <x>290</x>
      <y>220</y>
      <width>80</width>
      <height>120</height>
@@ -411,7 +309,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </property>
    <property name="font">
     <font>
-     <family>8514oem</family>
+     <family>Courier New</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
@@ -420,19 +320,30 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>3</number>
+   </property>
+   <property name="value">
+    <number>3</number>
+   </property>
   </widget>
   <widget class="QLabel" name="opplabel">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>101</width>
+     <width>91</width>
      <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>8514oem</family>
+     <family>Courier New</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
     </font>
    </property>
    <property name="autoFillBackground">
@@ -490,8 +401,8 @@ color: black;</string>
   <widget class="QLabel" name="lando">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>40</y>
+     <x>310</x>
+     <y>50</y>
      <width>101</width>
      <height>91</height>
     </rect>
@@ -504,6 +415,200 @@ color: black;</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="discard_spot">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>220</y>
+     <width>101</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgba(0, 0, 0,0);
+color:  rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Chewbaccachips">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>310</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Landochips">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>20</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Hanchips">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>320</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Chips:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="card1">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>425</y>
+     <width>80</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="card2">
+   <property name="geometry">
+    <rect>
+     <x>285</x>
+     <y>425</y>
+     <width>80</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="card3">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>425</y>
+     <width>80</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="card4">
+   <property name="geometry">
+    <rect>
+     <x>455</x>
+     <y>425</y>
+     <width>80</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="card5">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>425</y>
+     <width>80</width>
+     <height>120</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: rgba(255, 255, 255, 0);
+}
+QPushButton:hover{
+	background-color: rgba(255, 255, 255, 60);
+}</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
   <zorder>graphicsView</zorder>
@@ -522,14 +627,6 @@ color: black;</string>
   <zorder>swapButton</zorder>
   <zorder>standButton</zorder>
   <zorder>junkButton</zorder>
-  <zorder>card1</zorder>
-  <zorder>card2</zorder>
-  <zorder>card3</zorder>
-  <zorder>card4</zorder>
-  <zorder>card5</zorder>
-  <zorder>opponents1</zorder>
-  <zorder>opponents2</zorder>
-  <zorder>opponents3</zorder>
   <zorder>gamePot</zorder>
   <zorder>deckback</zorder>
   <zorder>oppcount</zorder>
@@ -537,6 +634,15 @@ color: black;</string>
   <zorder>chewie</zorder>
   <zorder>han</zorder>
   <zorder>lando</zorder>
+  <zorder>discard_spot</zorder>
+  <zorder>Chewbaccachips</zorder>
+  <zorder>Landochips</zorder>
+  <zorder>Hanchips</zorder>
+  <zorder>card1</zorder>
+  <zorder>card2</zorder>
+  <zorder>card3</zorder>
+  <zorder>card4</zorder>
+  <zorder>card5</zorder>
  </widget>
  <resources/>
  <connections/>
