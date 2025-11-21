@@ -311,6 +311,12 @@ class Ui_PokerScreen(object):
 "            color: black;\n"
 "}")
         self.oppTotal1.setObjectName("oppTotal1")
+        self.rulesButton = QtWidgets.QPushButton(parent=PokerScreen)
+        self.rulesButton.setGeometry(QtCore.QRect(10, 420, 61, 41))
+        font = QtGui.QFont()
+        font.setFamily("Broadway")
+        self.rulesButton.setFont(font)
+        self.rulesButton.setObjectName("rulesButton")
         self.river.raise_()
         self.turn.raise_()
         self.flop3.raise_()
@@ -335,6 +341,7 @@ class Ui_PokerScreen(object):
         self.oppTotal3.raise_()
         self.oppTotal2.raise_()
         self.oppTotal1.raise_()
+        self.rulesButton.raise_()
 
         self.retranslateUi(PokerScreen)
         QtCore.QMetaObject.connectSlotsByName(PokerScreen)
@@ -355,3 +362,4 @@ class Ui_PokerScreen(object):
         self.oppTotal3.setText(_translate("PokerScreen", "Chips:"))
         self.oppTotal2.setText(_translate("PokerScreen", "Chips:"))
         self.oppTotal1.setText(_translate("PokerScreen", "Chips:"))
+        self.rulesButton.setText(_translate("PokerScreen", "Rules"))

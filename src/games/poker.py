@@ -24,7 +24,7 @@ class PokerScreen(QWidget):
         super().__init__(parent)
         self.ui = Ui_PokerScreen()
         self.ui.setupUi(self)
-        self.ui.rules.clicked.connect(self.rules)
+        self.ui.rulesButton.clicked.connect(self.rules)
         self.ui.playerHandLabel.setGeometry(QRect(280, 520, 240, 61))
         self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
         self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
