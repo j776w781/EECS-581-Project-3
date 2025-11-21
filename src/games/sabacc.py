@@ -25,6 +25,7 @@ import random
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CARDS_DIR = os.path.join(BASE_DIR, "../assets/sabaac_cards")
 CHIPS_DIR = os.path.join(BASE_DIR, "../assets")
+OPPS_DIR = os.path.join(BASE_DIR, "../assets/sabacc_ops/")
 
 
 
@@ -37,9 +38,13 @@ class SabaccScreen(QWidget):
         self.ui = Ui_SabaccScreen()
         self.ui.setupUi(self)
 
-
         self.scene = QGraphicsScene(0,0,600,590, self)
         self.ui.graphicsView.setScene(self.scene)
+
+        self.ui.deckback.setPixmap(QPixmap(os.path.join(CARDS_DIR, "sabacc_deck_back.png")))
+        self.ui.han.setPixmap(QPixmap(OPPS_DIR + "han.png"))
+        self.ui.chewie.setPixmap(QPixmap(OPPS_DIR + "chewbacca.jpg"))
+        self.ui.lando.setPixmap(QPixmap(OPPS_DIR + "lando.png"))
 
         #Disable all buttons except leave and rules until game starts
         self.ui.drawButton.setEnabled(False)
@@ -63,44 +68,23 @@ class SabaccScreen(QWidget):
         self.ui.leaveButton.clicked.connect(self.leave)
         self.ui.rules.clicked.connect(self.show_rules)
 
+
         self.state = state
-        self.game = SabaccManager(self)
-        """Position to place deck graphic on GUI. 180, 200 is center of scene."""
         self.deck_pos = QPointF(180, 200)
-    
-    def addDeckBack(self):
-        deck_back_path = os.path.join(CARDS_DIR, "sabacc_deck_back.png")
-        deck_back_pixmap = QPixmap(deck_back_path).scaled(80, 120)
-        self.deck_item = self.scene.addPixmap(deck_back_pixmap)
-        self.deck_item.setPos(self.deck_pos)
-
-    def addDeckBackSideways(self):
-        deck_back_path = os.path.join(CARDS_DIR, "sabacc_deck_back.png")
-        deck_back_pixmap = QPixmap(deck_back_path).scaled(80, 120)
-        self.deck_item = self.scene.addPixmap(deck_back_pixmap)
-        self.deck_item.setPos(self.deck_pos)
-        self.deck_item.setRotation(90)
-
-    def addDeckBackSideways2(self):
-        deck_back_path = os.path.join(CARDS_DIR, "sabacc_deck_back.png")
-        deck_back_pixmap = QPixmap(deck_back_path).scaled(80, 120)
-        self.deck_item = self.scene.addPixmap(deck_back_pixmap)
-        self.deck_item.setPos(self.deck_pos)
-        self.deck_item.setRotation(270)
 
     def show_rules(self):
         rules = (
-            "Sabacc Rules:\n"
-            "10 Chip buy in to enter the game.\n"
-            "1. Each player is dealt two cards.\n"
-            "2. Players take turns to draw a card, swap for the card at the top of the discard pile, stand (pass to the next player), or junk (forfeit the game).\n"
-            "2.5. Players may choose to discard a card after drawing."
-            "3. The goal is to have a hand value closest to zero.\n"
-            "4. Positive and negative cards affect hand value.\n"
-            "5. The game continues for 3 rounds.\n"
-            "5.5. Players bet after every round.\n"
-            "6. The player with the hand value closest to zero wins the money bet after each round."
-            "7. If a player wins with exactly 0, they win the pot.\n"
+                "Sabacc Rules:\n"
+                "10 Chip buy in to enter the game.\n"
+                "1. Each player is dealt two cards.\n"
+                "2. Players take turns to draw a card, swap for the card at the top of the discard pile, stand (pass to the next player), or junk (forfeit the game).\n"
+                "2.5. Players may choose to discard a card after drawing."
+                "3. The goal is to have a hand value closest to zero.\n"
+                "4. Positive and negative cards affect hand value.\n"
+                "5. The game continues for 3 rounds.\n"
+                "5.5. Players bet after every round.\n"
+                "6. The player with the hand value closest to zero wins the money bet after each round."
+                "7. If a player wins with exactly 0, they win the pot.\n"
         )
         QMessageBox.information(self, "Sabacc Rules", rules)
         print("Displayed Sabacc Rules")
@@ -109,240 +93,154 @@ class SabaccScreen(QWidget):
     def leave(self):
         self.switch_to_menu.emit()
 
-    def roll_dice(self):
-        self.ui.dice1.display(str(random.randint(1,6)))
-        self.ui.dice2.display(str(random.randint(1,6)))
-        print("Rolled Dice")
-        print("Dice 1:", self.ui.dice1.value())
-        print("Dice 2:", self.ui.dice2.value())
+
+
 
     
 
-class SabaccManager:
-    """Manages the overall Sabacc game control flow."""
-    def __init__(self, screen):
-        """Initializes the Sabacc pot at a random value between 100 and 1000."""
-        self.screen = screen
-        self.pot = random.randint(100, 1000)
-        self.screen.ui.sabacc_pot.display(self.pot)
-        self.startGameSequence()
-
-    def startGameSequence(self):
-        """Sets up the initial game state and prompts the user to select the number of opponents."""
-        self.screen.ui.UserDialogBox.setPlainText("<-- Choose your number of opponents.")
-        self.screen.ui.opponents1.setEnabled(True)
-        self.screen.ui.opponents2.setEnabled(True)
-        self.screen.ui.opponents3.setEnabled(True)
-        self.num_opponents = 0
-        self.screen.ui.opponents1.clicked.connect(lambda: self.numOpponents(1))
-        self.screen.ui.opponents2.clicked.connect(lambda: self.numOpponents(2))
-        self.screen.ui.opponents3.clicked.connect(lambda: self.numOpponents(3))
-
-
-    def numOpponents(self, num):
-        """Sets the number of opponents for the game and prompts the user to start the game."""
-        self.num_opponents = num
-        print("Number of Opponents Chosen:", self.num_opponents)
-        self.screen.ui.UserDialogBox.setPlainText("<-- Press Start to begin the game.")
-        self.screen.ui.StartButton.setEnabled(True)
-        self.screen.ui.StartButton.clicked.connect(self.startGame)
-
-    def startGame(self):
-        """Starts the Sabacc game by initializing players and dealing initial hands."""
-        self.screen.ui.StartButton.setEnabled(False)
-        self.screen.ui.opponents1.setEnabled(False)
-        self.screen.ui.opponents2.setEnabled(False)
-        self.screen.ui.opponents3.setEnabled(False)
-        self.screen.addDeckBack()
-        self.players = []
-        ai_names = ["Lando", "Han", "Leia"]
-        if self.num_opponents == 1:
-            ai_positions = [QPointF(260, 10)]
-        elif self.num_opponents == 2:
-            ai_positions = [QPointF(50, 20), QPointF(550, 400)]
-        elif self.num_opponents == 3:
-            ai_positions = [QPointF(260, 10), QPointF(50, 20), QPointF(550, 400)]
-        for i in range(self.num_opponents):
-            ai_player = SabaccAI(ai_names[i], ai_positions[i], "medium")
-            self.players.append(ai_player)
-            print(f"Added AI Opponent: {ai_names[i]} at position {ai_positions[i]}")
-        user_player = SabaccPlayer("user", QPointF(260, 450), self.screen)
-        self.players.append(user_player)
-        print("Added User Player at position (260, 450) with chips:", self.screen.state.chips)
-        print("debug2")
-        self.game()
-
-    def game(self):
-        self.game = Sabacc(self.players, self.screen, self.pot)
-        self.game.enter_game()
-        self.game.game_setup()
-        self.game.initialize_discard_pile()
-        self.game.round(1)
-        """
-        self.game.round(2)
-        self.game.round(3)
-        self.game.end_game()
-        """
 
 
 
-class SabaccPlayer:
-    """Represents a player in Sabacc.
-    Input: name, position for GUI."""
-    def __init__(self, name, position, screen):
-        self.name = name
-        self.position = position
-        self.screen = screen
-        self.hand = []
-        self.numchips = self.screen.state.chips
-        self.numchips_bet = 0
-        self.out_of_game = False
 
-    def calc_hand_value(self):
-        total_value = 0
-        for card in self.hand:
-            total_value += card.rank
-        return total_value
-    
-    def make_bet(self, game):
-        betValue = 0
-        betting = True
-        self.screen.ui.UserDialogBox.append("Please place your bet by clicking the Bet buttons. When you are finished, press Start.")
-        self.screen.ui.bet5.setEnabled(True)
-        self.screen.ui.bet50.setEnabled(True)
-        self.screen.ui.bet100.setEnabled(True)
 
-        def bet5_clicked():
-            nonlocal betValue
-            if self.numchips - 5 >= 0:
-                betValue += 5
-                self.numchips -= 5
-                self.screen.ui.UserDialogBox.append(f"You bet 5 chips. Total bet: {betValue}. Remaining chips: {self.numchips}")
-            else:
-                self.screen.ui.UserDialogBox.append("Not enough chips to bet 5.")
 
-        def bet50_clicked():
-            nonlocal betValue
-            if self.numchips - 50 >= 0:
-                betValue += 50
-                self.numchips -= 50
-                self.screen.ui.UserDialogBox.append(f"You bet 50 chips. Total bet: {betValue}. Remaining chips: {self.numchips}")
-            else:
-                self.screen.ui.UserDialogBox.append("Not enough chips to bet 50.")
 
-        def bet100_clicked():
-            nonlocal betValue
-            if self.numchips - 100 >= 0:
-                betValue += 100
-                self.numchips -= 100
-                self.screen.ui.UserDialogBox.append(f"You bet 100 chips. Total bet: {betValue}. Remaining chips: {self.numchips}")
-            else:
-                self.screen.ui.UserDialogBox.append("Not enough chips to bet 100.")
 
-        self.screen.ui.bet5.clicked.connect(bet5_clicked)
-        self.screen.ui.bet50.clicked.connect(bet50_clicked)
-        self.screen.ui.bet100.clicked.connect(bet100_clicked)
 
-        self.screen.ui.StartButton.setEnabled(True)
-        self.screen.ui.StartButton.clicked.disconnect()
-        self.screen.ui.StartButton.clicked.connect(lambda: self.finish_betting(betValue, game))
 
-    def finish_betting(self, betValue, game):
-        self.screen.ui.bet5.setEnabled(False)
-        self.screen.ui.bet50.setEnabled(False)
-        self.screen.ui.bet100.setEnabled(False)
-        self.screen.ui.StartButton.setEnabled(False)
-        self.screen.ui.StartButton.clicked.disconnect()
-        game.gamePot += betValue
-        self.screen.ui.UserDialogBox.append(f"You have finished betting a total of {betValue} chips.")
-        self.screen.ui.gamePot.display(game.gamePot)
 
-    
-    def make_move(self, game, num_round):
-        self.screen.ui.UserDialogBox.append("Please make your move by clicking one of the action buttons.")
-        self.screen.ui.drawButton.setEnabled(True)
-        self.screen.ui.swapButton.setEnabled(True)
-        self.screen.ui.standButton.setEnabled(True)
-        self.screen.ui.junkButton.setEnabled(True)
-        print("debug")
-        self.screen.ui.drawButton.clicked.connect(lambda: self.draw(game, num_round))
-        self.screen.ui.swapButton.clicked.connect(lambda: game.swap(self))
-        self.screen.ui.standButton.clicked.connect(lambda: game.stand(self))
-        self.screen.ui.junkButton.clicked.connect(lambda: game.junk(self))
 
-    def draw(self, game, num_round):
-        game.draw(self)
-        print(f"{self.name} drew a card. Hand value is now: {self.calc_hand_value()}")
-        self.end_turn(game, num_round)
 
-    def end_turn(self, game, num_round):
-        self.screen.ui.drawButton.setEnabled(False)
-        self.screen.ui.swapButton.setEnabled(False)
-        self.screen.ui.standButton.setEnabled(False)
-        self.screen.ui.junkButton.setEnabled(False)
-        game.betting_phase(num_round)
 
-class SabaccAI:
-    """Represents an AI player in Sabacc.
-    Input: name, position for GUI, difficulty level."""
-    def __init__(self, name, position, difficulty):
-        self.name = name
-        self.position = position
-        self.difficulty = difficulty
-        self.hand = []
-        self.numchips = random.randint(50, 2000)
-        self.numchips_bet = 0
-        self.out_of_game = False
 
-    """Calculates the total value of the AI's hand."""
-    def calc_hand_value(self):
-        total_value = 0
-        for card in self.hand:
-            total_value += card.rank
-        return total_value
-    
-    """Checks possible swap options with the discard pile.
-    Inputs: AI's hand, value of the top discard card.
-    Outputs: The best swap option (card to swap, new hand value) or None if no beneficial swap exists."""
-    def checkSwapOptions(self, hand, discard_value):
-        possible_swaps = []
-        for card in hand:
-            new_hand_value = sum(c.rank for c in hand if c != card) + discard_value
-            possible_swaps.append((card, new_hand_value))
-        track_best = (None, 1000)
-        for i in range(len(possible_swaps)):
-            if abs(possible_swaps[i][1]) < abs(track_best[1]):
-                track_best = possible_swaps[i]
-        if track_best[1] < abs(self.calc_hand_value()):
-            return track_best
-        else:
-            return None
 
-    """Determines and executes the AI's move based on its difficulty level and hand value.
-    Inputs: current round number."""
-    def make_move(self, num_round, discard_pile, game):
-        checkHand = self.calc_hand_value()
-        checkDiscardValue = discard_pile[len(discard_pile)-1].rank if len(discard_pile) > 0 else None
-        optimalSwap = self.checkSwapOptions(self.hand, checkDiscardValue)
-        if self.difficulty == "medium":
-            if checkHand == 0:
-                # AI decides to stand with a perfect hand
-                game.stand(self)
-                return
-            if optimalSwap != None:
-                if num_round == 1 or abs(optimalSwap[1]) < 2:
-                    game.swap(self, optimalSwap)
-                    return
-            if abs(checkHand) < 3:
-                # AI decides to try and win with the current hand
-                game.stand(self)
-                return
-            if abs(checkHand) > 23 and num_round == 3:
-                game.junk(self)
-                return
-            game.draw(self)
-            return
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class Sabacc:
     """Represents a Sabacc game.
     Input: list of player objects, game screen."""
@@ -488,7 +386,3 @@ class Sabacc:
                 if player.name == "user":
                     print("Waiting for user to place bet...")
                     player.make_bet(self)
-
-            
-
-    
