@@ -427,7 +427,8 @@ class SabaccScreen(QWidget):
 
 
     def end_of_round(self):
-        if self.game.advance_round():
+        not_over = self.game.advance_round()
+        if not_over:
             print("NEXT ROUND")
             self.roll_dice()
             self.round()
