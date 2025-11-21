@@ -252,6 +252,13 @@ class PokerScreen(QWidget):
 #=================== POKER GUI GAME STATE TRACKING ===================#
 
     def nextTurn(self):
+        # Update pot.
+        self.pot = self.game.stake
+        for i in range(len(self.game.opps)):
+            self.pot += self.game.opps[i].stake
+        self.ui.potLabel.setText(f'Pot: {self.pot}')
+
+
         if self.game.checked == len(self.game.activePlayers):
             self.endRound()
             return
@@ -380,7 +387,6 @@ class PokerScreen(QWidget):
             self.ui.checkcallButton.setText("Call")
             self.ui.betraiseButton.setText("Raise")
             self.game.bet()
-            self.pot += 50
             self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
             self.ui.potLabel.setText(f'Pot: {self.pot}')
 
