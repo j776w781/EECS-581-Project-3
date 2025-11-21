@@ -396,6 +396,8 @@ class PokerScreen(QWidget):
                 self.game.check(0)
             else:
                 self.game.call(0)
+                self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
+
         else:
             # No bet, player can just check
             self.game.check(0)
@@ -408,6 +410,8 @@ class PokerScreen(QWidget):
                 self.game.check(0)
             else:
                 self.game._raise(0)
+                self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
+
         else:
             if self.state.chips < self.game.stake + 50:
                 QMessageBox(self, "Out of Chips", "You are out of chips")
