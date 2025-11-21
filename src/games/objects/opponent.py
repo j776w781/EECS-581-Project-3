@@ -18,6 +18,7 @@ class Opponent:
         self.chipTotal = 0
         self.id = id
         self.active = True
+        self.folded = False
 
     def __str__(self):
         return self.name

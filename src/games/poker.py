@@ -258,10 +258,16 @@ class PokerScreen(QWidget):
         current_turn = self.game.turn_index
         self.game.turn_index = (self.game.turn_index + 1) % (self.game.oppNo + 1)
         if current_turn == 0: # Player turn
-            self.enablePlayerActions(True)
+            if self.game.folded:
+                self.nextTurn()
+            else:
+                self.enablePlayerActions(True)
         else:
             self.enablePlayerActions(False)
-            QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
+            if self.game.opps[current_turn-1].folded:
+                self.nextTurn()
+            else:
+                QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
 
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
@@ -558,19 +564,17 @@ class Poker:
     def fold(self, index=0):
         print(f"Player {index} is folding...")
         self.checked += 1
-        self.folded = True
 
         # Deduct the stake from player chips if player is human (index 0)
         if index == 0:
+            self.folded = True
             self.playerHand = Hand()  # clear player's hand
             self.stake = 0
         else:
             # Clear opponent hand and stake
+            self.players[index].folded = True
             self.players[index].oppHand = Hand()
             self.players[index].stake = 0
-
-        # Advance the turn
-        self.game_turn_index = (self.turn_index + 1) % len(self.players)
 
     def allIn(self):
         print("GOING ALL IN!!!")
