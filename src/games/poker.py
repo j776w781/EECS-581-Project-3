@@ -251,7 +251,7 @@ class PokerScreen(QWidget):
 #=================== POKER GUI GAME STATE TRACKING ===================#
 
     def nextTurn(self):
-        if self.game.checked == len(self.game.players):
+        if self.game.checked == len(self.game.activePlayers):
             self.endRound()
             return
 
@@ -386,7 +386,6 @@ class PokerScreen(QWidget):
     def fold(self):
         self.state.chips -= self.game.stake
         self.game.fold(0)  # 0 = human player
-        self.enablePlayerActions(False)  # Disable buttons after fold
         self.nextTurn()
 
     def allIn(self):
@@ -474,6 +473,7 @@ class Poker:
         self.opps = [] # Holds Opponent instances.
         self.turn_index = 0 # Keeps track of who's turn in Poker it is.
         self.players = [] # Full list of players, user and opponents.
+        self.activePlayers = []
         self.checked = 0 # Keeps track of how many people have passed without betting/raising.
         self.started = False # Keeps track of whether the Poker instance is fresh.
         self.activeBet = False # We need to know if a bet is currently occurring.
@@ -486,6 +486,8 @@ class Poker:
             self.opps.append(Opponent(names[i], game, i))
             self.opps[i].chipTotal = random.randint(15, 25) * 50
         self.players = ['Player'] + self.opps
+        for player in self.players:
+            self.activePlayers.append(player)
 
     def removeOpponents(self):
         for opp in self.opps:
@@ -565,18 +567,21 @@ class Poker:
 
     def fold(self, index=0):
         print(f"Player {index} is folding...")
-        self.checked += 1
 
         # Deduct the stake from player chips if player is human (index 0)
         if index == 0:
             self.folded = True
             self.playerHand = Hand()  # clear player's hand
+            self.activePlayers.remove('Player')
             self.stake = 0
         else:
             # Clear opponent hand and stake
             self.players[index].folded = True
             self.players[index].oppHand = Hand()
             self.players[index].stake = 0
+            self.activePlayers.remove(self.players[index])
+            print(self.players)
+            print(self.activePlayers)
 
     def allIn(self):
         print("GOING ALL IN!!!")
@@ -624,6 +629,7 @@ class Poker:
         self.activeBet = False
         self.folded = False
         self.removeOpponents()
+        self.activePlayers = self.players
         for i in range(1, len(self.players)):
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
