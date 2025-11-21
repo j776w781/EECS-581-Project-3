@@ -256,6 +256,13 @@ class PokerScreen(QWidget):
             self.pot += self.game.opps[i].stake
         self.ui.potLabel.setText(f'Pot: {self.pot}')
 
+        if self.game.activeBet:
+            self.ui.checkcallButton.setText("Call")
+            self.ui.betraiseButton.setText("Raise")
+        else:
+            self.ui.checkcallButton.setText("Check")
+            self.ui.betraiseButton.setText("Bet")
+
         if len(self.game.activePlayers) == 1:
             self.gameOver()
 
@@ -387,11 +394,7 @@ class PokerScreen(QWidget):
         if self.game.activeBet:
             self.game._raise()
         else:
-            self.ui.checkcallButton.setText("Call")
-            self.ui.betraiseButton.setText("Raise")
             self.game.bet()
-            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
-            self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
