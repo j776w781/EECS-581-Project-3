@@ -314,8 +314,6 @@ class SabaccScreen(QWidget):
 
 
 
-
-
     def swap(self):
         #Deactivate buttons.
         self.ui.drawButton.setEnabled(False)
