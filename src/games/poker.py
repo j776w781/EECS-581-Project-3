@@ -142,12 +142,11 @@ class PokerScreen(QWidget):
     on rank, suit, and if its hidden.
     '''
     def createCard(self, card, hidden=False):
-        print("Creating cards...")
         if hidden:
             path = os.path.join(CARDS_DIR, "card_back.jpg")
         else:
             path = os.path.join(CARDS_DIR, "" + str(card.rank) + "_of_" + card.suit + ".png")
-        print(path)
+        #print(path)
         pixmap = QPixmap(path).scaled(71, 111)
         return pixmap
 
@@ -155,7 +154,6 @@ class PokerScreen(QWidget):
     Handles animation of a card. Takes in starting postiion, ending poisition, and pixmap.
     '''
     def animateCard(self, start, end, pixmap):
-        print("Animating cards...")
         card_sprite = AnimatedCard(pixmap)
         self.scene.addItem(card_sprite)
 
@@ -243,6 +241,7 @@ class PokerScreen(QWidget):
 #=================== POKER GUI HELPER FUNCTION ===================#
 
     def enablePlayerActions(self, enable):
+        self.ui.leaveButton.setEnabled(enable)
         self.ui.checkcallButton.setEnabled(enable)
         self.ui.betraiseButton.setEnabled(enable)
         self.ui.foldButton.setEnabled(enable)
@@ -251,6 +250,22 @@ class PokerScreen(QWidget):
 #=================== POKER GUI GAME STATE TRACKING ===================#
 
     def nextTurn(self):
+        # Update pot.
+        self.pot = self.game.stake
+        for i in range(len(self.game.opps)):
+            self.pot += self.game.opps[i].stake
+        self.ui.potLabel.setText(f'Pot: {self.pot}')
+
+        if self.game.activeBet:
+            self.ui.checkcallButton.setText("Call")
+            self.ui.betraiseButton.setText("Raise")
+        else:
+            self.ui.checkcallButton.setText("Check")
+            self.ui.betraiseButton.setText("Bet")
+
+        if len(self.game.activePlayers) == 1:
+            self.gameOver()
+
         if self.game.checked == len(self.game.activePlayers):
             self.endRound()
             return
@@ -271,11 +286,13 @@ class PokerScreen(QWidget):
 
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
+        self.oppWidgets[index+2].setText(f'Chip: {self.game.opps[index-1].chipTotal - self.game.opps[index-1].stake}')
         self.nextTurn()
 
     def endRound(self):
         self.enablePlayerActions(False)
         self.game.checked = 0
+        self.game.activeBet = False
 
         if len(self.game.board) == 3:
             self.turn()
@@ -301,12 +318,14 @@ class PokerScreen(QWidget):
 
     def gameOver(self):
         winner = self.game.get_results()
+        print("Winning index is", winner)
         for i in range(len(self.game.players)):
             if winner == i and i == 0:
                 self.state.chips -= self.game.stake
                 self.state.chips += self.pot
                 self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
             elif winner == i:
+                print("Winner is", self.game.players[winner].name)
                 self.game.players[i].chipTotal -= self.game.players[i].stake
                 self.game.players[i].chipTotal += self.pot
                 self.oppWidgets[self.game.players[i].id + 3].setText(f'Chips: {self.game.players[i].chipTotal}')
@@ -354,6 +373,7 @@ class PokerScreen(QWidget):
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.ui.dealButton.setEnabled(True)
+        self.ui.leaveButton.setEnabled(True)
         self.ui.checkcallButton.setEnabled(False)
         self.ui.betraiseButton.setEnabled(False)
         self.ui.foldButton.setEnabled(False)
@@ -374,12 +394,7 @@ class PokerScreen(QWidget):
         if self.game.activeBet:
             self.game._raise()
         else:
-            self.ui.checkcallButton.setText("Call")
-            self.ui.betraiseButton.setText("Raise")
             self.game.bet()
-            self.pot += 50
-            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
-            self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
@@ -543,6 +558,7 @@ class Poker:
 
     def bet(self, index=0):
         print("Betting...")
+        self.checked = 1
         self.activeBet = True
         if index == 0:
             self.stake += 50
@@ -573,15 +589,12 @@ class Poker:
             self.folded = True
             self.playerHand = Hand()  # clear player's hand
             self.activePlayers.remove('Player')
-            self.stake = 0
         else:
             # Clear opponent hand and stake
             self.players[index].folded = True
             self.players[index].oppHand = Hand()
-            self.players[index].stake = 0
+            self.players[index].chipTotal -= self.players[index].stake
             self.activePlayers.remove(self.players[index])
-            print(self.players)
-            print(self.activePlayers)
 
     def allIn(self):
         print("GOING ALL IN!!!")
@@ -591,6 +604,9 @@ class Poker:
 
     def get_results(self):
         print("Ending game...")
+        if len(self.activePlayers) == 1:
+            return self.players.index(self.activePlayers[0])
+        
         self.handRank, self.bestHand = self.analyzeHand()
 
         handRanks = [
@@ -604,6 +620,8 @@ class Poker:
 
         for i in range(1, len(self.players)):
             # Compare poker hands by higher index.
+            if self.players[i] not in self.activePlayers:
+                continue
             if handRanks.index(self.players[i].handRank) > bestRank:
                 bestRank = handRanks.index(self.players[i].handRank)
                 bestCombo = self.players[i].bestHand
@@ -612,8 +630,6 @@ class Poker:
                 if sorted([card.rank for card in self.players[i].bestHand], reverse=True) > sorted([card.rank for card in bestCombo], reverse=True):
                     bestCombo = self.players[i].bestHand
                     bestPlayerIndex = i
-        print('Best player is:', self.players[bestPlayerIndex])
-        print('Best hand is:', bestCombo)
         return bestPlayerIndex
 
     def reset(self):
@@ -629,8 +645,11 @@ class Poker:
         self.activeBet = False
         self.folded = False
         self.removeOpponents()
-        self.activePlayers = self.players
+        self.activePlayers = []
+        for player in self.players:
+            self.activePlayers.append(player)
         for i in range(1, len(self.players)):
+            self.players[i].folded = False
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
 
