@@ -169,6 +169,7 @@ class SabaccManager:
         user_player = SabaccPlayer("user", QPointF(260, 450), self.screen)
         self.players.append(user_player)
         print("Added User Player at position (260, 450) with chips:", self.screen.state.chips)
+        print("debug2")
         self.game()
 
     def game(self):
@@ -177,9 +178,11 @@ class SabaccManager:
         self.game.game_setup()
         self.game.initialize_discard_pile()
         self.game.round(1)
+        """
         self.game.round(2)
         self.game.round(3)
         self.game.end_game()
+        """
 
 
 
@@ -201,7 +204,7 @@ class SabaccPlayer:
             total_value += card.rank
         return total_value
     
-    def make_bet(self):
+    def make_bet(self, game):
         betValue = 0
         betting = True
         self.screen.ui.UserDialogBox.append("Please place your bet by clicking the Bet buttons. When you are finished, press Start.")
@@ -241,24 +244,43 @@ class SabaccPlayer:
         self.screen.ui.bet100.clicked.connect(bet100_clicked)
 
         self.screen.ui.StartButton.setEnabled(True)
-        self.screen.ui.StartButton.clicked.connect(lambda: self.finish_betting(betValue))
+        self.screen.ui.StartButton.clicked.disconnect()
+        self.screen.ui.StartButton.clicked.connect(lambda: self.finish_betting(betValue, game))
 
-    def finish_betting(self, betValue):
+    def finish_betting(self, betValue, game):
         self.screen.ui.bet5.setEnabled(False)
         self.screen.ui.bet50.setEnabled(False)
         self.screen.ui.bet100.setEnabled(False)
-        return betValue
+        self.screen.ui.StartButton.setEnabled(False)
+        self.screen.ui.StartButton.clicked.disconnect()
+        game.gamePot += betValue
+        self.screen.ui.UserDialogBox.append(f"You have finished betting a total of {betValue} chips.")
+        self.screen.ui.gamePot.display(game.gamePot)
+
     
-    def make_move(self, game):
+    def make_move(self, game, num_round):
         self.screen.ui.UserDialogBox.append("Please make your move by clicking one of the action buttons.")
         self.screen.ui.drawButton.setEnabled(True)
         self.screen.ui.swapButton.setEnabled(True)
         self.screen.ui.standButton.setEnabled(True)
         self.screen.ui.junkButton.setEnabled(True)
-        self.screen.ui.drawButton.clicked.connect(lambda: game.draw(self))
+        print("debug")
+        self.screen.ui.drawButton.clicked.connect(lambda: self.draw(game, num_round))
         self.screen.ui.swapButton.clicked.connect(lambda: game.swap(self))
         self.screen.ui.standButton.clicked.connect(lambda: game.stand(self))
         self.screen.ui.junkButton.clicked.connect(lambda: game.junk(self))
+
+    def draw(self, game, num_round):
+        game.draw(self)
+        print(f"{self.name} drew a card. Hand value is now: {self.calc_hand_value()}")
+        self.end_turn(game, num_round)
+
+    def end_turn(self, game, num_round):
+        self.screen.ui.drawButton.setEnabled(False)
+        self.screen.ui.swapButton.setEnabled(False)
+        self.screen.ui.standButton.setEnabled(False)
+        self.screen.ui.junkButton.setEnabled(False)
+        game.betting_phase(num_round)
 
 class SabaccAI:
     """Represents an AI player in Sabacc.
@@ -406,22 +428,53 @@ class Sabacc:
         self.screen.ui.sabacc_pot.display(self.pot)
         print("Players have entered the game. Pot is now:", self.pot)
 
-    
+    """Determines and announces the winner of the game and distributes the pot."""
+    def determine_winner(self):
+        track_winner = None
+        for player in self.players:
+            if not player.out_of_game:
+                if track_winner == None:
+                    """Set the winner equal to the first player found who is not out of the game."""
+                    track_winner = player
+                elif abs(player.calc_hand_value()) < abs(track_winner.calc_hand_value()):
+                    """Found a new winner with a hand value closer to zero."""
+                    track_winner = player
+                elif abs(player.calc_hand_value()) == abs(track_winner.calc_hand_value()):
+                    """Found a player with the same hand value, check for positive rank win."""
+                    if player.calc_hand_value() > track_winner.calc_hand_value():
+                        track_winner = player
+                    else:
+                        """Found a player with the same hand value, check for fewer cards win."""
+                        if len(player.hand) > len(track_winner.hand):
+                            track_winner = player
+                        else:
+                            """Found a player with the same hand value and same number of cards, check for highest value card to break the tie."""
+                            player.max_card = max(player.hand, key=lambda c: c.rank)
+                            track_winner.max_card = max(track_winner.hand, key=lambda c: c.rank)
+                            if player.max_card.rank > track_winner.max_card.rank:
+                                track_winner = player
+                            else:
+                                """It's a complete tie, no winner."""
+                                track_winner = None
+
     """Executes a round of moves and bets for all players.
     Inputs: current round number."""
     def round(self, num_round):
         self.screen.ui.UserDialogBox.setPlainText(f"<-- Round {num_round} in progress.")
         for player in self.players:
-            self.screen.ui.UserDialogBox.append(f"{player.name}'s turn:")
+            print(f"{player.name}'s turn. Hand value: {player.calc_hand_value()}")
             if player.name == "user":
                 self.screen.ui.UserDialogBox.append("Please make your move.")
-                player.make_move(self)
+                player.make_move(self, num_round)
             else:
-                sleep(2)
                 if not player.out_of_game:
                     player.make_move(num_round, self.discard_pile, self)
                     print(f"{player.name} has finished their turn. Hand value: {player.calc_hand_value()}")
-                sleep(2)
+
+    """Handles the betting phase after each round.
+    Inputs: current round number."""
+    def betting_phase(self, num_round):
+        self.screen.ui.UserDialogBox.append(f"<-- Betting phase for Round {num_round}")
         for player in self.players:
             sleep(1)
             if not player.out_of_game and not player.name == "user":
@@ -434,12 +487,8 @@ class Sabacc:
             else:
                 if player.name == "user":
                     print("Waiting for user to place bet...")
-                    betValue = player.make_bet()
-                    self.gamePot += betValue
-                    self.screen.ui.gamePot.display(self.gamePot)
-                    print(f"User bets {betValue}. Remaining chips: {player.numchips}")
-            sleep(1)
-        print(f"Round {num_round} complete. Game pot is now: {self.gamePot}")
+                    player.make_bet(self)
+
             
 
     
