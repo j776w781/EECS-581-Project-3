@@ -24,7 +24,7 @@ class PokerScreen(QWidget):
         super().__init__(parent)
         self.ui = Ui_PokerScreen()
         self.ui.setupUi(self)
-        self.ui.rules.clicked.connect(self.rules)
+        #self.ui.rules.clicked.connect(self.rules)
         self.ui.playerHandLabel.setGeometry(QRect(280, 520, 240, 61))
         self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
         self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
@@ -34,6 +34,7 @@ class PokerScreen(QWidget):
         self.scene = QGraphicsScene(0, 0, 600, 590, self)
         self.ui.graphicsView.setScene(self.scene)
 
+        self.minbet = 0
         self.state = state
         self.pot = 0
         self.ui.totalLabel.setText(f"Chip Total: {self.state.chips}")
@@ -249,8 +250,15 @@ class PokerScreen(QWidget):
         self.ui.allinButton.setEnabled(enable)
 
 #=================== POKER GUI GAME STATE TRACKING ===================#
+    def updatePot(self):
+        self.pot = self.game.stake
+        for i in range(self.game.oppNo):
+            self.pot += self.game.opps[i].stake
+        self.ui.potLabel.setText(f'Pot: {self.pot}')
+
 
     def nextTurn(self):
+        
         if self.game.checked == len(self.game.players):
             self.endRound()
             return
@@ -263,8 +271,11 @@ class PokerScreen(QWidget):
             self.enablePlayerActions(False)
             QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
 
+        self.updatePot()
+
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
+        
         self.nextTurn()
 
     def endRound(self):
@@ -358,7 +369,11 @@ class PokerScreen(QWidget):
     def checkorcall(self):
         if self.game.activeBet:
             # There’s a bet, so the player should call instead
-            self.game.call(0)  # 0 = human player
+            if self.state.chips < self.game.stake + self.game.minbet:
+                QMessageBox(self, "Out of Chips", "You are out of chips")
+                self.game.check(0)
+            else:
+                self.game.call(0)
         else:
             # No bet, player can just check
             self.game.check(0)
@@ -366,13 +381,20 @@ class PokerScreen(QWidget):
 
     def betorraise(self):
         if self.game.activeBet:
-            self.game._raise()
+            if self.state.chips < self.game.stake + self.game.minbet + 50:
+                QMessageBox(self, "Out of Chips", "You are out of chips")
+                self.game.check(0)
+            else:
+                self.game._raise(0)
         else:
-            self.ui.checkcallButton.setText("Call")
-            self.ui.betraiseButton.setText("Raise")
-            self.game.bet()
-            self.pot += 50
-            self.ui.potLabel.setText(f'Pot: {self.pot}')
+            if self.state.chips < self.game.stake + 50:
+                QMessageBox(self, "Out of Chips", "You are out of chips")
+                self.game.check(0)
+            else:
+                self.ui.checkcallButton.setText("Call")
+                self.ui.betraiseButton.setText("Raise")
+                self.game.bet(0)
+                self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
@@ -382,7 +404,7 @@ class PokerScreen(QWidget):
         self.nextTurn()
 
     def allIn(self):
-        self.game.allIn()
+        self.game.allIn(self.state.chips)
 
         self.nextTurn()
 
@@ -470,6 +492,7 @@ class Poker:
         self.started = False # Keeps track of whether the Poker instance is fresh.
         self.activeBet = False # We need to know if a bet is currently occurring.
         self.folded = False # This will likely be valuable in interrupting gameflow.
+        self.minbet = 0
 
     # Method creates opponents at the start of a fresh instance of Poker.
     def createOpponents(self, game):
@@ -525,15 +548,20 @@ class Poker:
             # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
 
     def call(self, index=0):
-        print("Calling...")
-        self.check(index)
         
+        print("Calling...")
+        if index == 0:
+            self.stake += self.minbet
+        else:
+            if self.opps[index-1].chipTotal > 0:
+                self.opps[index-1].stake += self.minbet
         # TO DO: IMPLEMENT CALL METHOD FURTHER.
         # BIG IDEA: FIND LARGEST STAKE OF PLAYERS AND MATCH IT.
 
     def bet(self, index=0):
         print("Betting...")
         self.activeBet = True
+        self.minbet = 50
         if index == 0:
             self.stake += 50
         else:
@@ -549,7 +577,15 @@ class Poker:
 
     def _raise(self, index=0):
         print("Raising...")
-        self.check(index)
+        self.activeBet = True
+        self.minbet += 50
+        if index == 0:
+            self.stake += 50
+        else:
+            if self.opps[index-1].chipTotal > 0:
+                self.opps[index-1].stake += 50
+            else:
+                self.check(index)
 
         # TO DO: IMPLEMENT RAISE METHOD
         # BIG IDEA: FIND LARGEST STAKE OF PLAEYRS AND INCREASE IT BY 50.
@@ -563,17 +599,20 @@ class Poker:
         # Deduct the stake from player chips if player is human (index 0)
         if index == 0:
             self.playerHand = Hand()  # clear player's hand
-            self.stake = 0
+            #self.stake = 0
         else:
             # Clear opponent hand and stake
             self.players[index].oppHand = Hand()
-            self.players[index].stake = 0
+            #self.players[index].stake = 0
 
         # Advance the turn
         self.game_turn_index = (self.turn_index + 1) % len(self.players)
 
-    def allIn(self):
+    def allIn(self,chips):
         print("GOING ALL IN!!!")
+        self.minbet = chips -self.stake
+        self.stake += chips - self.stake
+        self.activeBet = True
         # TO DO: IMPLEMENT ALL IN METHOD
         # BIG IDEA: RAISE OR BET WITH FULL CHIP TOTAL AS THE AMOUNT.
             # RAISE OR BET WILL DEPEND ON IF A BET IS ACTIVE.
