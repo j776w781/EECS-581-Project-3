@@ -12,7 +12,7 @@ class Sabacc_Card:
         self.rank = rank
         self.suit = suit
         if sign == 'neg':
-            self.rank = -rank
+            self.rank = -1 * rank
 
     def __str__(self):
         return self.sign + ": " + self.suit + ": " + str(self.rank)
