@@ -589,7 +589,6 @@ class Poker:
             self.folded = True
             self.playerHand = Hand()  # clear player's hand
             self.activePlayers.remove('Player')
-            self.stake = 0
         else:
             # Clear opponent hand and stake
             self.players[index].folded = True
