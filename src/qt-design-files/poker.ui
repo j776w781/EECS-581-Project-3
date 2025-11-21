@@ -636,6 +636,24 @@ QPushButton:hover {
     <string>Chips:</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="rulesButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>420</y>
+     <width>61</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Broadway</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>Rules</string>
+   </property>
+  </widget>
   <zorder>river</zorder>
   <zorder>turn</zorder>
   <zorder>flop3</zorder>
@@ -660,6 +678,7 @@ QPushButton:hover {
   <zorder>oppTotal3</zorder>
   <zorder>oppTotal2</zorder>
   <zorder>oppTotal1</zorder>
+  <zorder>rulesButton</zorder>
  </widget>
  <resources/>
  <connections/>

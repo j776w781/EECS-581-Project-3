@@ -1,3 +1,5 @@
+import random
+
 from PyQt6.QtWidgets import QWidget, QGraphicsScene, QMessageBox
 from PyQt6.QtCore import QPropertyAnimation, QRect, QPointF, QEasingCurve, QTimer, pyqtSignal, Qt, QTimer
 from PyQt6.QtGui import QPixmap
@@ -22,6 +24,7 @@ class PokerScreen(QWidget):
         super().__init__(parent)
         self.ui = Ui_PokerScreen()
         self.ui.setupUi(self)
+        self.ui.rulesButton.clicked.connect(self.rules)
         self.ui.playerHandLabel.setGeometry(QRect(280, 520, 240, 61))
         self.ui.opp3.setPixmap(QPixmap(ASSET_DIR + "/glass_joe.png"))
         self.ui.opp1.setPixmap(QPixmap(ASSET_DIR + "/super_macho_man.png"))
@@ -169,7 +172,24 @@ class PokerScreen(QWidget):
 
         return card_sprite
 
-#=================== POKER GUI START SEQUENCE ===================#
+    def rules(self):
+        rules_text = (
+            "Poker Rules:\n\n"
+            "1. Each player is dealt two private cards.\n"
+            "2. Five community cards are dealt in stages: Flop (3), Turn (1), River (1).\n"
+            "3. Players take turns to Check, Bet/Raise, Call, or Fold.\n"
+            "4. Betting rounds occur before and after the flop, turn, and river.\n"
+            "5. The best five-card hand using any combination of private and community cards wins the pot.\n"
+            "6. Folding forfeits your hand and any chips you have bet.\n"
+            "7. Checking passes the turn without betting.\n"
+            "8. Players with 0 chips are out and returned to the main menu."
+        )
+        msg = QMessageBox()
+        msg.setWindowTitle("Poker Rules")
+        msg.setText(rules_text)
+        msg.exec()
+
+    #=================== POKER GUI START SEQUENCE ===================#
 
     def deal(self):
         print("Dealing cards...")
@@ -238,10 +258,16 @@ class PokerScreen(QWidget):
         current_turn = self.game.turn_index
         self.game.turn_index = (self.game.turn_index + 1) % (self.game.oppNo + 1)
         if current_turn == 0: # Player turn
-            self.enablePlayerActions(True)
+            if self.game.folded:
+                self.nextTurn()
+            else:
+                self.enablePlayerActions(True)
         else:
             self.enablePlayerActions(False)
-            QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
+            if self.game.opps[current_turn-1].folded:
+                self.nextTurn()
+            else:
+                QTimer.singleShot(1500, Qt.TimerType.PreciseTimer, lambda: self.opponentTurn(current_turn))
 
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
@@ -257,6 +283,21 @@ class PokerScreen(QWidget):
             self.river()
         else:
             self.gameOver()
+
+    def sync_opponents_to_ui(self):
+        self.ui.oppCount.blockSignals(True)
+        self.ui.oppCount.setValue(self.game.oppNo)
+        self.ui.oppCount.blockSignals(False)
+        for i in range(3):
+            self.oppWidgets[i].hide()
+            self.oppWidgets[i+3].hide()
+            self.oppWidgets[i+3].setText("Chips:")
+        for i, opp in enumerate(self.game.opps):
+            self.oppWidgets[i].show()
+            self.oppWidgets[i+3].show()
+            remaining_chips = opp.chipTotal - opp.stake
+            self.oppWidgets[i+3].setText(f'Chips: {remaining_chips}')
+
 
     def gameOver(self):
         winner = self.game.get_results()
@@ -276,7 +317,19 @@ class PokerScreen(QWidget):
                 else:
                     self.game.players[i].chipTotal -= self.game.players[i].stake
                     self.oppWidgets[self.game.players[i].id + 3].setText(f'Chip: {self.game.players[i].chipTotal}')
+        
+        self.game.removeOpponents()
+        if self.game.oppNo == 0:
+            QMessageBox.information(self, "You Win!", "No Other Opponents have Chips. Congrats!")
+            self.leave()
+
+        if self.state.chips <= 0:
+            QMessageBox.information(self, "Game Over", "You're out of chips! Returning to main menu.")
+            self.switch_to_menu.emit()
+            return
+
         self.reset()
+        self.sync_opponents_to_ui()
 
     def reset(self):
         for card in self.scene.items():
@@ -310,12 +363,11 @@ class PokerScreen(QWidget):
 
     def checkorcall(self):
         if self.game.activeBet:
-            # Game logic of a call happens here.
-            self.game.call()
+            # There’s a bet, so the player should call instead
+            self.game.call(0)  # 0 = human player
         else:
-            # Game logic of a check happens here.
-            self.game.check()
-
+            # No bet, player can just check
+            self.game.check(0)
         self.nextTurn()
 
     def betorraise(self):
@@ -325,12 +377,16 @@ class PokerScreen(QWidget):
             self.ui.checkcallButton.setText("Call")
             self.ui.betraiseButton.setText("Raise")
             self.game.bet()
+            self.pot += 50
+            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
+            self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
     def fold(self):
-        self.game.fold()
-
+        self.state.chips -= self.game.stake
+        self.game.fold(0)  # 0 = human player
+        self.enablePlayerActions(False)  # Disable buttons after fold
         self.nextTurn()
 
     def allIn(self):
@@ -428,7 +484,15 @@ class Poker:
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
             self.opps.append(Opponent(names[i], game, i))
-            self.opps[i].chipTotal = 1000
+            self.opps[i].chipTotal = random.randint(15, 25) * 50
+        self.players = ['Player'] + self.opps
+
+    def removeOpponents(self):
+        for opp in self.opps:
+            if opp.chipTotal <=0:
+                opp.deactivate()
+                self.opps.remove(opp)
+                self.oppNo -= 1
         self.players = ['Player'] + self.opps
 
     # Method to deal initial two cards to a given player.
@@ -439,10 +503,11 @@ class Poker:
         self.playerHand.add(self.deck.draw())
 
         for i in range(len(self.opps)):
-            print(f"{self.opps[i].name} gets dealt.")
-            self.opps[i].stake += 50
-            self.opps[i].oppHand.add(self.deck.draw())
-            self.opps[i].oppHand.add(self.deck.draw())
+            if self.opps[i].active == True:
+                print(f"{self.opps[i].name} gets dealt.")
+                self.opps[i].stake += 50
+                self.opps[i].oppHand.add(self.deck.draw())
+                self.opps[i].oppHand.add(self.deck.draw())
 
     def start_round(self):
         self.turn_index = 0
@@ -462,7 +527,7 @@ class Poker:
         self.board.append(self.deck.draw())
 
     def check(self, index=0):
-        #print("Checking...")
+        print(f"Player {index} is checking...")
         self.checked += 1
         # TO DO: ???
             # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
@@ -476,7 +541,15 @@ class Poker:
 
     def bet(self, index=0):
         print("Betting...")
-        self.check(index)
+        self.activeBet = True
+        if index == 0:
+            self.stake += 50
+        else:
+            if self.opps[index-1].chipTotal > 0:
+                self.opps[index-1].stake += 50
+            else:
+                self.check(index)
+        
         
         # TO DO: IMPLEMENT BET METHOD FURTHER.
         # BIG IDEA: INCREASE STAKE OF CALLER BY 50 AND SET self.activeBet TO TRUE
@@ -491,12 +564,19 @@ class Poker:
             # MIGHT NEED TO KEEP BETACTIVE? NOT CONFIDENT THOUGH.
 
     def fold(self, index=0):
-        print("Folding...")
-        self.check(index)
+        print(f"Player {index} is folding...")
+        self.checked += 1
 
-        # TO DO: IMPLEMENT FOLD METHOD
-        # BIG IDEA: REMOVE PLAYERS FROM self.players
-            # THIS SHOULD HOPEFULLY PREVENT YOU FROM HAVING TO IMPLEMENT FOLD CHECKS IN OTHER METHODS.
+        # Deduct the stake from player chips if player is human (index 0)
+        if index == 0:
+            self.folded = True
+            self.playerHand = Hand()  # clear player's hand
+            self.stake = 0
+        else:
+            # Clear opponent hand and stake
+            self.players[index].folded = True
+            self.players[index].oppHand = Hand()
+            self.players[index].stake = 0
 
     def allIn(self):
         print("GOING ALL IN!!!")
@@ -543,7 +623,7 @@ class Poker:
         self.checked = 0
         self.activeBet = False
         self.folded = False
-
+        self.removeOpponents()
         for i in range(1, len(self.players)):
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
