@@ -265,6 +265,7 @@ class PokerScreen(QWidget):
 
         if len(self.game.activePlayers) == 1:
             self.gameOver()
+            return
 
         if self.game.checked == len(self.game.activePlayers):
             self.endRound()
@@ -373,11 +374,8 @@ class PokerScreen(QWidget):
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.ui.dealButton.setEnabled(True)
+        self.enablePlayerActions(False)
         self.ui.leaveButton.setEnabled(True)
-        self.ui.checkcallButton.setEnabled(False)
-        self.ui.betraiseButton.setEnabled(False)
-        self.ui.foldButton.setEnabled(False)
-        self.ui.allinButton.setEnabled(False)
 
 #=================== POKER GUI BUTTON ACTIONS ===================#
 
@@ -395,11 +393,12 @@ class PokerScreen(QWidget):
             self.game._raise()
         else:
             self.game.bet()
+            self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
 
         self.nextTurn()
 
     def fold(self):
-        self.state.chips -= self.game.stake
+        #self.state.chips -= self.game.stake
         self.game.fold(0)  # 0 = human player
         self.nextTurn()
 
@@ -593,7 +592,7 @@ class Poker:
             # Clear opponent hand and stake
             self.players[index].folded = True
             self.players[index].oppHand = Hand()
-            self.players[index].chipTotal -= self.players[index].stake
+            #self.players[index].chipTotal -= self.players[index].stake
             self.activePlayers.remove(self.players[index])
 
     def allIn(self):
