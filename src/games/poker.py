@@ -581,10 +581,9 @@ class Poker:
             # Clear opponent hand and stake
             self.players[index].folded = True
             self.players[index].oppHand = Hand()
+            self.players[index].chipTotal -= self.players[index].stake
             self.players[index].stake = 0
             self.activePlayers.remove(self.players[index])
-            print(self.players)
-            print(self.activePlayers)
 
     def allIn(self):
         print("GOING ALL IN!!!")
