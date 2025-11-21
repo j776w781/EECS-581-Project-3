@@ -272,6 +272,7 @@ class PokerScreen(QWidget):
 
     def opponentTurn(self, index):
         self.game.opps[index-1].decision(index)
+        self.oppWidgets[index+2].setText(f'Chip: {self.game.opps[index-1].chipTotal - self.game.opps[index-1].stake}')
         self.nextTurn()
 
     def endRound(self):
