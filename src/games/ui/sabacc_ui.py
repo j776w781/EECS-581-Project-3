@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 
-class Ui_SabaccScreen(object):
+class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(799, 598)
@@ -21,8 +21,9 @@ class Ui_SabaccScreen(object):
         self.leaveButton = QtWidgets.QPushButton(parent=Form)
         self.leaveButton.setGeometry(QtCore.QRect(10, 540, 71, 41))
         font = QtGui.QFont()
-        font.setFamily("Fixedsys")
+        font.setFamily("Courier New")
         font.setPointSize(15)
+        font.setBold(True)
         self.leaveButton.setFont(font)
         self.leaveButton.setStyleSheet("QPushButton {\n"
 "    background-color: qlineargradient(\n"
@@ -44,8 +45,9 @@ class Ui_SabaccScreen(object):
         self.StartButton = QtWidgets.QPushButton(parent=Form)
         self.StartButton.setGeometry(QtCore.QRect(90, 540, 71, 41))
         font = QtGui.QFont()
-        font.setFamily("Fixedsys")
+        font.setFamily("Courier New")
         font.setPointSize(15)
+        font.setBold(True)
         self.StartButton.setFont(font)
         self.StartButton.setStyleSheet("QPushButton {\n"
 "    background-color: qlineargradient(\n"
@@ -71,10 +73,10 @@ class Ui_SabaccScreen(object):
         self.bet50.setGeometry(QtCore.QRect(10, 460, 75, 24))
         self.bet50.setObjectName("bet50")
         self.dice1 = QtWidgets.QLCDNumber(parent=Form)
-        self.dice1.setGeometry(QtCore.QRect(570, 520, 64, 23))
+        self.dice1.setGeometry(QtCore.QRect(10, 50, 64, 23))
         self.dice1.setObjectName("dice1")
         self.dice2 = QtWidgets.QLCDNumber(parent=Form)
-        self.dice2.setGeometry(QtCore.QRect(570, 560, 64, 23))
+        self.dice2.setGeometry(QtCore.QRect(10, 80, 64, 23))
         self.dice2.setObjectName("dice2")
         self.bet100 = QtWidgets.QPushButton(parent=Form)
         self.bet100.setGeometry(QtCore.QRect(10, 420, 75, 24))
@@ -86,7 +88,7 @@ class Ui_SabaccScreen(object):
         self.betAmount.setGeometry(QtCore.QRect(100, 460, 64, 23))
         self.betAmount.setObjectName("betAmount")
         self.sabacc_pot = QtWidgets.QLCDNumber(parent=Form)
-        self.sabacc_pot.setGeometry(QtCore.QRect(370, 250, 64, 23))
+        self.sabacc_pot.setGeometry(QtCore.QRect(410, 380, 64, 23))
         self.sabacc_pot.setObjectName("sabacc_pot")
         self.drawButton = QtWidgets.QPushButton(parent=Form)
         self.drawButton.setGeometry(QtCore.QRect(670, 430, 75, 24))
@@ -103,35 +105,11 @@ class Ui_SabaccScreen(object):
         self.UserDialogBox = QtWidgets.QTextBrowser(parent=Form)
         self.UserDialogBox.setGeometry(QtCore.QRect(270, 551, 256, 31))
         self.UserDialogBox.setObjectName("UserDialogBox")
-        self.card1 = QtWidgets.QToolButton(parent=Form)
-        self.card1.setGeometry(QtCore.QRect(270, 500, 22, 22))
-        self.card1.setObjectName("card1")
-        self.card2 = QtWidgets.QToolButton(parent=Form)
-        self.card2.setGeometry(QtCore.QRect(330, 500, 22, 22))
-        self.card2.setObjectName("card2")
-        self.card3 = QtWidgets.QToolButton(parent=Form)
-        self.card3.setGeometry(QtCore.QRect(390, 500, 22, 22))
-        self.card3.setObjectName("card3")
-        self.card4 = QtWidgets.QToolButton(parent=Form)
-        self.card4.setGeometry(QtCore.QRect(450, 500, 22, 22))
-        self.card4.setObjectName("card4")
-        self.card5 = QtWidgets.QToolButton(parent=Form)
-        self.card5.setGeometry(QtCore.QRect(510, 500, 22, 22))
-        self.card5.setObjectName("card5")
-        self.opponents1 = QtWidgets.QPushButton(parent=Form)
-        self.opponents1.setGeometry(QtCore.QRect(180, 570, 75, 24))
-        self.opponents1.setObjectName("opponents1")
-        self.opponents2 = QtWidgets.QPushButton(parent=Form)
-        self.opponents2.setGeometry(QtCore.QRect(180, 540, 75, 24))
-        self.opponents2.setObjectName("opponents2")
-        self.opponents3 = QtWidgets.QPushButton(parent=Form)
-        self.opponents3.setGeometry(QtCore.QRect(180, 510, 75, 24))
-        self.opponents3.setObjectName("opponents3")
         self.gamePot = QtWidgets.QLCDNumber(parent=Form)
-        self.gamePot.setGeometry(QtCore.QRect(370, 290, 64, 23))
+        self.gamePot.setGeometry(QtCore.QRect(290, 380, 64, 23))
         self.gamePot.setObjectName("gamePot")
         self.deckback = QtWidgets.QLabel(parent=Form)
-        self.deckback.setGeometry(QtCore.QRect(280, 220, 80, 120))
+        self.deckback.setGeometry(QtCore.QRect(290, 220, 80, 120))
         self.deckback.setText("")
         self.deckback.setPixmap(QtGui.QPixmap("..\\..\\qt-design-files\\../assets/sabaac_cards/sabacc_deck_back.png"))
         self.deckback.setScaledContents(True)
@@ -139,15 +117,22 @@ class Ui_SabaccScreen(object):
         self.oppcount = QtWidgets.QSpinBox(parent=Form)
         self.oppcount.setGeometry(QtCore.QRect(10, 10, 141, 31))
         font = QtGui.QFont()
-        font.setFamily("8514oem")
+        font.setFamily("Courier New")
+        font.setPointSize(12)
+        font.setBold(True)
         self.oppcount.setFont(font)
         self.oppcount.setStyleSheet("background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 170, 255, 255), stop:1 rgba(255, 255, 255, 255));")
         self.oppcount.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
+        self.oppcount.setMinimum(1)
+        self.oppcount.setMaximum(3)
+        self.oppcount.setProperty("value", 3)
         self.oppcount.setObjectName("oppcount")
         self.opplabel = QtWidgets.QLabel(parent=Form)
-        self.opplabel.setGeometry(QtCore.QRect(10, 10, 101, 31))
+        self.opplabel.setGeometry(QtCore.QRect(10, 10, 91, 31))
         font = QtGui.QFont()
-        font.setFamily("8514oem")
+        font.setFamily("Courier New")
+        font.setPointSize(12)
+        font.setBold(True)
         self.opplabel.setFont(font)
         self.opplabel.setAutoFillBackground(False)
         self.opplabel.setStyleSheet("background-color: rgba(0, 0, 0, 0);\n"
@@ -167,11 +152,96 @@ class Ui_SabaccScreen(object):
         self.han.setScaledContents(True)
         self.han.setObjectName("han")
         self.lando = QtWidgets.QLabel(parent=Form)
-        self.lando.setGeometry(QtCore.QRect(300, 40, 101, 91))
+        self.lando.setGeometry(QtCore.QRect(310, 50, 101, 91))
         self.lando.setText("")
         self.lando.setPixmap(QtGui.QPixmap("..\\..\\qt-design-files\\../assets/sabacc_ops/lando.png"))
         self.lando.setScaledContents(True)
         self.lando.setObjectName("lando")
+        self.discard_spot = QtWidgets.QLabel(parent=Form)
+        self.discard_spot.setGeometry(QtCore.QRect(290, 220, 101, 121))
+        self.discard_spot.setStyleSheet("background-color: rgba(0, 0, 0,0);\n"
+"color:  rgba(0, 0, 0,0);")
+        self.discard_spot.setObjectName("discard_spot")
+        self.Chewbaccachips = QtWidgets.QLabel(parent=Form)
+        self.Chewbaccachips.setGeometry(QtCore.QRect(30, 310, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Chewbaccachips.setFont(font)
+        self.Chewbaccachips.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Chewbaccachips.setObjectName("Chewbaccachips")
+        self.Landochips = QtWidgets.QLabel(parent=Form)
+        self.Landochips.setGeometry(QtCore.QRect(310, 20, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Landochips.setFont(font)
+        self.Landochips.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Landochips.setObjectName("Landochips")
+        self.Hanchips = QtWidgets.QLabel(parent=Form)
+        self.Hanchips.setGeometry(QtCore.QRect(620, 320, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Hanchips.setFont(font)
+        self.Hanchips.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Hanchips.setObjectName("Hanchips")
+        self.card1 = QtWidgets.QPushButton(parent=Form)
+        self.card1.setGeometry(QtCore.QRect(200, 425, 80, 120))
+        self.card1.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.card1.setText("")
+        self.card1.setObjectName("card1")
+        self.card2 = QtWidgets.QPushButton(parent=Form)
+        self.card2.setGeometry(QtCore.QRect(285, 425, 80, 120))
+        self.card2.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.card2.setText("")
+        self.card2.setObjectName("card2")
+        self.card3 = QtWidgets.QPushButton(parent=Form)
+        self.card3.setGeometry(QtCore.QRect(370, 425, 80, 120))
+        self.card3.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.card3.setText("")
+        self.card3.setObjectName("card3")
+        self.card4 = QtWidgets.QPushButton(parent=Form)
+        self.card4.setGeometry(QtCore.QRect(455, 425, 80, 120))
+        self.card4.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.card4.setText("")
+        self.card4.setObjectName("card4")
+        self.card5 = QtWidgets.QPushButton(parent=Form)
+        self.card5.setGeometry(QtCore.QRect(540, 425, 80, 120))
+        self.card5.setStyleSheet("QPushButton {\n"
+"    background-color: rgba(255, 255, 255, 0);\n"
+"}\n"
+"QPushButton:hover{\n"
+"    background-color: rgba(255, 255, 255, 60);\n"
+"}")
+        self.card5.setText("")
+        self.card5.setObjectName("card5")
         self.graphicsView.raise_()
         self.UserDialogBox.raise_()
         self.leaveButton.raise_()
@@ -188,14 +258,6 @@ class Ui_SabaccScreen(object):
         self.swapButton.raise_()
         self.standButton.raise_()
         self.junkButton.raise_()
-        self.card1.raise_()
-        self.card2.raise_()
-        self.card3.raise_()
-        self.card4.raise_()
-        self.card5.raise_()
-        self.opponents1.raise_()
-        self.opponents2.raise_()
-        self.opponents3.raise_()
         self.gamePot.raise_()
         self.deckback.raise_()
         self.oppcount.raise_()
@@ -203,6 +265,15 @@ class Ui_SabaccScreen(object):
         self.chewie.raise_()
         self.han.raise_()
         self.lando.raise_()
+        self.discard_spot.raise_()
+        self.Chewbaccachips.raise_()
+        self.Landochips.raise_()
+        self.Hanchips.raise_()
+        self.card1.raise_()
+        self.card2.raise_()
+        self.card3.raise_()
+        self.card4.raise_()
+        self.card5.raise_()
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -228,12 +299,8 @@ class Ui_SabaccScreen(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:\'Segoe UI\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
-        self.card1.setText(_translate("Form", "..."))
-        self.card2.setText(_translate("Form", "..."))
-        self.card3.setText(_translate("Form", "..."))
-        self.card4.setText(_translate("Form", "..."))
-        self.card5.setText(_translate("Form", "..."))
-        self.opponents1.setText(_translate("Form", "1"))
-        self.opponents2.setText(_translate("Form", "2"))
-        self.opponents3.setText(_translate("Form", "3"))
         self.opplabel.setText(_translate("Form", "Opponents:"))
+        self.discard_spot.setText(_translate("Form", "TextLabel"))
+        self.Chewbaccachips.setText(_translate("Form", "Chips:"))
+        self.Landochips.setText(_translate("Form", "Chips:"))
+        self.Hanchips.setText(_translate("Form", "Chips:"))
