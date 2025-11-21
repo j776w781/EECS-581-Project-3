@@ -224,7 +224,7 @@ class PokerScreen(QWidget):
 
         # UI animates cards for each opponent
         for i in range(len(self.game.opps)):
-            print(f"Animating to {self.game.opps[i].name}")
+            #print(f"Animating to {self.game.opps[i].name}")
             for j, card in enumerate(self.game.opps[i].oppHand.hand):
                 card_sprite = self.createCard(card, True)
                 end = self.opps_pos[i] + QPointF(j * 80, 0)
@@ -319,7 +319,7 @@ class PokerScreen(QWidget):
 
     def gameOver(self):
         winner = self.game.get_results()
-        print("Winning index is", winner)
+        #print("Winning index is", winner)
         for i in range(len(self.game.players)):
             if winner == i and i == 0:
                 self.state.chips -= self.game.stake
