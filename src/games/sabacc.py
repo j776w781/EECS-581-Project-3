@@ -50,6 +50,7 @@ class SabaccScreen(QWidget):
         self.ui.drawButton.setEnabled(False)
         self.ui.drawButton.clicked.connect(self.draw)
         self.ui.swapButton.setEnabled(False)
+        self.ui.swapButton.clicked.connect(self.swap)
         self.ui.standButton.setEnabled(False)
         self.ui.junkButton.setEnabled(False)
         self.ui.bet5.setEnabled(False)
@@ -67,12 +68,6 @@ class SabaccScreen(QWidget):
         self.ui.rules.clicked.connect(self.show_rules)
         self.ui.oppcount.valueChanged.connect(self.refreshOpps)
         self.ui.StartButton.clicked.connect(self.begin_game)
-
-        self.ui.card1.clicked.connect(lambda: self.discard(0))
-        self.ui.card2.clicked.connect(lambda: self.discard(1))
-        self.ui.card3.clicked.connect(lambda: self.discard(2))
-        self.ui.card4.clicked.connect(lambda: self.discard(3))
-        self.ui.card5.clicked.connect(lambda: self.discard(4))
 
 
         self.state = state
@@ -243,7 +238,7 @@ class SabaccScreen(QWidget):
 
 
     def discard(self, cardnum):
-        print(f"discarding {self.player.hand[cardnum]}")
+        print(f"discarding {cardnum}")
         #Disable further discarding.
         for i in range(len(self.player.hand)):
             self.card_buttons[i].setEnabled(False)
@@ -289,8 +284,53 @@ class SabaccScreen(QWidget):
         #Enable available cards for discarding.
         for i in range(len(self.player.hand)):
             self.card_buttons[i].setEnabled(True)
+            self.card_buttons[i].clicked.connect(lambda _, idx=i: self.discard(idx))
         
         self.ui.standButton.setEnabled(True)
+
+
+
+    def swap_helper(self, cardnum):
+        #Disable further swapping
+        for i in range(len(self.player.hand)):
+            self.card_buttons[i].setEnabled(False)
+        
+        #Remove old card widget.
+        self.scene.removeItem(self.player.hand_widgets[cardnum])
+
+        self.ui.discard_spot.pos()
+
+        #Animate taking the discard card.
+        card_sprite = self.createCard(self.game.discard_pile[len(self.game.discard_pile)-1])
+        end = self.card_pos[cardnum]
+        self.player.hand_widgets[cardnum] = self.animateCard(self.ui.discard_spot.pos(), end, card_sprite)
+
+        #Animate giving up old card
+        card_sprite = self.createCard(self.player.hand[cardnum])
+        start = self.card_pos[cardnum]
+        self.animateCard(start, self.ui.discard_spot.pos(), card_sprite)
+
+        self.game.swap(self.player, cardnum)
+
+
+
+
+
+    def swap(self):
+        #Deactivate buttons.
+        self.ui.drawButton.setEnabled(False)
+        self.ui.swapButton.setEnabled(False)
+        self.ui.junkButton.setEnabled(False)
+        self.ui.standButton.setEnabled(False)
+
+        #Enable available cards for swapping.
+        for i in range(len(self.player.hand)):
+            self.card_buttons[i].setEnabled(True)
+            self.card_buttons[i].clicked.connect(lambda _, idx=i: self.swap_helper(idx))
+        QMessageBox.information(self, "Swap", "Time to swap! Pick a card to give up. Hope that discard is worth it.")
+
+
+
 
         
         
@@ -611,13 +651,13 @@ class Sabacc:
 
     """Handles the swap action for a player.
     Inputs: player object, swap option (card to swap)."""
-    def swap(self, player, swap_option):
-        card_to_swap = swap_option[0]
-        player.hand.remove(card_to_swap)
+    def swap(self, player, cardnum):
+        card_to_swap = player.hand.pop(cardnum)
         new_card = self.discard_pile.pop()
-        player.hand.append(new_card)
+        player.hand.insert(cardnum, new_card)
         self.discard_pile.append(card_to_swap)
         print(f"{player.name} swapped {card_to_swap} with {new_card}.")
+        print(f"Hand: {player.hand}")
 
 
 
@@ -642,15 +682,7 @@ class Sabacc:
 
 
 
-    """Handles the swap action for a player.
-    Inputs: player object, swap option (card to swap)."""
-    def swap(self, player, swap_option):
-        card_to_swap = swap_option[0]
-        player.hand.remove(card_to_swap)
-        new_card = self.discard_pile.pop()
-        player.hand.append(new_card)
-        self.discard_pile.append(card_to_swap)
-        print(f"{player.name} swapped {card_to_swap} with {new_card}.")
+    
 
     """Handles the stand action for a player.
     Inputs: player object. Strictly for the format. No logic needed."""
