@@ -278,6 +278,21 @@ class PokerScreen(QWidget):
         else:
             self.gameOver()
 
+    def sync_opponents_to_ui(self):
+        self.ui.oppCount.blockSignals(True)
+        self.ui.oppCount.setValue(self.game.oppNo)
+        self.ui.oppCount.blockSignals(False)
+        for i in range(3):
+            self.oppWidgets[i].hide()
+            self.oppWidgets[i+3].hide()
+            self.oppWidgets[i+3].setText("Chips:")
+        for i, opp in enumerate(self.game.opps):
+            self.oppWidgets[i].show()
+            self.oppWidgets[i+3].show()
+            remaining_chips = opp.chipTotal - opp.stake
+            self.oppWidgets[i+3].setText(f'Chips: {remaining_chips}')
+
+
     def gameOver(self):
         winner = self.game.get_results()
         for i in range(len(self.game.players)):
@@ -296,6 +311,11 @@ class PokerScreen(QWidget):
                 else:
                     self.game.players[i].chipTotal -= self.game.players[i].stake
                     self.oppWidgets[self.game.players[i].id + 3].setText(f'Chip: {self.game.players[i].chipTotal}')
+        
+        self.game.removeOpponents()
+        if self.game.oppNo == 0:
+            QMessageBox.information(self, "You Win!", "No Other Opponents have Chips. Congrats!")
+            self.leave()
 
         if self.state.chips <= 0:
             QMessageBox.information(self, "Game Over", "You're out of chips! Returning to main menu.")
@@ -303,6 +323,7 @@ class PokerScreen(QWidget):
             return
 
         self.reset()
+        self.sync_opponents_to_ui()
 
     def reset(self):
         for card in self.scene.items():
@@ -350,6 +371,8 @@ class PokerScreen(QWidget):
             self.ui.checkcallButton.setText("Call")
             self.ui.betraiseButton.setText("Raise")
             self.game.bet()
+            self.pot += 50
+            self.ui.potLabel.setText(f'Pot: {self.pot}')
 
         self.nextTurn()
 
@@ -456,6 +479,14 @@ class Poker:
             self.opps[i].chipTotal = random.randint(750, 1250)
         self.players = ['Player'] + self.opps
 
+    def removeOpponents(self):
+        for opp in self.opps:
+            if opp.chipTotal <=0:
+                opp.deactivate()
+                self.opps.remove(opp)
+                self.oppNo -= 1
+        self.players = ['Player'] + self.opps
+
     # Method to deal initial two cards to a given player.
     def deal(self):
         self.started = True
@@ -464,10 +495,11 @@ class Poker:
         self.playerHand.add(self.deck.draw())
 
         for i in range(len(self.opps)):
-            print(f"{self.opps[i].name} gets dealt.")
-            self.opps[i].stake += 50
-            self.opps[i].oppHand.add(self.deck.draw())
-            self.opps[i].oppHand.add(self.deck.draw())
+            if self.opps[i].active == True:
+                print(f"{self.opps[i].name} gets dealt.")
+                self.opps[i].stake += 50
+                self.opps[i].oppHand.add(self.deck.draw())
+                self.opps[i].oppHand.add(self.deck.draw())
 
     def start_round(self):
         self.turn_index = 0
@@ -501,7 +533,15 @@ class Poker:
 
     def bet(self, index=0):
         print("Betting...")
-        self.check(index)
+        self.activeBet = True
+        if index == 0:
+            self.stake += 50
+        else:
+            if self.opps[index-1].chipTotal > 0:
+                self.opps[index-1].stake += 50
+            else:
+                self.check(index)
+        
         
         # TO DO: IMPLEMENT BET METHOD FURTHER.
         # BIG IDEA: INCREASE STAKE OF CALLER BY 50 AND SET self.activeBet TO TRUE
@@ -577,7 +617,7 @@ class Poker:
         self.checked = 0
         self.activeBet = False
         self.folded = False
-
+        self.removeOpponents()
         for i in range(1, len(self.players)):
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
