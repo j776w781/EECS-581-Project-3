@@ -571,8 +571,8 @@ class Poker:
             # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
 
     def call(self, index=0):
-        
         print("Calling...")
+        self.checked += 1
         if index == 0:
             self.stake += self.minbet
         else:
