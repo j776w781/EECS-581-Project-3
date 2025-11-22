@@ -48,26 +48,36 @@ class Opponent:
 
             if self.game.activeBet:
                 if strength < 0.2:
-                    self.game.fold(id) if random.random() < 0.8 else self.game.call(id)
+                    if random.random() < 0.8:
+                        self.game.fold(id)
+                        return 'folds'
+                    else:
+                        self.game.call(id)
+                        return 'calls'
                 elif strength < 0.5:
                     self.game.call(id)
-                elif strength < 0.8:
-                    self.game.call(id) if random.random() < 0.7 else self.game._raise(id)
+                    return 'calls'
+                elif strength < 0.8: 
+                    if random.random() < 0.7:
+                        self.game.call(id)
+                        return 'calls'
+                    else:
+                        self.game._raise(id)
+                        return 'raises'
                 else:
-                    self.game._raise(id) if random.random() < 0.6 else self.game.call(id)
+                    if random.random() < 0.6:
+                        self.game._raise(id)
+                        return 'raises'
+                    else: 
+                        self.game.call(id)
+                        return 'calls'
             else:
                 if strength > 0.75 and random.random() < 0.5:
                     self.game.bet(id)
+                    return 'bets'
                 elif strength > 0.5 and random.random() < 0.3:
                     self.game.bet(id)
+                    return 'bets'
                 else:
                     self.game.check(id)
-
-    def deactivate(self):
-        self.active = False
-        self.oppHand = Hand()
-        self.bestHand = []
-        self.handRank = 0
-        self.stake = 0
-        self.chipTotal = 0
-        self.id = id
+                    return 'checks'
