@@ -432,6 +432,8 @@ class SabaccScreen(QWidget):
                 over = ai.hand_widgets[cardnum+1]
                 ai.hand_widgets[cardnum].setZValue(over.zValue() - 1)
 
+                ai.hand.insert(cardnum, ai.hand.pop())
+
         #The human player's case is almost exactly the same, with some slight changes for how the position is calculated.
         #Additional buttons also need to be deactivated.   
         else:
@@ -460,6 +462,8 @@ class SabaccScreen(QWidget):
                 start = self.card_pos[len(self.player.hand)]
                 end = self.card_pos[cardnum]
                 self.player.hand_widgets[cardnum] = self.animateCard(start, end, card_sprite)
+
+                self.player.hand.insert(cardnum, self.player.hand.pop())
             
             #If this discard is not being done within a shift, then the betting stage should begin, since the human plays last.
             if not shift:
