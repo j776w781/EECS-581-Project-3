@@ -61,6 +61,7 @@ class SabaccScreen(QWidget):
             os.path.join(MUSIC_DIR, "song1.mp3"),
             os.path.join(MUSIC_DIR, "song2.mp3"),
             os.path.join(MUSIC_DIR, "song3.mp3"),
+            os.path.join(MUSIC_DIR, "song4.mp3"),
         ]
         self.current_sond_index = None
         #This will fire off when a song ends. It then randomly plays another song.
@@ -733,7 +734,6 @@ class SabaccScreen(QWidget):
     Very simple function that moves the game out of the betting phase. It disables all betting buttons and ends the round.
     '''
     def done_betting(self):
-        self.ui.CurBet.setText(f"Bet to Match: ")
         self.ui.MatchButton.setEnabled(False)
         self.ui.RaiseButton.setEnabled(False)
         self.ui.ContButton.setEnabled(False)
@@ -1014,8 +1014,6 @@ class SabaccScreen(QWidget):
     game_over() is called.
     '''
     def end_of_round(self):
-        #Reset the current bet.
-        self.game.reset_bet()
         not_over = self.game.advance_round()
         #Run if the game's not over.
         if not_over:
@@ -1237,6 +1235,7 @@ class Sabacc:
     '''
     def reset(self):
         self.round_num = 0
+        self.reset_bet()
         self.gamePot = 0
         self.discard_pile = []
         self.deck = Sabacc_Deck()
@@ -1265,7 +1264,7 @@ class Sabacc:
     def determine_winner(self):
         track_winner = None
         for player in self.players:
-            print(f"{player.name}'s Hand: {player.hand}")
+            print(f"{player.name}'s Hand: {player.hand} with value {player.calc_hand_value()}")
             if not player.out_of_game and not player.defeated:
                 if track_winner == None:
                     """Set the winner equal to the first player found who is not out of the game."""
@@ -1278,16 +1277,16 @@ class Sabacc:
                     if player.calc_hand_value() > track_winner.calc_hand_value():
                         track_winner = player
                     elif player.calc_hand_value() == track_winner.calc_hand_value():
-                        """Found a player with the same hand value, check for fewer cards win."""
+                        """Found a player with the same hand value, check for more cards win."""
                         if len(player.hand) > len(track_winner.hand):
                             track_winner = player
                         elif len(player.hand) == len(track_winner.hand):
                             """Found a player with the same hand value and same number of cards, check for highest value card to break the tie."""
-                            player.max_card = max(player.hand, key=lambda c: c.rank)
-                            track_winner.max_card = max(track_winner.hand, key=lambda c: c.rank)
-                            if player.max_card.rank > track_winner.max_card.rank:
+                            player_max_max_card = max(player.hand, key=lambda c: c.rank)
+                            track_winner_max_card = max(track_winner.hand, key=lambda c: c.rank)
+                            if player_max_max_card.rank > track_winner_max_card.rank:
                                 track_winner = player
-                            elif player.max_card.rank == track_winner.max_card.rank and player.name=="user":
+                            elif player_max_max_card.rank == track_winner_max_card.rank and player.name=="user":
                                 track_winner = player
         return track_winner
 
