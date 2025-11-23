@@ -55,9 +55,6 @@ class SabaccScreen(QWidget):
         self.ui.standButton.clicked.connect(self.stand)
         self.ui.junkButton.setEnabled(False)
         self.ui.junkButton.clicked.connect(self.junk)
-        self.ui.bet5.setEnabled(False)
-        self.ui.bet50.setEnabled(False)
-        self.ui.bet100.setEnabled(False)
         self.ui.card1.setEnabled(False)
         self.ui.card2.setEnabled(False)
         self.ui.card3.setEnabled(False)
@@ -94,20 +91,6 @@ class SabaccScreen(QWidget):
         players.append(self.player)
         self.game = Sabacc(players, 200323)
 
-        
-
-
-
-    def initializeOpponents(self):
-        opponents = []
-        ai_names = ["Lando", "Han", "Chewbacca"]
-        for i in range(3):
-            ai_player = SabaccAI(ai_names[i], self.opp_positions[i], "medium")
-            opponents.append(ai_player)
-            #print(f"Added AI Opponent: {ai_names[i]} at position {self.opp_positions[i]}")
-            self.ui.__getattribute__(f"{ai_names[i]}chips").setText(f'Chips: {ai_player.numchips}')
-        return opponents
-
 
 
 
@@ -130,54 +113,27 @@ class SabaccScreen(QWidget):
 
 
 
-    def reset(self, hard=False):
-        self.scene.clear()
-        self.ui.drawButton.setEnabled(False)
-        self.ui.swapButton.setEnabled(False)
-        self.ui.standButton.setEnabled(False)
-        self.ui.junkButton.setEnabled(False)
-        self.ui.bet5.setEnabled(False)
-        self.ui.bet50.setEnabled(False)
-        self.ui.bet100.setEnabled(False)
-        self.ui.card1.setEnabled(False)
-        self.ui.card2.setEnabled(False)
-        self.ui.card3.setEnabled(False)
-        self.ui.card4.setEnabled(False)
-        self.ui.card5.setEnabled(False)
-        self.ui.StartButton.setEnabled(True)
-        self.ui.dice1.display("-")
-        self.ui.dice2.display("-")
-        self.ui.oppcount.setEnabled(True)
-        for button in self.card_buttons:
-            try:
-                button.clicked.disconnect()
-            except TypeError:
-                pass
-
-        self.discard_widgets = []
-
-        if hard:
-            self.ui.opplabel.show()
-            self.ui.oppcount.show()
-            self.ui.oppcount.setValue(3)
-
-            self.opponents = self.initializeOpponents()
-            self.refreshOpps(3)
-
-            self.player = SabaccPlayer("user", self.state.chips)
-            players = []
-            for opp in self.opponents:
-                players.append(opp)
-            players.append(self.player)
-
-            self.game = Sabacc(players, 200323)
-
-
+    
     def leave(self):
         self.reset(True)
         self.switch_to_menu.emit()
 
 
+
+
+
+    #==========================Opponent Management Functions======================#
+
+    def initializeOpponents(self):
+        opponents = []
+        ai_names = ["Lando", "Han", "Chewbacca"]
+        for i in range(3):
+            ai_player = SabaccAI(ai_names[i], self.opp_positions[i], "medium")
+            opponents.append(ai_player)
+            #print(f"Added AI Opponent: {ai_names[i]} at position {self.opp_positions[i]}")
+            self.ui.__getattribute__(f"{ai_names[i]}chips").setText(f'Chips: {ai_player.numchips}')
+        return opponents
+    
     def refreshOpps(self, oppcnt):
         for i in range(3):
             if i < oppcnt:
@@ -191,6 +147,9 @@ class SabaccScreen(QWidget):
         #self.game.oppNo = value
 
 
+
+
+    #========================ANIMATION HELP===================================#
     '''
     Helpful function for obtaining the proper pixmap for a Card instance, based
     on rank, suit, and if its hidden.
@@ -234,23 +193,26 @@ class SabaccScreen(QWidget):
         self.discard_widgets.append(self.animateCard(pos, self.ui.discard_spot.pos(), card_sprite))
 
 
-    def roll_dice(self):
-        self.ui.dice1.display(str(random.randint(1,6)))
-        self.ui.dice2.display(str(random.randint(1,6)))
-        print("Rolled Dice")
-        print("Dice 1:", self.ui.dice1.value())
-        print("Dice 2:", self.ui.dice2.value())
 
 
 
-    def deal(self):
-        print("Dealing cards...")
-        self.ui.oppcount.setEnabled(False)
-        self.ui.opplabel.hide()
-        self.ui.oppcount.hide()
 
+
+
+
+    #===============================GAME MOVE WRAPPER=================================#
+
+
+    def deal(self, shift=False):
         # Game deals cards.
-        self.game.game_setup()
+        if not shift:
+            print("Dealing cards...")
+            self.ui.oppcount.setEnabled(False)
+            self.ui.opplabel.hide()
+            self.ui.oppcount.hide()
+            self.ui.StartButton.setEnabled(False)
+        
+            self.game.game_setup()
 
         # UI animates cards to player hand.
         for i, card in enumerate(self.player.hand):
@@ -266,51 +228,11 @@ class SabaccScreen(QWidget):
                 end = self.opponents[i].position + QPointF(j * 20, 0)
                 self.opponents[i].hand_widgets[j] = (self.animateCard(self.deck_pos, end, card_sprite))
 
-        self.ui.StartButton.setEnabled(False)
+        
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    def round(self):
-        report_str = ""
-        i = 1
-        for opp in self.opponents:
-            if not opp.out_of_game and not opp.defeated:
-                move = opp.make_move(self.game.round_num+1, self.game.discard_pile)
-                report_str += f"{opp.name} chose to {move[0]}.\n"
-
-                if move[0] == "draw":
-                    #print(f"Calling draw for {opp}")
-                    QTimer.singleShot(1000 * i, lambda a=opp: self.draw(ai=a))
-                    i+=1
-                elif move[0] == "swap":
-                    QTimer.singleShot(1000 * i, lambda m=move, a=opp: self.swap_helper(m[1], a))
-                    i+=1
-                elif move[0] == "junk":
-                    QTimer.singleShot(1000*i, lambda a=opp: self.junk(a))
-                    i+=1
-                else:
-                    QTimer.singleShot(1000*i, lambda a=opp: self.stand(a))
-            
-        QTimer.singleShot(1000*i, lambda s=report_str: QMessageBox.information(self, "Opponents' Moves", s))
-        #Let the AI do what it needs to do.
-        #Effectuate changes
-
-        QTimer.singleShot(1000*i, lambda: self.ui.drawButton.setEnabled(True))
-        QTimer.singleShot(1000*i, lambda: self.ui.swapButton.setEnabled(True))
-        QTimer.singleShot(1000*i, lambda: self.ui.junkButton.setEnabled(True))
-        QTimer.singleShot(1000*i, lambda: self.ui.standButton.setEnabled(True))
 
 
     
@@ -330,15 +252,29 @@ class SabaccScreen(QWidget):
 
 
 
-
-
-
-    def discard(self, cardnum, ai=None):
+    def discard(self, cardnum, ai=None, shift=False):
         if ai:
-            return
+            #update hand in game logic
+            self.game.discard(ai, cardnum)
 
-        
+            #animate discarding.
+            self.updateDiscard(ai.position + QPointF(cardnum*20, 0))
 
+            if cardnum == len(ai.hand):
+                self.scene.removeItem(ai.hand_widgets[cardnum])
+                ai.hand_widgets[cardnum] = None
+            else:
+                self.scene.removeItem(ai.hand_widgets[cardnum])
+                self.scene.removeItem(ai.hand_widgets[len(ai.hand)])
+
+                #Move furthest card over.
+                card_sprite = self.createCard(ai.hand[len(ai.hand)-1], True)
+                start = ai.position + QPointF((20 * len(ai.hand)), 0)
+                end = ai.position + QPointF(cardnum*20, 0)
+                ai.hand_widgets[cardnum] = self.animateCard(start, end, card_sprite)
+                over = ai.hand_widgets[cardnum+1]
+                ai.hand_widgets[cardnum].setZValue(over.zValue() - 1)
+                
         else:
             #print(f"discarding {cardnum}")
             #Disable further discarding.
@@ -368,15 +304,14 @@ class SabaccScreen(QWidget):
                 end = self.card_pos[cardnum]
                 self.player.hand_widgets[cardnum] = self.animateCard(start, end, card_sprite)
             
-            self.plays_over()
+            if not shift:
+                self.plays_over()
             
 
 
     def draw(self, ai=None):
         if ai:
-            #print(ai)
-            #Add to the hand.
-            self.game.draw(ai)
+            #For timings, the actual game logic drawing is done in round(). The AI version of draw simply implements the animations.
             #Animate the new card.
             card_sprite = self.createCard(ai.hand[len(ai.hand)-1], True)
             end = ai.position + QPointF((len(ai.hand)-1) * 20, 0)
@@ -505,60 +440,102 @@ class SabaccScreen(QWidget):
                 self.player.hand_widgets[i] = None
                 self.updateDiscard(self.card_pos[i], len(self.game.discard_pile)-1-i)
             
-            self.plays_over()
+            self.game_over(True)
 
 
             
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def plays_over(self):
-        #Start the bets.
-
-        self.end_of_round()
-        return
-
-        
-
-
-
-    def end_of_round(self):
+    def background_finish(self):
         not_over = self.game.advance_round()
-        if not_over:
-            print("NEXT ROUND")
-            self.roll_dice()
-            self.round()
-        else:
-            self.roll_dice()
-            self.game_over()
+        while not_over:
+            opp_order = [2, 0, 1]
+        
+            for num in opp_order:
+                opp = self.opponents[num]
+                if not opp.out_of_game and not opp.defeated:
+                    move = opp.make_move(self.game.round_num+1, self.game.discard_pile)
+
+                    if move[0] == "draw":
+                        #print(f"Calling draw for {opp}")
+                        self.game.draw(opp)
+                        drop = opp.should_discard()
+                        if drop >= 0:
+                            self.game.discard(opp, drop)
+                            self.discard_widgets.append(None)
+                        elif move[0] == "swap":
+                            self.game.swap(opp, move[1])
+                            self.discard_widgets.pop()
+                            self.discard_widgets.append(None)
+                        elif move[0] == "junk":
+                            for card in opp.hand():
+                                self.discard_widgets.append(None)
+                            self.game.junk(opp)
+            not_over = self.game.advance_round()
+
+            if self.game.should_shift([random.randint(1,6), random.randint(1,6)]):
+                #Opponents discard
+                lengths = []
+                for opp in self.opponents:
+                    length = len(opp.hand)
+                    lengths.append(length)
+                    if not opp.out_of_game and not opp.defeated:
+                        for i in range(length-1, -1, -1):
+                            self.game.discard(opp, i)
+                self.game.shift(lengths)
 
 
 
 
 
+
+    #==============================CLEANUP=======================================#
+
+
+    def reset(self, hard=False):
+        self.scene.clear()
+        self.ui.drawButton.setEnabled(False)
+        self.ui.swapButton.setEnabled(False)
+        self.ui.standButton.setEnabled(False)
+        self.ui.junkButton.setEnabled(False)
+        self.ui.card1.setEnabled(False)
+        self.ui.card2.setEnabled(False)
+        self.ui.card3.setEnabled(False)
+        self.ui.card4.setEnabled(False)
+        self.ui.card5.setEnabled(False)
+        self.ui.StartButton.setEnabled(True)
+        self.ui.dice1.display("-")
+        self.ui.dice2.display("-")
+        self.ui.oppcount.setEnabled(True)
+        for button in self.card_buttons:
+            try:
+                button.clicked.disconnect()
+            except TypeError:
+                pass
+
+        self.discard_widgets = []
+
+        if hard:
+            self.ui.opplabel.show()
+            self.ui.oppcount.show()
+            self.ui.oppcount.setValue(3)
+
+            self.opponents = self.initializeOpponents()
+            self.refreshOpps(3)
+
+            self.player = SabaccPlayer("user", self.state.chips)
+            players = []
+            for opp in self.opponents:
+                players.append(opp)
+            players.append(self.player)
+
+            self.game = Sabacc(players, 200323)
+
+    
     def clear_game(self):
         for i in range(len(self.game.discard_pile)):
-            self.scene.removeItem(self.discard_widgets[i])
-            self.animateCard(self.ui.discard_spot.pos(), self.deck_pos, self.createCard(self.game.discard_pile[i]))
+            if self.discard_widgets[i]:
+                self.scene.removeItem(self.discard_widgets[i])
+                self.animateCard(self.ui.discard_spot.pos(), self.deck_pos, self.createCard(self.game.discard_pile[i]))
 
         for opp in self.opponents:
             for i in range(len(opp.hand)):
@@ -577,20 +554,116 @@ class SabaccScreen(QWidget):
 
 
 
-    def game_over(self):
-        for opp in self.opponents:
-            for i in range(len(opp.hand)):
-                self.scene.removeItem(opp.hand_widgets[i])
-                opp.hand_widgets[i] = self.scene.addPixmap(self.createCard(opp.hand[i]))
-                opp.hand_widgets[i].setPos(opp.position + QPointF(i * 20, 0))
-        
-        QMessageBox.information(self, "End", f"Final Score: {self.player.calc_hand_value()}")
 
-        QTimer.singleShot(500, lambda: self.clear_game())
-        QTimer.singleShot(3000, lambda: self.reset())
+
+    #=================GAME FLOW CONTROL==========================================#  
+
+    def round(self):
+        opp_order = [2, 0, 1]
+        report_str = ""
+        i = 1
+        for num in opp_order:
+            opp = self.opponents[num]
+            if not opp.out_of_game and not opp.defeated:
+                move = opp.make_move(self.game.round_num+1, self.game.discard_pile)
+                report_str += f"{opp.name} chose to {move[0]}"
+
+                if move[0] == "draw":
+                    #print(f"Calling draw for {opp}")
+                    self.game.draw(opp)
+                    QTimer.singleShot(1000 * i, lambda offset=i, a=opp: self.draw(a))
+                    i+=1
+
+                    drop = opp.should_discard()
+                    if drop >= 0:
+                        report_str += f" and discard"
+                        QTimer.singleShot(1000 * i, lambda c=drop, a=opp: self.discard(c, a))
+                        i+=1
+                    
+                elif move[0] == "swap":
+                    QTimer.singleShot(1000 * i, lambda m=move, a=opp: self.swap_helper(m[1], a))
+                    i+=1
+                elif move[0] == "junk":
+                    QTimer.singleShot(1000*i, lambda a=opp: self.junk(a))
+                    i+=1
+                else:
+                    QTimer.singleShot(1000*i, lambda a=opp: self.stand(a))
+                
+                report_str += ".\n"
+            
+        QTimer.singleShot(1000*i, lambda s=report_str: QMessageBox.information(self, "Opponents' Moves", s))
+        #Let the AI do what it needs to do.
+        #Effectuate changes
+
+        QTimer.singleShot(1000*i, lambda: self.ui.drawButton.setEnabled(True))
+        QTimer.singleShot(1000*i, lambda: self.ui.swapButton.setEnabled(True))
+        QTimer.singleShot(1000*i, lambda: self.ui.junkButton.setEnabled(True))
+        QTimer.singleShot(1000*i, lambda: self.ui.standButton.setEnabled(True))
+        
+
+
+
+    def plays_over(self):
+        #Start the bets.
+
+        self.end_of_round()
         return
 
 
+
+    def roll_dice(self, hack=False):
+        self.ui.dice1.display(str(random.randint(1,6)))
+        self.ui.dice2.display(str(random.randint(1,6)))
+        print("Rolled Dice")
+        print("Dice 1:", self.ui.dice1.value())
+        print("Dice 2:", self.ui.dice2.value())
+        
+        if hack:
+            return [1,1]
+        return [self.ui.dice1.value(), self.ui.dice2.value()]
+
+
+    def reset_hands(self):
+        lengths = []
+
+        #Opponents discard
+        for opp in self.opponents:
+            length = len(opp.hand)
+            lengths.append(length)
+            if not opp.out_of_game and not opp.defeated:
+                for i in range(length-1, -1, -1):
+                    self.discard(i, opp)
+
+        #Player discards.
+        length = len(self.player.hand)
+        lengths.append(len(self.player.hand))
+        for i in range(length-1, -1, -1):
+            self.discard(i, shift=True)
+
+        self.game.shift(lengths)
+        self.deal(True)
+
+
+
+
+    def end_of_round(self):
+        not_over = self.game.advance_round()
+        if not_over:
+            if self.game.should_shift(self.roll_dice()):
+                QMessageBox.information(self, "Doubles!", "Dice came up doubles! Time to shift!")
+                self.reset_hands()
+                self.round()
+                print("NEXT ROUND(DOUBLES)")
+            else:
+                self.round()
+                print("NEXT ROUND")
+        else:
+            if self.game.should_shift(self.roll_dice(not_over)):
+                QMessageBox.information(self, "Doubles!", "Dice came up doubles! Time to shift!")
+                self.reset_hands()
+                QTimer.singleShot(1000, self.game_over)
+            else:
+                self.game_over()
 
     def begin_game(self):
         self.game.initialize_discard_pile()
@@ -599,7 +672,37 @@ class SabaccScreen(QWidget):
         self.round()
 
 
+    def game_over(self, fast_frwd=False):
+        if fast_frwd:
+            self.background_finish()
+            winner = self.game.determine_winner()
+            name = winner.name
+            score = winner.calc_hand_value()
+            self.clear_game()
+            QTimer.singleShot(1000, lambda: self.reset())
+            QMessageBox.information(self, "Fast Forwarding", f"At the end of that game, {name} won with a score of {score}.")
+            return
+        else:
+            for opp in self.opponents:
+                for i in range(len(opp.hand)):
+                    self.scene.removeItem(opp.hand_widgets[i])
+                    opp.hand_widgets[i] = self.scene.addPixmap(self.createCard(opp.hand[i]))
+                    opp.hand_widgets[i].setPos(opp.position + QPointF(i * 20, 0))
 
+
+        winner = self.game.determine_winner()
+        if winner.name == "user":
+            QMessageBox.information(self, "You Win!", f"You won with a score of {winner.calc_hand_value()}")
+        else:
+            QMessageBox.information(self, "You Lose!", f"{winner.name} won with a score of {winner.calc_hand_value()}")
+
+        QTimer.singleShot(500, lambda: self.clear_game())
+        QTimer.singleShot(3000, lambda: self.reset())
+        return
+
+
+
+    
 
     
 
@@ -667,7 +770,7 @@ class SabaccScreen(QWidget):
 
 
 
-
+#======================Object for the HUMAN======================================#
 
 class SabaccPlayer:
     """Represents a player in Sabacc.
@@ -697,6 +800,7 @@ class SabaccPlayer:
 
 
 
+#============================Object for ROBOPPONENTS===================================#
 
 class SabaccAI:
     """Represents an AI player in Sabacc.
@@ -749,7 +853,6 @@ class SabaccAI:
                     return ["draw"]
                 else:
                     return ["junk"]
-                
         
             if checkHand == 0:
                 # AI decides to stand with a perfect hand
@@ -769,6 +872,25 @@ class SabaccAI:
                 return ["junk"]
             #game.draw(self)
             return ["draw"]
+        
+
+    def should_discard(self):
+        #Fetch current total.
+        cur_sum = self.calc_hand_value()
+
+        #Calculate the best sum which can be achieved from removing one card.
+        best_sum = 100000
+        card_to_drop = -1
+        for card in self.hand:
+            if abs(cur_sum - card.rank) < best_sum:
+                card_to_drop = self.hand.index(card)
+                best_sum = abs(cur_sum - card.rank)
+
+        #Only recommend a discard if the best possible removal is actually beneficial.
+        if abs(best_sum) <= abs(cur_sum):
+            return card_to_drop
+        else:
+            return -1
 
 
 
@@ -941,46 +1063,14 @@ class Sabacc:
             player.out_of_game = False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def should_shift(self, results):
+        return results[0] == results[1]
     
+    def shift(self, lengths):
+        for num in range(len(lengths)):
+            if not self.players[num].out_of_game and not self.players[num].defeated:
+                self.deal(self.players[num], lengths[num])
 
-    """Handles the stand action for a player.
-    Inputs: player object. Strictly for the format. No logic needed."""
-    def stand(self, player):
-        pass  # Implement stand logic
-    
-
-    def enter_game(self):
-        for player in self.players:
-            if player.numchips < 10:
-                self.players.remove(player)
-        for player in self.players:
-            self.pot += 10
-            player.numchips -= 10
-        #self.screen.ui.sabacc_pot.display(self.pot)
-        print("Players have entered the game. Pot is now:", self.pot)
 
     """Determines and announces the winner of the game and distributes the pot."""
     def determine_winner(self):
@@ -1001,29 +1091,25 @@ class Sabacc:
                         """Found a player with the same hand value, check for fewer cards win."""
                         if len(player.hand) > len(track_winner.hand):
                             track_winner = player
-                        else:
+                        elif len(player.hand) == len(track_winner.hand):
                             """Found a player with the same hand value and same number of cards, check for highest value card to break the tie."""
                             player.max_card = max(player.hand, key=lambda c: c.rank)
                             track_winner.max_card = max(track_winner.hand, key=lambda c: c.rank)
                             if player.max_card.rank > track_winner.max_card.rank:
                                 track_winner = player
-                            else:
-                                """It's a complete tie, no winner."""
-                                track_winner = None
+                            elif player.max_card.rank == track_winner.max_card.rank and player.name=="user":
+                                track_winner = player
+        return track_winner
 
-    """Executes a round of moves and bets for all players.
-    Inputs: current round number."""
-    def round(self, num_round):
-        #self.screen.ui.UserDialogBox.setPlainText(f"<-- Round {num_round} in progress.")
-        for player in self.players:
-            print(f"{player.name}'s turn. Hand value: {player.calc_hand_value()}")
-            if player.name == "user":
-                #self.screen.ui.UserDialogBox.append("Please make your move.")
-                player.make_move(self, num_round)
-            else:
-                if not player.out_of_game:
-                    player.make_move(num_round, self.discard_pile, self)
-                    print(f"{player.name} has finished their turn. Hand value: {player.calc_hand_value()}")
+
+
+
+
+
+
+
+
+
 
     """Handles the betting phase after each round.
     Inputs: current round number."""
