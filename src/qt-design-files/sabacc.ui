@@ -70,8 +70,8 @@ QPushButton:hover {
   <widget class="QPushButton" name="StartButton">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>540</y>
+     <x>10</x>
+     <y>490</y>
      <width>71</width>
      <height>41</height>
     </rect>
@@ -108,7 +108,7 @@ QPushButton:hover {
   <widget class="QLCDNumber" name="dice1">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>220</x>
      <y>10</y>
      <width>64</width>
      <height>23</height>
@@ -121,7 +121,7 @@ QPushButton:hover {
   <widget class="QLCDNumber" name="dice2">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>220</x>
      <y>40</y>
      <width>64</width>
      <height>23</height>
@@ -134,8 +134,8 @@ QPushButton:hover {
   <widget class="QPushButton" name="rules">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>500</y>
+     <x>10</x>
+     <y>460</y>
      <width>75</width>
      <height>24</height>
     </rect>
@@ -433,7 +433,7 @@ background-color: rgba(0, 0, 0,0);</string>
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>20</y>
+     <y>140</y>
      <width>121</width>
      <height>31</height>
     </rect>
@@ -580,6 +580,356 @@ QPushButton:hover{
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="dice1label">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>10</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0,0, 0, 0);</string>
+   </property>
+   <property name="text">
+    <string>Dice 1:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="dice2label">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>40</y>
+     <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0,0, 0, 0);</string>
+   </property>
+   <property name="text">
+    <string>Dice 2:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Chewbaccastake">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>330</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Stake:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Hanstake">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>340</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Stake:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Landostake">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>160</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Stake:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Gamepot">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>330</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Game Pot:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Sabaccpot">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>350</y>
+     <width>231</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Sabacc Pot:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Userchips">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>560</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Your Chips:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Userstake">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>560</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Your Stake:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="CurBet">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>370</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(255, 255, 255);
+background-color: rgba(0, 0, 0,0);</string>
+   </property>
+   <property name="text">
+    <string>Bet to Match: </string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MatchButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>490</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>15</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #64ff00,
+		stop:1 #7d9d00
+    );
+	color: black;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #64ff00,
+		stop:1 #7d9d00
+    );
+	color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>Match</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RaiseButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>440</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>15</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	color: black;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>Raise</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ContButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>540</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>10</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color: qlineargradient(spread:pad, x1:0.545455, y1:1, x2:1, y2:1, stop:0 rgba(255, 115, 0, 255), stop:1 rgba(255, 255, 255, 255));
+	color: black;
+}
+QPushButton:hover {
+	background-color: qlineargradient(
+		x1:0, y1:0, x2:0, y2:1,
+		stop:0 #ff0000,
+		stop:1 #7d0000
+    );
+	color: white;
+}</string>
+   </property>
+   <property name="text">
+    <string>Continue</string>
    </property>
   </widget>
  </widget>

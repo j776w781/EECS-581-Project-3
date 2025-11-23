@@ -43,7 +43,7 @@ class Ui_Form(object):
 "}")
         self.leaveButton.setObjectName("leaveButton")
         self.StartButton = QtWidgets.QPushButton(parent=Form)
-        self.StartButton.setGeometry(QtCore.QRect(90, 540, 71, 41))
+        self.StartButton.setGeometry(QtCore.QRect(10, 490, 71, 41))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(15)
@@ -67,15 +67,15 @@ class Ui_Form(object):
 "}")
         self.StartButton.setObjectName("StartButton")
         self.dice1 = QtWidgets.QLCDNumber(parent=Form)
-        self.dice1.setGeometry(QtCore.QRect(160, 10, 64, 23))
+        self.dice1.setGeometry(QtCore.QRect(220, 10, 64, 23))
         self.dice1.setStyleSheet("background-color: rgba(0,0,0, 0);")
         self.dice1.setObjectName("dice1")
         self.dice2 = QtWidgets.QLCDNumber(parent=Form)
-        self.dice2.setGeometry(QtCore.QRect(160, 40, 64, 23))
+        self.dice2.setGeometry(QtCore.QRect(220, 40, 64, 23))
         self.dice2.setStyleSheet("background-color: rgba(0,0,0, 0);")
         self.dice2.setObjectName("dice2")
         self.rules = QtWidgets.QPushButton(parent=Form)
-        self.rules.setGeometry(QtCore.QRect(90, 500, 75, 24))
+        self.rules.setGeometry(QtCore.QRect(10, 460, 75, 24))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(12)
@@ -188,7 +188,7 @@ class Ui_Form(object):
 "background-color: rgba(0, 0, 0,0);")
         self.Chewbaccachips.setObjectName("Chewbaccachips")
         self.Landochips = QtWidgets.QLabel(parent=Form)
-        self.Landochips.setGeometry(QtCore.QRect(310, 20, 121, 31))
+        self.Landochips.setGeometry(QtCore.QRect(310, 140, 121, 31))
         font = QtGui.QFont()
         font.setFamily("Courier New")
         font.setPointSize(11)
@@ -257,6 +257,174 @@ class Ui_Form(object):
 "}")
         self.card5.setText("")
         self.card5.setObjectName("card5")
+        self.dice1label = QtWidgets.QLabel(parent=Form)
+        self.dice1label.setGeometry(QtCore.QRect(160, 10, 81, 21))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(12)
+        font.setBold(True)
+        self.dice1label.setFont(font)
+        self.dice1label.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0,0, 0, 0);")
+        self.dice1label.setObjectName("dice1label")
+        self.dice2label = QtWidgets.QLabel(parent=Form)
+        self.dice2label.setGeometry(QtCore.QRect(160, 40, 81, 21))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(12)
+        font.setBold(True)
+        self.dice2label.setFont(font)
+        self.dice2label.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0,0, 0, 0);")
+        self.dice2label.setObjectName("dice2label")
+        self.Chewbaccastake = QtWidgets.QLabel(parent=Form)
+        self.Chewbaccastake.setGeometry(QtCore.QRect(30, 330, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Chewbaccastake.setFont(font)
+        self.Chewbaccastake.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Chewbaccastake.setObjectName("Chewbaccastake")
+        self.Hanstake = QtWidgets.QLabel(parent=Form)
+        self.Hanstake.setGeometry(QtCore.QRect(620, 340, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Hanstake.setFont(font)
+        self.Hanstake.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Hanstake.setObjectName("Hanstake")
+        self.Landostake = QtWidgets.QLabel(parent=Form)
+        self.Landostake.setGeometry(QtCore.QRect(310, 160, 121, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Landostake.setFont(font)
+        self.Landostake.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Landostake.setObjectName("Landostake")
+        self.Gamepot = QtWidgets.QLabel(parent=Form)
+        self.Gamepot.setGeometry(QtCore.QRect(280, 330, 191, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Gamepot.setFont(font)
+        self.Gamepot.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Gamepot.setObjectName("Gamepot")
+        self.Sabaccpot = QtWidgets.QLabel(parent=Form)
+        self.Sabaccpot.setGeometry(QtCore.QRect(280, 350, 231, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Sabaccpot.setFont(font)
+        self.Sabaccpot.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Sabaccpot.setObjectName("Sabaccpot")
+        self.Userchips = QtWidgets.QLabel(parent=Form)
+        self.Userchips.setGeometry(QtCore.QRect(200, 560, 181, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Userchips.setFont(font)
+        self.Userchips.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Userchips.setObjectName("Userchips")
+        self.Userstake = QtWidgets.QLabel(parent=Form)
+        self.Userstake.setGeometry(QtCore.QRect(430, 560, 191, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.Userstake.setFont(font)
+        self.Userstake.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.Userstake.setObjectName("Userstake")
+        self.CurBet = QtWidgets.QLabel(parent=Form)
+        self.CurBet.setGeometry(QtCore.QRect(280, 370, 191, 31))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(11)
+        font.setBold(True)
+        self.CurBet.setFont(font)
+        self.CurBet.setStyleSheet("color: rgb(255, 255, 255);\n"
+"background-color: rgba(0, 0, 0,0);")
+        self.CurBet.setObjectName("CurBet")
+        self.MatchButton = QtWidgets.QPushButton(parent=Form)
+        self.MatchButton.setGeometry(QtCore.QRect(100, 490, 71, 41))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(15)
+        font.setBold(True)
+        self.MatchButton.setFont(font)
+        self.MatchButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #64ff00,\n"
+"        stop:1 #7d9d00\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #64ff00,\n"
+"        stop:1 #7d9d00\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.MatchButton.setObjectName("MatchButton")
+        self.RaiseButton = QtWidgets.QPushButton(parent=Form)
+        self.RaiseButton.setGeometry(QtCore.QRect(100, 440, 71, 41))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(15)
+        font.setBold(True)
+        self.RaiseButton.setFont(font)
+        self.RaiseButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.RaiseButton.setObjectName("RaiseButton")
+        self.ContButton = QtWidgets.QPushButton(parent=Form)
+        self.ContButton.setGeometry(QtCore.QRect(100, 540, 71, 41))
+        font = QtGui.QFont()
+        font.setFamily("Courier New")
+        font.setPointSize(10)
+        font.setBold(True)
+        self.ContButton.setFont(font)
+        self.ContButton.setStyleSheet("QPushButton {\n"
+"    background-color: qlineargradient(spread:pad, x1:0.545455, y1:1, x2:1, y2:1, stop:0 rgba(255, 115, 0, 255), stop:1 rgba(255, 255, 255, 255));\n"
+"    color: black;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: qlineargradient(\n"
+"        x1:0, y1:0, x2:0, y2:1,\n"
+"        stop:0 #ff0000,\n"
+"        stop:1 #7d0000\n"
+"    );\n"
+"    color: white;\n"
+"}")
+        self.ContButton.setObjectName("ContButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -276,3 +444,16 @@ class Ui_Form(object):
         self.Chewbaccachips.setText(_translate("Form", "Chips:"))
         self.Landochips.setText(_translate("Form", "Chips:"))
         self.Hanchips.setText(_translate("Form", "Chips:"))
+        self.dice1label.setText(_translate("Form", "Dice 1:"))
+        self.dice2label.setText(_translate("Form", "Dice 2:"))
+        self.Chewbaccastake.setText(_translate("Form", "Stake:"))
+        self.Hanstake.setText(_translate("Form", "Stake:"))
+        self.Landostake.setText(_translate("Form", "Stake:"))
+        self.Gamepot.setText(_translate("Form", "Game Pot:"))
+        self.Sabaccpot.setText(_translate("Form", "Sabacc Pot:"))
+        self.Userchips.setText(_translate("Form", "Your Chips:"))
+        self.Userstake.setText(_translate("Form", "Your Stake:"))
+        self.CurBet.setText(_translate("Form", "Bet to Match: "))
+        self.MatchButton.setText(_translate("Form", "Match"))
+        self.RaiseButton.setText(_translate("Form", "Raise"))
+        self.ContButton.setText(_translate("Form", "Continue"))
