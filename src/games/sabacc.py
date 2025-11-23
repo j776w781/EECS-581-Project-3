@@ -141,16 +141,16 @@ class SabaccScreen(QWidget):
     def show_rules(self):
         rules = (
                 "Sabacc Rules:\n"
-                "10 Chip buy in to enter the game.\n"
+                "50 Chip buy in to enter the game.\n"
                 "1. Each player is dealt two cards.\n"
-                "2. Players take turns to draw a card, swap for the card at the top of the discard pile, stand (pass to the next player), or junk (forfeit the game).\n"
+                "2. Players take turns each round to draw a card, swap for the card at the top of the discard pile, stand (pass to the next player), or junk (forfeit the game).\n"
                 "2.5. Players may choose to discard a card after drawing."
                 "3. The goal is to have a hand value closest to zero.\n"
                 "4. Positive and negative cards affect hand value.\n"
                 "5. The game continues for 3 rounds.\n"
                 "5.5. Players bet after every round.\n"
-                "6. The player with the hand value closest to zero wins the money bet after each round."
-                "7. If a player wins with exactly 0, they win the pot.\n"
+                "6. The player with the hand value closest to zero after the last round wins the game pot.\n"
+                "7. If a player wins with exactly 0, they win the sabacc pot.\n"
         )
         QMessageBox.information(self, "Sabacc Rules", rules)
 
@@ -1054,7 +1054,7 @@ class SabaccScreen(QWidget):
             if not opp.defeated:
                 self.oppstuff[i+3].setText(f"Chips: {opp.chips}")
                 self.oppstuff[i+6].setText(f"Stake: {opp.stake}")
-        self.ui.Gamepot.setText(f"Game Pot: {self.game.gamePot}")
+        self.ui.Sabaccpot.setText(f"Sabacc Pot: {self.game.sabbacpot}")
 
         #Setup discard pile, animate changes, deal, then start the first round.
         self.game.initialize_discard_pile()
@@ -1297,7 +1297,7 @@ class Sabacc:
     def entry_fees(self):
         for player in self.players:
             if not player.defeated:
-                self.gamePot += 50
+                self.sabbacpot += 50
                 player.chips += -50
                 player.stake += 50
 
