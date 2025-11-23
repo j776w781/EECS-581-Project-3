@@ -163,7 +163,6 @@ class SabaccScreen(QWidget):
     def leave(self):
         if self.game.playing:
             QMessageBox.information(self, "Exiting", "Haha! You just forfeited your chips!")
-        self.state.chips = self.player.chips
         self.reset(True)
         self.switch_to_menu.emit()
 
@@ -199,6 +198,11 @@ class SabaccScreen(QWidget):
     '''This function is called any time the Sabacc screen comes into focus. It starts music.'''
     def showEvent(self, event):
         super().showEvent(event)
+
+        #Useful for updating sabacc balance when you've left to play another game.
+        self.player.chips = self.state.chips
+        self.ui.Userchips.setText(f"Your Chips: {self.player.chips}")
+
         self.start_music()
     
     '''This function is called any time the Sabacc screen goes out of focus. It ends the music.'''
@@ -799,6 +803,8 @@ class SabaccScreen(QWidget):
         for item in self.scene.items():
             self.scene.removeItem(item)
         self.scene.clear()
+
+        self.state.chips = self.player.chips
 
         #Reset/disable buttons.
         self.ui.drawButton.setEnabled(False)
