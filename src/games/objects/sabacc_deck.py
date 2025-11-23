@@ -1,7 +1,8 @@
 """
 Sabaac Deck and Card Classes
 Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Bisshoy Bhattacharjee, Max Biundo
-Description: Implementation for Sabaac playing card and card deck.
+Description: Implementation for Sabaac playing card and card deck. Methods are very similar to deck.py,
+with slight modifications for Sabacc.
 """
 import random
 from .deck import AnimatedCard

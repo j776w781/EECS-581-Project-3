@@ -1,3 +1,19 @@
+'''
+File: sabaac_players.py
+
+Authors: Joshua Welicky, Gavin Billinger, Mark Kitchin, Max Biundo, Bisshoy Bhattacharjee
+
+Description:
+Store the SabaccPlayer class, which represents a human player, and a SabaccAI class.
+Each one has a name, a hand (array of SabaccCards), a hand_widgets (Stores GUI elements for each
+card for convenient access), their chips, their current stake, whether they're in the current game, and whether they're 
+defeated.
+
+Inputs: None
+
+Outputs: None
+'''
+
 import random
 
 #======================Object for the HUMAN======================================#
@@ -14,6 +30,9 @@ class SabaccPlayer:
         self.out_of_game = False
         self.defeated = False
 
+    '''
+    Returns the current value of the hand.
+    '''
     def calc_hand_value(self):
         total_value = 0
         for card in self.hand:
@@ -35,10 +54,9 @@ class SabaccPlayer:
 class SabaccAI:
     """Represents an AI player in Sabacc.
     Input: name, position for GUI, difficulty level."""
-    def __init__(self, name, position, difficulty):
+    def __init__(self, name, position):
         self.name = name
         self.position = position
-        self.difficulty = difficulty
         self.hand = []
         self.hand_widgets = [None, None, None, None, None]
         self.chips = random.randint(1, 25) * 50
@@ -76,27 +94,28 @@ class SabaccAI:
         checkHand = self.calc_hand_value()
         checkDiscardValue = discard_pile[len(discard_pile)-1].rank if len(discard_pile) > 0 else None
         optimalSwap = self.checkSwapOptions(self.hand, checkDiscardValue)
-        if self.difficulty == "medium":
+        if True:
             if checkHand == 0:
                 # AI decides to stand with a perfect hand
-                #game.stand(self)
                 return ["stand"]
             if optimalSwap != None:
                 if num_round == 1 or abs(optimalSwap[1]) < 2:
-                    #game.swap(self, optimalSwap)
+                    #AI decides to swap.
                     card_idx = self.hand.index(optimalSwap[0])
                     return ["swap", card_idx]
             if abs(checkHand) < 3:
                 # AI decides to try and win with the current hand
-                #game.stand(self)
                 return ["stand"]
             if abs(checkHand) > 23 and num_round == 3:
-                #game.junk(self)
                 return ["junk"]
-            #game.draw(self)
+            #If nothing else, they'll just draw.
             return ["draw"]
         
 
+    '''
+    This function lets the opponent decide what card they should discard, if any.
+    It returns the index(in their hand) or the card they should discard.
+    '''
     def should_discard(self):
         #Fetch current total.
         cur_sum = self.calc_hand_value()
@@ -120,13 +139,19 @@ class SabaccAI:
     '''
     I must cite ChatGPT for giving me a coherent technique for deciding when to bet in Sabacc,
     as well as filling out the rest of this function.
+
+    This function allows an opponent to decide how much to bet considering a current bet. It returns the
+    amount to bet.
     '''
     def should_bet(self, current_bet):
+        #Firstly, if they have no chips, they shouldn't bet.
         if self.chips == 0:
             return 0
         
+        #Gain the value of their hand.
         hand_val = abs(self.calc_hand_value())
 
+        #Assign strength based on the hand quality.
         if hand_val == 0:
             strength = 1.0
         elif hand_val <= 2:
@@ -138,36 +163,43 @@ class SabaccAI:
         else:
             strength = 0.1
 
-        #Add random noise
-        strength += random.uniform(-0.1, 0.1)
+        #Add random noise to strength, for unpredictability
+        strength += random.uniform(-0.2, 0.2)
 
         '''
         LLM Contributions Begin Here
         '''
-        strength = max(0.0, min(1.0, strength))   # clamp
+        #Clamp the strength at 1.
+        strength = max(0.0, min(1.0, strength))
 
         #Convert strength into action probabilities
-        p_raise = 0.2 + 0.8 * strength
-        p_call  = 1 - (p_raise)
+        p_raise = 0.8 * strength
+        p_match  = 1 - (p_raise)
 
         #Choose action
         r = random.random()
 
-        if r < p_call:
+        #If they decide to match or don't have enough chips to match/raise.
+        if r < p_match or self.chips <= current_bet:
+            #Use when the opponent is the first better.
             if current_bet == 0:
+                #Bet either 50 or less.
                 return min(50, self.chips)
-            #Call the current bet
+            
+            #Match the current bet, or self.chips if they don't have enough.
             return min(current_bet, self.chips)
+        #Only runs if they can and want to raise.
         else:
-            if self.chips < current_bet:
-                return self.chips
             #Raise amount based on strength
-            raise_fraction = 0.5 * strength
+            raise_fraction = 0.25 * strength
+            #Make sure it's a multiple of fifty.
             raw_raise = int((self.chips * raise_fraction) // 50) * 50
 
+            
             if current_bet == 0:
                 return max(50, raw_raise)
             
-            raise_amount = min(self.chips, current_bet + raw_raise)
+            
+            #raise_amount = min(self.chips, current_bet + raw_raise)
 
-            return raise_amount
+            return current_bet + raw_raise
