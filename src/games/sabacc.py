@@ -1265,6 +1265,7 @@ class Sabacc:
     def determine_winner(self):
         track_winner = None
         for player in self.players:
+            print(f"{player.name}'s Hand: {player.hand}")
             if not player.out_of_game and not player.defeated:
                 if track_winner == None:
                     """Set the winner equal to the first player found who is not out of the game."""
