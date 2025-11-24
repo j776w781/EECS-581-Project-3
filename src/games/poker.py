@@ -819,9 +819,14 @@ class Poker:
         # Look for the best hand and rank
         self.handRank, self.bestHand = self.analyzeHand()
 
-        bestRank = handRanks.index(self.handRank)
-        bestCombo = self.bestHand
-        bestPlayerIndex = 0
+        if not self.folded:
+            bestRank = handRanks.index(self.handRank)
+            bestCombo = self.bestHand
+            bestPlayerIndex = 0
+        else:
+            bestRank = -1
+            bestCombo = None
+            bestPlayerIndex = 0
 
         for i in range(1, len(self.players)):
             # Compare poker hands by higher index.
