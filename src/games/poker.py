@@ -242,7 +242,9 @@ class PokerScreen(QWidget):
         self.ui.dealButton.setEnabled(False)
 
 #=================== POKER GUI HELPER FUNCTION ===================#
-
+    """
+    Enables buttons once the game begins
+    """
     def enablePlayerActions(self, enable):
         self.ui.leaveButton.setEnabled(enable)
         self.ui.checkcallButton.setEnabled(enable)
@@ -251,13 +253,19 @@ class PokerScreen(QWidget):
         self.ui.allinButton.setEnabled(enable)
 
 #=================== POKER GUI GAME STATE TRACKING ===================#
+    """
+    Updates the game pot to be the total of everyone's bets
+    """
     def updatePot(self):
         self.pot = self.game.stake
         for i in range(self.game.oppNo):
             self.pot += self.game.opps[i].stake
         self.ui.potLabel.setText(f'Pot: {self.pot}')
 
-
+    """
+    Updates the pot, checks the correct buttons to display, checks to see if the 
+    game is still going, and then performs actions based on the player state
+    """
     def nextTurn(self):
         # Update pot.
         self.pot = self.game.stake
@@ -315,12 +323,20 @@ class PokerScreen(QWidget):
 
         self.updatePot()
 
+    """
+    When an Opponent's turn happens, make a decision and re-evaluate how many chips
+    the opponent has
+    """
     def opponentTurn(self, index):
         action = self.game.opps[index-1].decision(index)
         self.roundText += f"{self.game.opps[index-1]} {action}.\n"
         self.oppWidgets[index+2].setText(f'Chip: {self.game.opps[index-1].chipTotal - self.game.opps[index-1].stake}')
         self.nextTurn()
 
+    """
+    Progress the game to the next round or finish the game, reset who checked and 
+    if there was a bet placed
+    """
     def endRound(self):
         if self.game.folded or self.game.skip:
             self.actionBox.setText(self.roundText)
@@ -337,6 +353,9 @@ class PokerScreen(QWidget):
         else:
             self.gameOver()
 
+    """
+    Syncs the current chips of the non-player opponents to their current amount
+    """
     def sync_opponents_to_ui(self):
         self.ui.oppCount.blockSignals(True)
         self.ui.oppCount.setValue(self.game.oppNo)
@@ -352,7 +371,9 @@ class PokerScreen(QWidget):
             remaining_chips = opp.chipTotal - opp.stake
             self.oppWidgets[i+3].setText(f'Chips: {remaining_chips}')
 
-
+    """
+    Checks who won the game, awards chips to the winner and sends a message
+    """
     def gameOver(self):
         winner, handRank = self.game.get_results()
         #print("Winning index is", winner)
@@ -413,6 +434,9 @@ class PokerScreen(QWidget):
             QMessageBox.information(self, "You Win!", "No Other Opponents have Chips. Congrats!")
             self.leave()
 
+    """
+    resets game board UI and state to the beginning of another game
+    """
     def reset(self):
         for card in self.scene.items():
             self.scene.removeItem(card)
@@ -441,6 +465,9 @@ class PokerScreen(QWidget):
 
 #=================== POKER GUI BUTTON ACTIONS ===================#
 
+    """
+    Controls the player's ability to check to call on a bet
+    """
     def checkorcall(self):
         if self.game.activeBet:
             # There’s a bet, so the player should call instead
@@ -456,6 +483,9 @@ class PokerScreen(QWidget):
             self.game.check(0)
         self.nextTurn()
 
+    """
+    Controls the bet/raise button allowing player to place and raise bets
+    """
     def betorraise(self):
         if self.game.activeBet:
             if self.state.chips < self.game.stake + self.game.minbet + 50:
@@ -474,12 +504,18 @@ class PokerScreen(QWidget):
                 self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
 
         self.nextTurn()
-
+    
+    """
+    Controls the player ability to fold forfeiting the game
+    """
     def fold(self):
         #self.state.chips -= self.game.stake
         self.game.fold(0)  # 0 = human player
         self.nextTurn()
 
+    """
+    Allows player to go all in, betting their remaining chips
+    """
     def allIn(self):
         self.game.allIn(self.state.chips)
         self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
@@ -488,6 +524,9 @@ class PokerScreen(QWidget):
 
 #=================== POKER GAME FLOW ANIMATIONS ===================#
 
+    """
+    Carries out the flop, the first round of poker
+    """
     def flop(self):
         self.game.flop()
         for i, card in enumerate(self.game.board):
@@ -500,6 +539,9 @@ class PokerScreen(QWidget):
         self.game.start_round()
         self.nextTurn()
 
+    """
+    responsible for executing the second part of a game of poker
+    """
     def turn(self):
         self.game.turn()
         card_sprite = self.createCard(self.game.board[3])
@@ -513,6 +555,9 @@ class PokerScreen(QWidget):
 
         print(self.game.board)
 
+    """
+    Responsible for carrying out the third part of a poker game
+    """
     def river(self):
         self.game.river()
         card_sprite = self.createCard(self.game.board[4])
@@ -526,6 +571,9 @@ class PokerScreen(QWidget):
 
         print(self.game.board)
 
+    """
+    Leave the game to the main menu
+    """
     def leave(self):
         self.scene.clear()
         self.state.chips -= self.game.stake
@@ -573,8 +621,9 @@ class Poker:
         self.folded = False # This will likely be valuable in interrupting gameflow.
         self.minbet = 50 # Keeps track of largest bet that players must match.
         self.skip = False # Keeps track of when player can be skipped (e.g. during an All-In)
-
-    # Method creates opponents at the start of a fresh instance of Poker.
+    """
+    Method creates opponents at the start of a fresh instance of Poker.
+    """
     def createOpponents(self, game):
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
@@ -583,13 +632,17 @@ class Poker:
         self.players = ['Player'] + self.opps
         for player in self.players:
             self.activePlayers.append(player)
-
+    """
+    Checks to see if opponents still have chips and removes them if not
+    """
     def removeOpponents(self):
         for opp in self.opps:
             if opp.chipTotal <=0:
                 opp.active = False
 
-    # Method to deal initial two cards to a given player.
+    """
+    Method to deal initial two cards to a given player.
+    """
     def deal(self):
         self.started = True
         self.stake += 50 # Ante
@@ -603,29 +656,49 @@ class Poker:
                 self.opps[i].oppHand.add(self.deck.draw())
                 self.opps[i].oppHand.add(self.deck.draw())
 
+    """
+    Starts round with player's turn
+    """
     def start_round(self):
         self.turn_index = 0
 
+    """
+    Moves the turn index forward to the next player
+    """
     def next_turn(self):
         self.turn_index = (self.turn_index + 1) % len(self.players)
 
+    """
+    Starts the game by drawing three cards to the table
+    """
     def flop(self):
         self.board.append(self.deck.draw())
         self.board.append(self.deck.draw())
         self.board.append(self.deck.draw())
 
+    """
+    Moves to the next round by adding one more card to the table
+    """
     def turn(self):
         self.board.append(self.deck.draw())
 
+    """
+    Adds one final card to the table
+    """
     def river(self):
         self.board.append(self.deck.draw())
 
+    """
+    Game method moves turn to next player without betting any chips. ends round if everyone
+    checks
+    """
     def check(self, index=0):
         print(f"Player {index} is checking...")
         self.checked += 1
-        # TO DO: ???
-            # THIS METHOD MAY BE COMPLETE I'M NOT SURE.
 
+    """
+    Game method matches the highest bet
+    """
     def call(self, index=0):
         print("Calling...")
         self.checked += 1
@@ -636,9 +709,10 @@ class Poker:
                 self.opps[index-1].stake = self.minbet
             else:
                 self.opps[index-1].stake = self.opps[index-1].chipTotal
-        # TO DO: IMPLEMENT CALL METHOD FURTHER.
-        # BIG IDEA: FIND LARGEST STAKE OF PLAYERS AND MATCH IT.
 
+    """
+    Game method to bet chips, forcing the rest of the players to call or raise
+    """
     def bet(self, index=0):
         print("Betting...")
         self.checked = 1
@@ -652,7 +726,9 @@ class Poker:
             else:
                 self.opps[index-1].stake = self.opps[index-1].chipTotal
         
-
+    """
+    Game method to raise the minimum bet and bet that amount
+    """
     def _raise(self, index=0):
         print("Raising...")
         self.checked = 1
@@ -666,10 +742,9 @@ class Poker:
             else:
                 self.opps[index-1].stake = self.opps[index-1].chipTotal
 
-        # TO DO: IMPLEMENT RAISE METHOD
-        # BIG IDEA: FIND LARGEST STAKE OF PLAEYRS AND INCREASE IT BY 50.
-            # MIGHT NEED TO KEEP BETACTIVE? NOT CONFIDENT THOUGH.
-
+    """
+    Game method to remove the person from the round 
+    """
     def fold(self, index=0):
         print(f"Player {index} is folding...")
 
@@ -685,6 +760,9 @@ class Poker:
             #self.players[index].chipTotal -= self.players[index].stake
             self.activePlayers.remove(self.players[index])
 
+    """
+    Game methond to bet all the remaining chips a player has
+    """
     def allIn(self,chips):
         print("GOING ALL IN!!!")
         self.checked = 1
@@ -696,6 +774,9 @@ class Poker:
         # BIG IDEA: RAISE OR BET WITH FULL CHIP TOTAL AS THE AMOUNT.
             # RAISE OR BET WILL DEPEND ON IF A BET IS ACTIVE.
 
+    """
+    Game method to calculate who has the best hand and find the winner
+    """
     def get_results(self):
         print("Ending game...")
 
@@ -732,6 +813,9 @@ class Poker:
                     bestPlayerIndex = i
         return bestPlayerIndex, handRanks[bestRank]
 
+    """
+    Resets game state to new round
+    """
     def reset(self):
         self.deck.shuffle()
         self.playerHand = Hand()
@@ -759,6 +843,10 @@ class Poker:
             self.players[i].stake = 0
             self.players[i].oppHand = Hand()
 
+    """
+    Game method looks at hand and finds the best combination of cards with the cards on 
+    the table
+    """
     def analyzeHand(self):
         hand_type, best_hand = self.playerHand.getBestHand(self.board)
         return hand_type, best_hand
