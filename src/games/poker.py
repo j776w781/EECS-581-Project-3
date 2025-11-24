@@ -812,7 +812,7 @@ class Poker:
         if len(self.activePlayers) == 1:
             if self.activePlayers[0] == "Player":
                 self.handRank, self.bestHand = self.analyzeHand()
-                return self.players.index(self.activePlayers[0], self.handRank)
+                return self.players.index(self.activePlayers[0]), self.handRank
             else:
                 hand_rank, best_hand = self.activePlayers[0].oppHand.getBestHand(self.board)
                 return self.players.index(self.activePlayers[0]), hand_rank
