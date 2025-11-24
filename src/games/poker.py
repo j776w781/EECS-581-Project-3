@@ -299,7 +299,7 @@ class PokerScreen(QWidget):
                 self.actionBox.setText(self.roundText)
                 if len(self.game.board) == 3:
                     self.actionBox.exec()
-                self.roundText = ''
+                    self.roundText = ''
                 self.nextTurn()
             elif self.game.skip:
                 self.actionBox.setText(self.roundText)
