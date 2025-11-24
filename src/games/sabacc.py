@@ -1309,7 +1309,6 @@ class Sabacc:
             if not player.defeated:
                 self.sabbacpot += 50
                 player.chips += -50
-                player.stake += 50
 
 
     '''
