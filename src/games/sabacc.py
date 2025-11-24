@@ -162,7 +162,7 @@ class SabaccScreen(QWidget):
     '''
     def leave(self):
         if self.game.playing:
-            QMessageBox.information(self, "Exiting", "Haha! You just forfeited your chips!")
+            QMessageBox.information(self, "Exiting", "May the Force be with you, always.")
         self.reset(True)
         self.switch_to_menu.emit()
 
