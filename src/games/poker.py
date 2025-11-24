@@ -191,7 +191,9 @@ class PokerScreen(QWidget):
         msg.exec()
 
     #=================== POKER GUI START SEQUENCE ===================#
-
+    """
+    Start a game of poker
+    """
     def deal(self):
         print("Dealing cards...")
         # First we hide insignificant details.
@@ -257,6 +259,7 @@ class PokerScreen(QWidget):
     Updates the game pot to be the total of everyone's bets
     """
     def updatePot(self):
+        # Get the player's stake and then iterate through opponents and calculate new pot
         self.pot = self.game.stake
         for i in range(self.game.oppNo):
             self.pot += self.game.opps[i].stake
@@ -272,25 +275,26 @@ class PokerScreen(QWidget):
         for i in range(len(self.game.opps)):
             self.pot += self.game.opps[i].stake
         self.ui.potLabel.setText(f'Pot: {self.pot}')
-
+        # Change bet buttons to call/raise if a bet has been placed
         if self.game.activeBet:
             self.ui.checkcallButton.setText("Call")
             self.ui.betraiseButton.setText("Raise")
         else:
+            # Else stay the same
             self.ui.checkcallButton.setText("Check")
             self.ui.betraiseButton.setText("Bet")
-
+        # If there's one player left run the game over to end the game and reward the plauer
         if len(self.game.activePlayers) == 1:
             self.actionBox.setText(self.roundText)
             self.actionBox.exec()
             self.roundText = ''
             self.gameOver()
             return
-
+        # If everyone checks end the round
         if self.game.checked == len(self.game.activePlayers):
             self.endRound()
             return
-
+        # Get the current turn and move it to the next player
         current_turn = self.game.turn_index
         self.game.turn_index = (self.game.turn_index + 1) % (self.game.oppNo + 1)
         if current_turn == 0: # Player turn
@@ -328,6 +332,7 @@ class PokerScreen(QWidget):
     the opponent has
     """
     def opponentTurn(self, index):
+        # Make betting decision and update display
         action = self.game.opps[index-1].decision(index)
         self.roundText += f"{self.game.opps[index-1]} {action}.\n"
         self.oppWidgets[index+2].setText(f'Chip: {self.game.opps[index-1].chipTotal - self.game.opps[index-1].stake}')
@@ -338,6 +343,7 @@ class PokerScreen(QWidget):
     if there was a bet placed
     """
     def endRound(self):
+        # If player folds or gets skipped, remove roundtext label
         if self.game.folded or self.game.skip:
             self.actionBox.setText(self.roundText)
             self.actionBox.exec()
@@ -345,7 +351,7 @@ class PokerScreen(QWidget):
         self.enablePlayerActions(False)
         self.game.checked = 0
         self.game.activeBet = False
-
+        # Move to the next round 
         if len(self.game.board) == 3:
             self.turn()
         elif len(self.game.board) == 4:
@@ -354,16 +360,18 @@ class PokerScreen(QWidget):
             self.gameOver()
 
     """
-    Syncs the current chips of the non-player opponents to their current amount
+    Syncs the current players in the game to the UI
     """
     def sync_opponents_to_ui(self):
         self.ui.oppCount.blockSignals(True)
         self.ui.oppCount.setValue(self.game.oppNo)
         self.ui.oppCount.blockSignals(False)
+        # Hide all opponents and lable attached
         for i in range(3):
             self.oppWidgets[i].hide()
             self.oppWidgets[i+3].hide()
             self.oppWidgets[i+3].setText("Chips:")
+        # Re-Reveal all the opponents that are still active in the game
         for i, opp in enumerate(self.game.opps):
             if opp.active:
                 self.oppWidgets[i].show()
@@ -375,8 +383,9 @@ class PokerScreen(QWidget):
     Checks who won the game, awards chips to the winner and sends a message
     """
     def gameOver(self):
+        # Determine the winner 
         winner, handRank = self.game.get_results()
-        #print("Winning index is", winner)
+        # Check to see who the winner is out of the players in the field and award chips
         for i in range(len(self.game.players)):
             if winner == i and i == 0:
                 winner = "Player"
@@ -389,13 +398,14 @@ class PokerScreen(QWidget):
                 self.game.players[i].chipTotal += self.pot
                 self.oppWidgets[self.game.players[i].id + 3].setText(f'Chips: {self.game.players[i].chipTotal}')
             else:
+                # If they didn't win, remove the chips from their total
                 if i == 0:
                     self.state.chips -= self.game.stake
                     self.ui.totalLabel.setText(f'Chip Total: {self.state.chips}')
                 else:
                     self.game.players[i].chipTotal -= self.game.players[i].stake
                     self.oppWidgets[self.game.players[i].id + 3].setText(f'Chip: {self.game.players[i].chipTotal}')
-
+        # Alert the player if they won
         if winner == "Player":
             QMessageBox.information(self, "Winner", f"{winner} wins with a {handRank}.")
         else:
@@ -409,12 +419,12 @@ class PokerScreen(QWidget):
                 elif card.rank == 14:
                     card.rank = "A"
             QMessageBox.information(self, "Winner", f"{winner} wins with a {handRank}.\nHand: {winner.oppHand.hand}")
-
+        # Force quit if the player is out fo chips
         if self.state.chips <= 0:
             QMessageBox.information(self, "Game Over", "You're out of chips! Returning to main menu.")
             self.switch_to_menu.emit()
             return
-
+        # Check to see which opponents are still playing
         self.game.removeOpponents()
         for i in range(len(self.game.opps)):
             if not self.game.opps[i].active:
@@ -425,7 +435,7 @@ class PokerScreen(QWidget):
 
         self.reset()
         self.sync_opponents_to_ui()
-
+        # Track which opponents are inactive and force quit the player if no other opponents remain
         inactive_ct = 0
         for opp in self.game.opps:
             if not opp.active:
@@ -438,9 +448,10 @@ class PokerScreen(QWidget):
     resets game board UI and state to the beginning of another game
     """
     def reset(self):
+        # Remove all cards from the scene
         for card in self.scene.items():
             self.scene.removeItem(card)
-
+        # Send all cards back to their respective areas
         for i, card in enumerate(self.game.playerHand.hand):
             card_sprite = self.createCard(card)
             end = self.player_pos + QPointF(i * 80, 0)
@@ -472,9 +483,11 @@ class PokerScreen(QWidget):
         if self.game.activeBet:
             # There’s a bet, so the player should call instead
             if self.state.chips < self.game.stake + self.game.minbet:
+                # Check if the player can't do anything else
                 QMessageBox.information(self, "Out of Chips", "You are out of chips")
                 self.game.check(0)
             else:
+                # Otherwise call
                 self.game.call(0)
                 self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
 
@@ -487,14 +500,16 @@ class PokerScreen(QWidget):
     Controls the bet/raise button allowing player to place and raise bets
     """
     def betorraise(self):
+        # If there is an active bet, switch button to raise
         if self.game.activeBet:
+            # Check if no chips are left
             if self.state.chips < self.game.stake + self.game.minbet + 50:
                 QMessageBox.information(self, "Out of Chips", "You are out of chips")
                 self.game.check(0)
             else:
                 self.game._raise(0)
                 self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
-
+        # If no bet has been placed check to see if a bet can be made and check if not
         else:
             if self.state.chips < self.game.stake + 50:
                 QMessageBox.information(self, "Out of Chips", "You are out of chips")
@@ -517,6 +532,7 @@ class PokerScreen(QWidget):
     Allows player to go all in, betting their remaining chips
     """
     def allIn(self):
+        # Bet all the chips that belong to the player
         self.game.allIn(self.state.chips)
         self.ui.totalLabel.setText(f"Chip Total: {self.state.chips - self.game.stake}")
 
@@ -529,11 +545,12 @@ class PokerScreen(QWidget):
     """
     def flop(self):
         self.game.flop()
+        # Animate three new cards onto the table 
         for i, card in enumerate(self.game.board):
             card_sprite = self.createCard(card)
             end = self.board_pos[i]
             self.animateCard(self.deck_pos, end, card_sprite)
-
+        # Reset the buttons for start of a new round
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
@@ -543,11 +560,12 @@ class PokerScreen(QWidget):
     responsible for executing the second part of a game of poker
     """
     def turn(self):
+        # Start the turn and animate a card to the board
         self.game.turn()
         card_sprite = self.createCard(self.game.board[3])
         end = self.board_pos[3]
         self.animateCard(self.deck_pos, end, card_sprite)
-
+        # Reset bet buttons for new roound
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
@@ -559,11 +577,12 @@ class PokerScreen(QWidget):
     Responsible for carrying out the third part of a poker game
     """
     def river(self):
+        # Start the river round and animate a card to the table
         self.game.river()
         card_sprite = self.createCard(self.game.board[4])
         end = self.board_pos[4]
         self.animateCard(self.deck_pos, end, card_sprite)
-
+        # Reset bet buttons for new round
         self.ui.checkcallButton.setText("Check")
         self.ui.betraiseButton.setText("Bet")
         self.game.start_round()
@@ -575,6 +594,7 @@ class PokerScreen(QWidget):
     Leave the game to the main menu
     """
     def leave(self):
+        # Reset everything
         self.scene.clear()
         self.state.chips -= self.game.stake
         self.pot = 0
@@ -625,10 +645,12 @@ class Poker:
     Method creates opponents at the start of a fresh instance of Poker.
     """
     def createOpponents(self, game):
+        # Create up to three opponents with random chip amounts
         names = ["Super Macho Man", "King Hippo", "Glass Joe"]
         for i in range(self.oppNo):
             self.opps.append(Opponent(names[i], game, i))
             self.opps[i].chipTotal = random.randint(15, 25) * 50
+        # Create a list of active players including the user
         self.players = ['Player'] + self.opps
         for player in self.players:
             self.activePlayers.append(player)
@@ -644,11 +666,12 @@ class Poker:
     Method to deal initial two cards to a given player.
     """
     def deal(self):
+        # Draw 2 cards and 50 chip buy in
         self.started = True
         self.stake += 50 # Ante
         self.playerHand.add(self.deck.draw())
         self.playerHand.add(self.deck.draw())
-
+        # Give cards to active opponents and bet 50 chips
         for i in range(len(self.opps)):
             if self.opps[i].active == True:
                 print(f"{self.opps[i].name} gets dealt.")
@@ -703,6 +726,7 @@ class Poker:
         print("Calling...")
         self.checked += 1
         if index == 0:
+            # bet the minimum amount
             self.stake = self.minbet
         else:
             if self.opps[index-1].chipTotal > self.minbet:
@@ -716,6 +740,7 @@ class Poker:
     def bet(self, index=0):
         print("Betting...")
         self.checked = 1
+        # Raise the minimum bet by 50 and bet 50 chips
         self.activeBet = True
         self.minbet += 50
         if index == 0:
@@ -730,6 +755,7 @@ class Poker:
     Game method to raise the minimum bet and bet that amount
     """
     def _raise(self, index=0):
+        # Raise the minimum bet 50 chips and bet that amount
         print("Raising...")
         self.checked = 1
         self.activeBet = True
@@ -765,6 +791,7 @@ class Poker:
     """
     def allIn(self,chips):
         print("GOING ALL IN!!!")
+        # Set the minimum bet to the amount of chips the user has left and bet that
         self.checked = 1
         self.minbet = chips
         self.stake = self.minbet
@@ -779,12 +806,12 @@ class Poker:
     """
     def get_results(self):
         print("Ending game...")
-
+        # Store all the hand ranks
         handRanks = [
                 "High Card", "Pair", "Two Pair", "Three of a Kind", "Straight",
                  "Flush", "Full House", "Four of a Kind", "Straight Flush", "Royal Flush"
         ]
-
+        # If there is one player left reward that player the chips
         if len(self.activePlayers) == 1:
             if self.activePlayers[0] == "Player":
                 self.handRank, self.bestHand = self.analyzeHand()
@@ -792,7 +819,7 @@ class Poker:
             else:
                 hand_rank, best_hand = self.activePlayers[0].oppHand.getBestHand(self.board)
                 return self.players.index(self.activePlayers[0]), hand_rank
-        
+        # Look for the best hand and rank
         self.handRank, self.bestHand = self.analyzeHand()
 
         bestRank = handRanks.index(self.handRank)
