@@ -285,9 +285,6 @@ class PokerScreen(QWidget):
             self.ui.betraiseButton.setText("Bet")
         # If there's one player left run the game over to end the game and reward the plauer
         if len(self.game.activePlayers) == 1:
-            self.actionBox.setText(self.roundText)
-            self.actionBox.exec()
-            self.roundText = ''
             self.gameOver()
             return
         # If everyone checks end the round
