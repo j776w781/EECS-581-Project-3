@@ -1110,7 +1110,7 @@ class SabaccScreen(QWidget):
             #If all opponents have been defeated, force the user to exit.
             if alive == 0:
                 QMessageBox.information(self, "Flawless Victory", "WOW! You beat...everyone! Come back later!")
-                self.leave(True)
+                self.leave()
                 return
         #Case for player loss.
         else:
