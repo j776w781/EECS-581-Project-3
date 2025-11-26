@@ -285,9 +285,6 @@ class PokerScreen(QWidget):
             self.ui.betraiseButton.setText("Bet")
         # If there's one player left run the game over to end the game and reward the plauer
         if len(self.game.activePlayers) == 1:
-            self.actionBox.setText(self.roundText)
-            self.actionBox.exec()
-            self.roundText = ''
             self.gameOver()
             return
         # If everyone checks end the round
@@ -302,7 +299,7 @@ class PokerScreen(QWidget):
                 self.actionBox.setText(self.roundText)
                 if len(self.game.board) == 3:
                     self.actionBox.exec()
-                self.roundText = ''
+                    self.roundText = ''
                 self.nextTurn()
             elif self.game.skip:
                 self.actionBox.setText(self.roundText)
@@ -815,16 +812,21 @@ class Poker:
         if len(self.activePlayers) == 1:
             if self.activePlayers[0] == "Player":
                 self.handRank, self.bestHand = self.analyzeHand()
-                return self.players.index(self.activePlayers[0], self.handRank)
+                return self.players.index(self.activePlayers[0]), self.handRank
             else:
                 hand_rank, best_hand = self.activePlayers[0].oppHand.getBestHand(self.board)
                 return self.players.index(self.activePlayers[0]), hand_rank
         # Look for the best hand and rank
         self.handRank, self.bestHand = self.analyzeHand()
 
-        bestRank = handRanks.index(self.handRank)
-        bestCombo = self.bestHand
-        bestPlayerIndex = 0
+        if not self.folded:
+            bestRank = handRanks.index(self.handRank)
+            bestCombo = self.bestHand
+            bestPlayerIndex = 0
+        else:
+            bestRank = -1
+            bestCombo = None
+            bestPlayerIndex = 0
 
         for i in range(1, len(self.players)):
             # Compare poker hands by higher index.
