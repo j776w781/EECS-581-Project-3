@@ -38,16 +38,16 @@
   <widget class="QLabel" name="playerHandLabel">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>270</x>
      <y>520</y>
-     <width>221</width>
+     <width>271</width>
      <height>61</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Broadway</family>
-     <pointsize>36</pointsize>
+     <pointsize>28</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -69,7 +69,7 @@
    <property name="font">
     <font>
      <family>Broadway</family>
-     <pointsize>24</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -501,7 +501,7 @@ QPushButton:hover {
    <property name="font">
     <font>
      <family>Broadway</family>
-     <pointsize>24</pointsize>
+     <pointsize>18</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -557,7 +557,7 @@ QPushButton:hover {
     <rect>
      <x>20</x>
      <y>170</y>
-     <width>91</width>
+     <width>131</width>
      <height>21</height>
     </rect>
    </property>
@@ -583,9 +583,9 @@ QPushButton:hover {
   <widget class="QLabel" name="oppTotal2">
    <property name="geometry">
     <rect>
-     <x>690</x>
+     <x>660</x>
      <y>170</y>
-     <width>91</width>
+     <width>121</width>
      <height>21</height>
     </rect>
    </property>
@@ -612,8 +612,8 @@ QPushButton:hover {
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>110</y>
-     <width>91</width>
+     <y>120</y>
+     <width>131</width>
      <height>21</height>
     </rect>
    </property>

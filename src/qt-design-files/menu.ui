@@ -239,9 +239,9 @@ QPushButton:hover{
   <widget class="QLabel" name="bankLabel">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>430</x>
      <y>360</y>
-     <width>261</width>
+     <width>361</width>
      <height>61</height>
     </rect>
    </property>

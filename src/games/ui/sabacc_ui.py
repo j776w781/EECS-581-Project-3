@@ -151,7 +151,7 @@ class Ui_Form(object):
         self.opplabel.setFont(font)
         self.opplabel.setAutoFillBackground(False)
         self.opplabel.setStyleSheet("background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 170, 255, 0), stop:1 rgba(255, 255, 255, 0));\n"
-"color: black;")
+"color: white;")
         self.opplabel.setObjectName("opplabel")
         self.chewie = QtWidgets.QLabel(parent=Form)
         self.chewie.setGeometry(QtCore.QRect(30, 230, 121, 81))

@@ -106,7 +106,7 @@ class PokerScreen(QWidget):
     def fontControl(self):
         # Font Size Control (Adjust this until the fonts work work for you guys)
         font = self.ui.label.font()
-        font.setPointSize(24) # <<< Adjust me!
+        font.setPointSize(18) # <<< Adjust me!
         self.ui.label.setFont(font)
 
         font = self.ui.oppCount.font()
@@ -114,11 +114,11 @@ class PokerScreen(QWidget):
         self.ui.oppCount.setFont(font)
 
         font = self.ui.playerHandLabel.font()
-        font.setPointSize(36) # <<< Adjust me!
+        font.setPointSize(28) # <<< Adjust me!
         self.ui.playerHandLabel.setFont(font)
 
         font = self.ui.totalLabel.font()
-        font.setPointSize(24) # <<< Adjust me!
+        font.setPointSize(18) # <<< Adjust me!
         self.ui.totalLabel.setFont(font)
 
         for i in range(self.game.oppNo):
