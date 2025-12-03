@@ -340,9 +340,6 @@ class RouletteScreen(QWidget):
 
     '''
     Helper function to parse the betcodes described above.
-
-    NOTE: This function has been identified for future refactoring, as it unnecessarily 
-    couples game-logic tasking with GUI management.
     '''
     def parse_betcode(self,betcode):
         numbers = "0123456789"
